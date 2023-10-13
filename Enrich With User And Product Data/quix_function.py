@@ -43,9 +43,13 @@ class QuixFunction:
             visitor = df['Visitor Unique ID'].strip('{}')
             gender = self.redis_client.hget(f'visitor:{visitor}', 'gender')
             birthday = self.redis_client.hget(f'visitor:{visitor}', 'birthday')
-            df['Visitor Gender'] = gender
-            df['Visitor Birthday'] = birthday
-            df['Visitor Age'] = self.calculate_age(birthday)
+            
+            if gender is not None:
+                df['Visitor Gender'] = gender
+    
+            if birthday is not None:
+                df['Visitor Birthday'] = birthday
+                df['Visitor Age'] = self.calculate_age(birthday)
         except Exception as e2:
             print("Exception enriching visitor data", e2)
 
