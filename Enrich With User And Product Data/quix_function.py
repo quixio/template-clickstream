@@ -34,7 +34,8 @@ class QuixFunction:
         try:
             product = df['Product Page URL']
             cat = self.redis_client.hget(f'product:{product}', 'cat')
-            df['Product Category'] = cat
+            if cat is not None:
+                df['Product Category'] = cat
         except Exception as e:
             print("Exception calculating product category", e)
             pass
