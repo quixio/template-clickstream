@@ -25,7 +25,7 @@ def load_users():
     total_users = len(users)
     imported_users = 0
     for index, row in users.iterrows():
-        key = f'user:{row["SWID"]}'
+        key = f'visitor:{row["SWID"]}'
         try:
             birthday = datetime.strptime(row['BIRTH_DT'], '%d-%b-%y')
             if birthday.year > 2005:
@@ -55,7 +55,7 @@ def main():
     if r.hget("product:http://www.acme.com/SH5584743/VD55162989", "cat") != "grocery":
         raise Exception("Wrong category for product")
 
-    if r.hget("user:0044AF02-16EC-42B0-96DD-52679773A9D6", "birthday") != "2006-07-17":
+    if r.hget("visitor:0044AF02-16EC-42B0-96DD-52679773A9D6", "birthday") != "2006-07-17":
         raise Exception("Wrong birthday for user")
 
 
