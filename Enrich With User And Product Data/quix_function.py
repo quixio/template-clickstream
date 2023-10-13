@@ -53,4 +53,8 @@ class QuixFunction:
         except Exception as e2:
             print("Exception enriching visitor data", e2)
 
+
+        # Create a new stream to output data
+        producer_stream = producer_topic.get_or_create_stream(consumer_stream.stream_id)
+        producer_stream.properties.parents.append(consumer_stream.stream_id)
         self.producer_stream.timeseries.buffer.publish(df)
