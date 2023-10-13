@@ -1,0 +1,16 @@
+name: Stream data from CSV
+language: python
+variables:
+  - name: output
+    inputType: OutputTopic
+    description: This is the output topic for realtime CSV data
+    defaultValue: realtime-csv-data
+    required: true
+  - name: keep_timing
+    inputType: FreeText
+    description: Set to 1 to keep original timings, otherwise send each click event every 0.2 seconds
+    defaultValue: ''
+    required: false
+dockerfile: build/dockerfile
+runEntryPoint: main.py
+defaultFile: main.py
