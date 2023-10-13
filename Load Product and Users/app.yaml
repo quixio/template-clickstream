@@ -1,6 +1,11 @@
 name: Load Product and Users
 language: python
-variables: []
+variables:
+  - name: redis_host
+    inputType: FreeText
+    description: External Redis hostname
+    defaultValue: ''
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
