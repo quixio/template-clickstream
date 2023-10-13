@@ -4,8 +4,9 @@ import redis
 from datetime import datetime, date
 
 class QuixFunction:
-    def __init__(self, consumer_stream: qx.StreamConsumer, r: redis.Redis):
+    def __init__(self, consumer_stream: qx.StreamConsumer, topic_producer: qx.TopicProducer, r: redis.Redis):
         self.consumer_stream = consumer_stream
+        self.topic_producer = topic_producer
         self.redis_client = r
 
     # Callback triggered for each new event
@@ -13,12 +14,16 @@ class QuixFunction:
         print(data.value)
 
         # Transform your data here.
-
-        self.producer_stream.events.publish(data)
+        producer_stream = self.topic_producer.get_or_create_stream(stream_consumer.stream_id)
+        producer_stream.events.publish(data)
 
     def calculate_age(self, birthday: str):
+        if birthday is None:
+            return None
+
         today = date.today()
         birthdate = datetime.strptime(birthday, '%Y-%m-%d')
+
         # Calculate the difference between the current date and the birthday
         difference = today - birthdate
 
@@ -27,34 +32,30 @@ class QuixFunction:
 
         return age_in_years
 
+    def get_product_category(self, product: str):
+        return self.redis_client.hget(f'product:{product}', 'cat')
+
+    def get_visitor_gender(self, visitor: str):
+        visitor_without_brackets = visitor.strip('{}')
+        return self.redis_client.hget(f'visitor:{visitor_without_brackets}', 'gender')
+
+    def get_visitor_birthdate(self, visitor: str):
+        visitor_without_brackets = visitor.strip('{}')
+        return self.redis_client.hget(f'visitor:{visitor_without_brackets}', 'birthday')
+
+    def get_visitor_age(self, visitor: str):
+        visitor_without_brackets = visitor.strip('{}')
+        birthday = self.redis_client.hget(f'visitor:{visitor_without_brackets}', 'birthday')
+        return self.calculate_age(birthday)
+
     # Callback triggered for each new timeseries data
     def on_dataframe_handler(self, stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
-
-        try:
-            product = df['Product Page URL']
-            cat = self.redis_client.hget(f'product:{product}', 'cat')
-            if cat is not None:
-                df['Product Category'] = cat
-        except Exception as e:
-            print("Exception calculating product category", e)
-            pass
-
-        try:
-            visitor = df['Visitor Unique ID'].strip('{}')
-            gender = self.redis_client.hget(f'visitor:{visitor}', 'gender')
-            birthday = self.redis_client.hget(f'visitor:{visitor}', 'birthday')
-            
-            if gender is not None:
-                df['Visitor Gender'] = gender
-    
-            if birthday is not None:
-                df['Visitor Birthday'] = birthday
-                df['Visitor Age'] = self.calculate_age(birthday)
-        except Exception as e2:
-            print("Exception enriching visitor data", e2)
-
+        df['Product Category'] = df['Product Page URL'].apply(self.get_product_category)
+        df['Visitor Gender'] = df['Visitor Unique ID'].apply(self.get_visitor_gender)
+        df['Visitor Birthdate'] = df['Visitor Unique ID'].apply(self.get_visitor_birthdate)
+        df['Visitor Age'] = df['Visitor Birthdate'].apply(self.calculate_age)
 
         # Create a new stream to output data
-        producer_stream = producer_topic.get_or_create_stream(consumer_stream.stream_id)
-        producer_stream.properties.parents.append(consumer_stream.stream_id)
-        self.producer_stream.timeseries.buffer.publish(df)
+        producer_stream = self.topic_producer.get_or_create_stream(stream_consumer.stream_id)
+        producer_stream.properties.parents.append(stream_consumer.stream_id)
+        producer_stream.timeseries.buffer.publish(df)

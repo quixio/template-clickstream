@@ -21,10 +21,9 @@ r = redis.Redis(
 
 # Callback called for each incoming stream
 def read_stream(consumer_stream: qx.StreamConsumer):
-
     # handle the data in a function to simplify the example
-    quix_function = QuixFunction(consumer_topic, r)
-        
+    quix_function = QuixFunction(consumer_stream, producer_topic, r)
+
     # React to new data received from input topic.
     consumer_stream.events.on_data_received = quix_function.on_event_data_handler
     consumer_stream.timeseries.on_dataframe_received = quix_function.on_dataframe_handler
