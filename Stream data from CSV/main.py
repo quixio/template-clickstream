@@ -7,7 +7,7 @@ import threading
 
 # True = keep original timings.
 # False = No delay! Speed through it as fast as possible.
-keep_timing = False
+keep_timing = os.environ["keep_timing"] == "1"
 
 # If the process is terminated on the command line or by the container
 # setting this flag to True will tell the loops to stop and the code
