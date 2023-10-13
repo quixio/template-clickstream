@@ -21,6 +21,11 @@ variables:
     description: External Redis port
     defaultValue: ''
     required: true
+  - name: redis_password
+    inputType: Secret
+    description: External Redis password
+    defaultValue: redis_password
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: quix_function.py
