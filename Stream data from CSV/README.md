@@ -1,8 +1,7 @@
 # Stream data from CSV
 
-This project was created from a [the RealTime From File library item](https://github.com/quixio/quix-samples/tree/main/python/sources/Real-Time-From-File), modified
+This project was created from the [RealTime From File](https://github.com/quixio/quix-samples/tree/main/python/sources/Real-Time-From-File) library item, modified
 to read data from TSV instead of CSV and use one stream for each visitor UUID.
-
 
 ## Environment variables
 
