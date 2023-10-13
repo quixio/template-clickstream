@@ -14,18 +14,9 @@ client = qx.QuixStreamingClient()
 print("Opening output topic")
 producer_topic = client.get_topic_producer(os.environ["output"])
 
-# CREATE A NEW STREAM
-# A stream is a collection of data that belong to a single session of a single source.
-stream_producer = producer_topic.create_stream()
-# EDIT STREAM
-# stream = producer_topic.create_stream("my-own-stream-id")  # To append data into the stream later, assign a stream id.
-stream_producer.properties.name = "ExampleData"  # Give the stream a human readable name (for the data catalogue).
-stream_producer.properties.location = "/example data"  # Save stream in specific folder to organize your workspace.
-# stream_producer.properties.metadata["version"] = "Version 1"  # Add stream metadata to add context to time series data.
-
 # Read the CSV data
-df = pd.read_csv("ExampleData.csv")
-date_col_name = 'Date and Time'  # Column name containing the timestamp information
+df = pd.read_csv("omniture-logs.tsv", sep="\t")
+date_col_name = 'Unix Timestamp'  # Column name containing the timestamp information
 print("File loaded.")
 
 # Get original col names
@@ -35,19 +26,20 @@ original_cols.remove(date_col_name)
 # Now let's write this file to some stream in real time.
 # We want to respect the original time deltas, so we'll need some calculations
 # Get the timestamp data in timestamp format
-df['Original_'+date_col_name] = pd.to_datetime(df[date_col_name])  # you may have to define format https://pandas.pydata.org/docs/reference/api/pandas.to_datetime.html
-df['Original_'+date_col_name] = [pd.Timestamp(ti, unit = 'ns').timestamp() for ti in df['Original_' + date_col_name]]
-df = df.drop(date_col_name, axis = 1)
+df['Original_' + date_col_name] = pd.to_datetime(df[date_col_name])
+df['Original_' + date_col_name] = [pd.Timestamp(ti, unit='ns').timestamp() for ti in df['Original_' + date_col_name]]
+df = df.drop(date_col_name, axis=1)
 
 # Let's calculate the original time deltas and then the accumulated timedeltas
 print("Calculating time deltas...")
-df['delta_s_'+date_col_name] = df['Original_'+date_col_name].shift(-1) - df['Original_'+date_col_name]
-df['acc_delta_s_'+date_col_name] = df['delta_s_'+date_col_name].expanding(1).sum()
+df['delta_s_' + date_col_name] = df['Original_' + date_col_name].shift(-1) - df['Original_' + date_col_name]
+df['acc_delta_s_' + date_col_name] = df['delta_s_' + date_col_name].expanding(1).sum()
 
 # Let's generate the new timestamps
 print("Generate new timestamps")
 timestamp_now = pd.Timestamp.now().timestamp()
-df['timestamp'] = (timestamp_now * 1e9) + (df['acc_delta_s_'+date_col_name] * 1e9)
+df['timestamp'] = (timestamp_now * 1e9) + (df['acc_delta_s_' + date_col_name] * 1e9)
+
 
 def get_data():
     global df
@@ -73,7 +65,7 @@ def get_data():
             print("Writing {} rows of data".format(len(df_to_write)))
 
             stream_producer.timeseries.publish(df_to_write)
-            print(df_to_write.to_string(index = False))
+            print(df_to_write.to_string(index=False))
 
             # Update df
             df = df[filter_df_to_write == False]
@@ -94,11 +86,11 @@ def before_shutdown():
 
 
 def main():
-    thread = Thread(target = get_data)
+    thread = Thread(target=get_data)
     thread.start()
 
     # handle termination signals and close streams
-    qx.App.run(before_shutdown = before_shutdown)
+    qx.App.run(before_shutdown=before_shutdown)
 
     # wait for worker thread to end
     thread.join()
