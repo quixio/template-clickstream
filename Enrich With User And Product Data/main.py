@@ -16,7 +16,7 @@ producer_topic = client.get_topic_producer(os.environ["output"])
 def read_stream(consumer_stream: qx.StreamConsumer):
 
     # Create a new stream to output data
-    producer_stream = producer_topic.get_or_create_stream(consumer_stream.stream_id + "hard-braking")
+    producer_stream = producer_topic.get_or_create_stream(consumer_stream.stream_id)
     producer_stream.properties.parents.append(consumer_stream.stream_id)
 
     # handle the data in a function to simplify the example
