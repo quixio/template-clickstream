@@ -25,8 +25,7 @@ stream_producer.properties.location = "/example data"  # Save stream in specific
 
 # Read the CSV data
 df = pd.read_csv("ExampleData.csv")
-date_col_name = 'datetime'  # Column name containing the timestamp information
-# df = df.rename(columns={"username": "TAG__username" })  # Add TAG__ prefix to to use this column as tag (index).
+date_col_name = 'Date and Time'  # Column name containing the timestamp information
 print("File loaded.")
 
 # Get original col names
@@ -59,6 +58,9 @@ def get_data():
         # this will end up loop when all data has been sent
         if df.empty:
             break
+
+        # Use one stream per visitor
+        stream_producer = producer_topic.create_stream(df['UUID'])
 
         # Get df_to_write
         filter_df_to_write = (df['timestamp'] <= pd.Timestamp.now().timestamp() * 1e9)
