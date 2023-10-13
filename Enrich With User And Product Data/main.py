@@ -18,26 +18,16 @@ r = redis.Redis(
     password=os.environ['redis_password'],
     decode_responses=True)
 
+
 # Callback called for each incoming stream
 def read_stream(consumer_stream: qx.StreamConsumer):
 
-    # Create a new stream to output data
-    producer_stream = producer_topic.get_or_create_stream(consumer_stream.stream_id)
-    producer_stream.properties.parents.append(consumer_stream.stream_id)
-
     # handle the data in a function to simplify the example
-    quix_function = QuixFunction(consumer_topic, producer_stream, r)
+    quix_function = QuixFunction(consumer_topic, r)
         
     # React to new data received from input topic.
     consumer_stream.events.on_data_received = quix_function.on_event_data_handler
     consumer_stream.timeseries.on_dataframe_received = quix_function.on_dataframe_handler
-
-    # When input stream closes, we close output stream as well. 
-    def on_stream_close(stream_consumer: qx.StreamConsumer, end_type: qx.StreamEndType):
-        producer_stream.close()
-        print("Stream closed:" + producer_stream.stream_id)
-
-    consumer_stream.on_stream_closed = on_stream_close
 
 
 # Hook up events before initiating read to avoid losing out on any data
