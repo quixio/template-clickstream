@@ -4,9 +4,8 @@ import redis
 from datetime import datetime, date
 
 class QuixFunction:
-    def __init__(self, consumer_stream: qx.StreamConsumer, producer_stream: qx.StreamProducer, r: redis.Redis):
+    def __init__(self, consumer_stream: qx.StreamConsumer, r: redis.Redis):
         self.consumer_stream = consumer_stream
-        self.producer_stream = producer_stream
         self.redis_client = r
 
     # Callback triggered for each new event
