@@ -6,6 +6,11 @@ variables:
     description: External Redis hostname
     defaultValue: ''
     required: true
+  - name: redis_port
+    inputType: FreeText
+    description: External Redis port
+    defaultValue: ''
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
