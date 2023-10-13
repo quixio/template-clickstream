@@ -36,4 +36,4 @@ class QuixFunction:
         except:
             pass    
 
-        self.producer_stream.timeseries.buffer.publish(output_df)
+        self.producer_stream.timeseries.buffer.publish(df)
