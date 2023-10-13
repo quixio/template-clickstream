@@ -26,6 +26,30 @@ deployments:
         description: Set to 1 to keep original timings, if set to false, send each click event every 0.2 seconds
         required: false
         value: 0
+  - name: Load Product and Users
+    application: Load Product and Users
+    deploymentType: Job
+    version: 1461e157dd4153322c6795b6016b998762546add
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    variables:
+      - name: redis_host
+        inputType: FreeText
+        description: External Redis hostname
+        required: true
+        value: redis-12878.c250.eu-central-1-1.ec2.cloud.redislabs.com
+      - name: redis_port
+        inputType: FreeText
+        description: External Redis port
+        required: true
+        value: 12878
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        value: redis_password
 
 # This section describes the Topics of the data pipeline
 topics:
@@ -36,4 +60,3 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 1048576000
-
