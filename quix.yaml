@@ -36,3 +36,10 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 1048576000
+  - name: enriched-click-data
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
