@@ -1,0 +1,32 @@
+# Quix Project Descriptor
+# This file describes the data pipeline and configuration of resources of a Quix Project.
+
+metadata:
+  version: 1.0
+
+# This section describes the Deployments of the data pipeline
+deployments:
+  - name: Stream data from CSV
+    application: Stream data from CSV
+    deploymentType: Job
+    version: 893a42bb86b8d0aff4ae737a88c99ace0fba6f45
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: This is the output topic for realtime CSV data
+        required: true
+        value: click-data
+
+# This section describes the Topics of the data pipeline
+topics:
+  - name: click-data
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: -1
+      retentionInBytes: 1048576000
