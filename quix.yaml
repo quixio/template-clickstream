@@ -36,3 +36,4 @@ topics:
       replicationFactor: 2
       retentionInMinutes: -1
       retentionInBytes: 1048576000
+
