@@ -1,6 +1,7 @@
 import quixstreams as qx
 import pandas as pd
 import redis
+from datetime import datetime, date
 
 class QuixFunction:
     def __init__(self, consumer_stream: qx.StreamConsumer, producer_stream: qx.StreamProducer, r: redis.Redis):
@@ -16,6 +17,17 @@ class QuixFunction:
 
         self.producer_stream.events.publish(data)
 
+    def calculate_age(self, birthday: str):
+        today = date.today()
+        birthdate = datetime.strptime(birthday, '%Y-%m-%d')
+        # Calculate the difference between the current date and the birthday
+        difference = today - birthdate
+
+        # Calculate the person's age in years
+        age_in_years = difference.days // 365
+
+        return age_in_years
+
     # Callback triggered for each new timeseries data
     def on_dataframe_handler(self, stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
 
@@ -23,7 +35,8 @@ class QuixFunction:
             product = df['Product Page URL']
             cat = self.redis_client.hget(f'product:{product}', 'cat')
             df['Product Category'] = cat
-        except:
+        except Exception as e:
+            print("Exception calculating product category", e)
             pass
 
         try:
@@ -33,7 +46,7 @@ class QuixFunction:
             df['Visitor Gender'] = gender
             df['Visitor Birthday'] = birthday
             df['Visitor Age'] = self.calculate_age(birthday)
-        except:
-            pass    
+        except Exception as e2:
+            print("Exception enriching visitor data", e2)
 
         self.producer_stream.timeseries.buffer.publish(df)
