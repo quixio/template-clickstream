@@ -9,7 +9,7 @@ deployments:
   - name: Stream data from CSV
     application: Stream data from CSV
     deploymentType: Job
-    version: 893a42bb86b8d0aff4ae737a88c99ace0fba6f45
+    version: c2fb1f65a9d9c274d4457d0a19e27c422aeb9b45
     resources:
       cpu: 200
       memory: 500
@@ -20,6 +20,11 @@ deployments:
         description: This is the output topic for realtime CSV data
         required: true
         value: click-data
+      - name: keep_timing
+        inputType: FreeText
+        description: Set to 1 to keep original timings, if set to false, send each click event every 0.2 seconds
+        required: false
+        value: 0
 
 # This section describes the Topics of the data pipeline
 topics:
