@@ -8,8 +8,8 @@ metadata:
 deployments:
   - name: Stream data from CSV
     application: Stream data from CSV
-    deploymentType: Job
-    version: c2fb1f65a9d9c274d4457d0a19e27c422aeb9b45
+    deploymentType: Service
+    version: d4d48818e6bd3616473f13d97798da7e022f00fa
     resources:
       cpu: 200
       memory: 1000
