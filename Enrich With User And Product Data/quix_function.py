@@ -3,6 +3,7 @@ import pandas as pd
 import redis
 from datetime import datetime
 
+
 class QuixFunction:
     def __init__(self, consumer_stream: qx.StreamConsumer, topic_producer: qx.TopicProducer, r: redis.Redis):
         self.consumer_stream = consumer_stream
@@ -17,20 +18,24 @@ class QuixFunction:
         producer_stream = self.topic_producer.get_or_create_stream(stream_consumer.stream_id)
         producer_stream.events.publish(data)
 
-    def calculate_age(self, birthday: str):
-        if birthday is None:
+    def calculate_age(self, birthdate: str):
+        if birthdate is None:
             return None
 
-        today = datetime.today()
-        birthdate = datetime.strptime(birthday, '%Y-%m-%d')
+        # Convert the birthdate string to a datetime object
+        birthdate = datetime.strptime(birthdate, '%Y-%m-%d')
 
-        # Calculate the difference between the current date and the birthday
-        difference = today - birthdate
+        # Get the current date
+        current_date = datetime.now()
 
-        # Calculate the person's age in years
-        age_in_years = difference.days // 365
+        # Calculate the age
+        age = current_date.year - birthdate.year
 
-        return age_in_years
+        # Check if the birthday for this year has already occurred
+        if (current_date.month, current_date.day) < (birthdate.month, birthdate.day):
+            age -= 1
+
+        return age
 
     def get_product_category(self, product: str):
         return self.redis_client.hget(f'product:{product}', 'cat')
