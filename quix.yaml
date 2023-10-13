@@ -12,7 +12,7 @@ deployments:
     version: c2fb1f65a9d9c274d4457d0a19e27c422aeb9b45
     resources:
       cpu: 200
-      memory: 500
+      memory: 1000
       replicas: 1
     variables:
       - name: output
