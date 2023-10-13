@@ -1,11 +1,12 @@
 import quixstreams as qx
 import pandas as pd
-
+import redis
 
 class QuixFunction:
-    def __init__(self, consumer_stream: qx.StreamConsumer, producer_stream: qx.StreamProducer):
+    def __init__(self, consumer_stream: qx.StreamConsumer, producer_stream: qx.StreamProducer, r: redis.Redis):
         self.consumer_stream = consumer_stream
         self.producer_stream = producer_stream
+        self.redis_client = r
 
     # Callback triggered for each new event
     def on_event_data_handler(self, stream_consumer: qx.StreamConsumer, data: qx.EventData):
