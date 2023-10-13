@@ -1,6 +1,7 @@
 import quixstreams as qx
 from quix_function import QuixFunction
 import os
+import redis
 
 
 # Quix injects credentials automatically to the client.
@@ -11,6 +12,11 @@ print("Opening input and output topics")
 consumer_topic = client.get_topic_consumer(os.environ["input"], "default-consumer-group")
 producer_topic = client.get_topic_producer(os.environ["output"])
 
+r = redis.Redis(
+    host=os.environ['redis_host'],
+    port=os.environ['redis_port'],
+    password=os.environ['redis_password'],
+    decode_responses=True)
 
 # Callback called for each incoming stream
 def read_stream(consumer_stream: qx.StreamConsumer):
@@ -20,7 +26,7 @@ def read_stream(consumer_stream: qx.StreamConsumer):
     producer_stream.properties.parents.append(consumer_stream.stream_id)
 
     # handle the data in a function to simplify the example
-    quix_function = QuixFunction(consumer_topic, producer_stream)
+    quix_function = QuixFunction(consumer_topic, producer_stream, r)
         
     # React to new data received from input topic.
     consumer_stream.events.on_data_received = quix_function.on_event_data_handler
