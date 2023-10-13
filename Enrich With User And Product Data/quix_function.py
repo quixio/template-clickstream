@@ -18,18 +18,22 @@ class QuixFunction:
 
     # Callback triggered for each new timeseries data
     def on_dataframe_handler(self, stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
-        
-        output_df = pd.DataFrame()
-        output_df["timestamp"] = df["timestamp"]
 
-        if "TAG__LapNumber" in df.columns:
-            output_df["TAG__LapNumber"] = df["TAG__LapNumber"]
-            
-        print(df)
+        try:
+            product = df['Product Page URL']
+            cat = self.redis_client.hget(f'product:{product}', 'cat')
+            df['Product Category'] = cat
+        except:
+            pass
 
-        # If braking force applied is more than 50%, we send True.
-        # update this code to apply your own logic or ML model processing
-        if "Brake" in df.columns:
-            output_df["HardBraking"] = df.apply(lambda row: "True" if row.Brake > 0.5 else "False", axis = 1)  
+        try:
+            visitor = df['Visitor Unique ID'].strip('{}')
+            gender = self.redis_client.hget(f'visitor:{visitor}', 'gender')
+            birthday = self.redis_client.hget(f'visitor:{visitor}', 'birthday')
+            df['Visitor Gender'] = gender
+            df['Visitor Birthday'] = birthday
+            df['Visitor Age'] = self.calculate_age(birthday)
+        except:
+            pass    
 
         self.producer_stream.timeseries.buffer.publish(output_df)
