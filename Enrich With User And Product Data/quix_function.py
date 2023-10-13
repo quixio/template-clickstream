@@ -1,7 +1,7 @@
 import quixstreams as qx
 import pandas as pd
 import redis
-from datetime import datetime, date
+from datetime import datetime
 
 class QuixFunction:
     def __init__(self, consumer_stream: qx.StreamConsumer, topic_producer: qx.TopicProducer, r: redis.Redis):
@@ -21,7 +21,7 @@ class QuixFunction:
         if birthday is None:
             return None
 
-        today = date.today()
+        today = datetime.today()
         birthdate = datetime.strptime(birthday, '%Y-%m-%d')
 
         # Calculate the difference between the current date and the birthday
