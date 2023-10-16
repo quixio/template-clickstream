@@ -36,6 +36,21 @@ deployments:
       replicas: 1
     desiredStatus: Running
     variables:
+      - name: redis_host
+        inputType: FreeText
+        description: External Redis hostname
+        required: true
+        value: redis-12878.c250.eu-central-1-1.ec2.cloud.redislabs.com
+      - name: redis_port
+        inputType: FreeText
+        description: External Redis port
+        required: true
+        value: 12878
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        value: redis_password
       - name: input
         inputType: InputTopic
         description: This is the input topic where we will get user interactions
@@ -46,6 +61,16 @@ deployments:
         description: This is the output topic, where we will send the enriched data
         required: true
         value: enriched-click-data
+  - name: Load Products and Users
+    application: Load Products and Users
+    deploymentType: Service
+    version: 4e9fc5d428998db25942db34663bfc0beeadd91c
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
       - name: redis_host
         inputType: FreeText
         description: External Redis hostname
