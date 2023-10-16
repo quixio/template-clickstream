@@ -25,7 +25,7 @@ class BehaviourDetector:
         # Remove visitors from the dataframe, so we don't launch same offer to the same visitor
         self.remove_visitors(visitors)
 
-        for _, row in visitors.iteritems():
+        for _, row in visitors.items():
             print(f"Sending offer to {row['Visitor Unique ID']} for category {row['Product Category']}")
             stream = self.topic_producer.get_or_create_stream(row['Visitor Unique ID'])
             stream.timeseries.publish(pd.DataFrame(row))
@@ -53,7 +53,7 @@ class BehaviourDetector:
 
         self.df = self.df[self.df['time'] > minutes_ago]
 
-    def get_visitors_opened_same_category(self):
+    def get_visitors_opened_same_category(self) -> pd.DataFrame:
         """Get visitors who opened 3 or more products in the same category."""
 
         visits = self.remove_page_refreshes()
@@ -70,7 +70,7 @@ class BehaviourDetector:
 
         self.df = self.df[~self.df['Visitor Unique ID'].isin(visitors.index.get_level_values(0))]
 
-    def remove_page_refreshes(self):
+    def remove_page_refreshes(self) -> pd.DataFrame:
         """Remove consecutive duplicates of "Product Page URL" for same visitor."""
 
         # First, we sort the dataframe by Visitor Unique ID and time, so we can detect if the visitor refreshed the page
