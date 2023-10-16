@@ -1,37 +1,21 @@
 import quixstreams as qx
-from quix_function import QuixFunction
+from behaviour_detector import BehaviourDetector
 import os
-
 
 # Quix injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
-client = qx.QuixStreamingClient()
+TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1qVTBRVE01TmtJNVJqSTNOVEpFUlVSRFF6WXdRVFF4TjBSRk56SkNNekpFUWpBNFFqazBSUSJ9.eyJodHRwczovL3F1aXguYWkvb3JnX2lkIjoiZGVtbyIsImh0dHBzOi8vcXVpeC5haS9vd25lcl9pZCI6ImF1dGgwfDExYjRjZmQyLWZiMjctNGIwNS05Y2MzLWRhNmE5YTZlNzRjNyIsImh0dHBzOi8vcXVpeC5haS90b2tlbl9pZCI6IjcyOGM4NGUwLWUxNWQtNGM1YS05MWRjLWQzMWE3N2E2M2Q2MyIsImh0dHBzOi8vcXVpeC5haS9leHAiOiIxNjk4NzA2ODAwIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnF1aXguYWkvIiwic3ViIjoicWlkc050N3diM1c4d1FFcHVFN0NiR3pmMWNkbUo3WWtAY2xpZW50cyIsImF1ZCI6InF1aXgiLCJpYXQiOjE2OTc0NTY1MzUsImV4cCI6MTcwMDA0ODUzNSwiYXpwIjoicWlkc050N3diM1c4d1FFcHVFN0NiR3pmMWNkbUo3WWsiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMiLCJwZXJtaXNzaW9ucyI6W119.MuwvlpR_SARux8YzI1yTPRX268CmpHmAD9vriOd_IJgly4GY_mTPW8zxGycp5q3nE20BHsBSXcTpxbdrAOLSY-FB83sN7GWIePcNGlfkNksxCkxsecJHR_vHfXxbJNz6VpTAc0IIV3KrBz3HEeou06qVNmW0xDd-AISu9RAKwYqE_KrfcxW-K5MCQPGVxZXMKq7Gx8fjfx12iZf-fH2YhBTjPfPQXsAA-pAvang60C4Xtq3dCLWrs_vFYhDOeDcS11gFaEj7PGPtbTZuXKIWVCVEzin7YzTqwVjUBNDbmxDodMuXmnQT2iJIHxqVjZxFcoHOiD68BeQ5lXoS48hEvA"
+client = qx.QuixStreamingClient(token=TOKEN)
 
 print("Opening input and output topics")
 consumer_topic = client.get_topic_consumer(os.environ["input"], "default-consumer-group")
 producer_topic = client.get_topic_producer(os.environ["output"])
-
+behaviour_detector = BehaviourDetector(producer_topic)
 
 # Callback called for each incoming stream
 def read_stream(consumer_stream: qx.StreamConsumer):
-
-    # Create a new stream to output data
-    producer_stream = producer_topic.get_or_create_stream(consumer_stream.stream_id + "hard-braking")
-    producer_stream.properties.parents.append(consumer_stream.stream_id)
-
-    # handle the data in a function to simplify the example
-    quix_function = QuixFunction(consumer_topic, producer_stream)
-        
     # React to new data received from input topic.
-    consumer_stream.events.on_data_received = quix_function.on_event_data_handler
-    consumer_stream.timeseries.on_dataframe_received = quix_function.on_dataframe_handler
-
-    # When input stream closes, we close output stream as well. 
-    def on_stream_close(stream_consumer: qx.StreamConsumer, end_type: qx.StreamEndType):
-        producer_stream.close()
-        print("Stream closed:" + producer_stream.stream_id)
-
-    consumer_stream.on_stream_closed = on_stream_close
+    consumer_stream.timeseries.on_dataframe_received = behaviour_detector.on_dataframe_handler
 
 
 # Hook up events before initiating read to avoid losing out on any data
