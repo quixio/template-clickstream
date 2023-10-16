@@ -21,7 +21,8 @@ r = redis.Redis(
 
 # Callback called for each incoming stream
 def read_stream(consumer_stream: qx.StreamConsumer):
-    # handle the data in a function to simplify the example
+    # Handle the data in a function to simplify the example.
+    # Note that we will be creating one function per visitor for this example.
     quix_function = QuixFunction(consumer_stream, producer_topic, r)
 
     # React to new data received from input topic.

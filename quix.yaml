@@ -38,12 +38,12 @@ deployments:
     variables:
       - name: input
         inputType: InputTopic
-        description: This is the input topic for f1 data
+        description: This is the input topic where we will get user interactions
         required: true
         value: click-data
       - name: output
         inputType: OutputTopic
-        description: This is the output topic for hard braking events
+        description: This is the output topic, where we will send the enriched data
         required: true
         value: enriched-click-data
       - name: redis_host

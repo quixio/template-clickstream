@@ -3,12 +3,12 @@ language: python
 variables:
   - name: input
     inputType: InputTopic
-    description: This is the input topic for f1 data
+    description: This is the input topic where we will get user interactions
     defaultValue: ''
     required: true
   - name: output
     inputType: OutputTopic
-    description: This is the output topic for hard braking events
+    description: This is the output topic, where we will send the enriched data
     defaultValue: hard-braking
     required: true
   - name: redis_host
