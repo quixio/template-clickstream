@@ -17,7 +17,7 @@ class BehaviourDetector:
         self.merge_dataframe(received_df)
 
         # Remove old data
-        self.remove_old_data(minutes=10)
+        self.remove_old_data(minutes=30)
 
         # Get visitors who opened 3 or more products in the same category
         visitors = self.get_visitors_opened_same_category()
