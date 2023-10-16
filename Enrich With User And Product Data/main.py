@@ -26,7 +26,6 @@ def read_stream(consumer_stream: qx.StreamConsumer):
     quix_function = QuixFunction(consumer_stream, producer_topic, r)
 
     # React to new data received from input topic.
-    consumer_stream.events.on_data_received = quix_function.on_event_data_handler
     consumer_stream.timeseries.on_dataframe_received = quix_function.on_dataframe_handler
 
 

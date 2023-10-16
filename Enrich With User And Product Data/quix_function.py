@@ -10,14 +10,6 @@ class QuixFunction:
         self.topic_producer = topic_producer
         self.redis_client = r
 
-    # Callback triggered for each new event (like stream created, parameters changed, etc.)
-    def on_event_data_handler(self, stream_consumer: qx.StreamConsumer, data: qx.EventData):
-        print(data.value)
-
-        # Transform your data here.
-        producer_stream = self.topic_producer.get_or_create_stream(stream_consumer.stream_id)
-        producer_stream.events.publish(data)
-
     # Method to calculate the age of a visitor
     def calculate_age(self, birthdate: str):
         if birthdate is None:
