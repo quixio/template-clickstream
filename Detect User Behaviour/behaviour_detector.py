@@ -10,9 +10,15 @@ class BehaviourDetector:
     def __init__(self, topic_producer: qx.TopicProducer):
         self.topic_producer = topic_producer
         self.df = pd.DataFrame(columns=self.columns)
+        self.frames_received = 0
 
     # Callback triggered for each new timeseries data
     def on_dataframe_handler(self, stream_consumer: qx.StreamConsumer, received_df: pd.DataFrame):
+        self.frames_received += 1
+        if self.frames_received % 100 == 0:
+            print(f"Received {self.frames_received} frames")
+            print("Unique visitors:", len(self.df.groupby(["Visitor Unique ID"]).size().index))
+
         # Merge incoming data with existing data
         self.merge_dataframe(received_df)
 
@@ -25,10 +31,12 @@ class BehaviourDetector:
         # Remove visitors from the dataframe, so we don't launch same offer to the same visitor
         self.remove_visitors(visitors)
 
-        for _, row in visitors.items():
-            print(f"Sending offer to {row['Visitor Unique ID']} for category {row['Product Category']}")
-            stream = self.topic_producer.get_or_create_stream(row['Visitor Unique ID'])
-            stream.timeseries.publish(pd.DataFrame(row))
+        for label, row in visitors.items():
+            visitor, category = label
+            print(f"Sending offer to {visitor} for category {category}")
+            stream = self.topic_producer.get_or_create_stream(visitor)
+            stream.timeseries.publish(
+                pd.DataFrame([{"visitor": visitor, "category": category, "timestamp": datetime.utcnow()}]))
 
     def merge_dataframe(self, new_df: pd.DataFrame):
         """Merge the new DataFrame with the existing DataFrame."""
