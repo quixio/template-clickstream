@@ -1,7 +1,6 @@
 # Sample template
 
-Simple program to insert user and product data to redis database, so it
-can be used later for enrichment
+Simple program to insert user and product data to redis database, so it can be used later for enrichment
 
 ## Environment variables
 
