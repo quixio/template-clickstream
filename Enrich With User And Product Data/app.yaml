@@ -1,0 +1,31 @@
+name: Enrich With User And Product Data
+language: python
+variables:
+  - name: input
+    inputType: InputTopic
+    description: This is the input topic where we will get user interactions
+    defaultValue: ''
+    required: true
+  - name: output
+    inputType: OutputTopic
+    description: This is the output topic, where we will send the enriched data
+    defaultValue: hard-braking
+    required: true
+  - name: redis_host
+    inputType: FreeText
+    description: External Redis hostname
+    defaultValue: ''
+    required: true
+  - name: redis_port
+    inputType: FreeText
+    description: External Redis port
+    defaultValue: ''
+    required: true
+  - name: redis_password
+    inputType: Secret
+    description: External Redis password
+    defaultValue: redis_password
+    required: true
+dockerfile: build/dockerfile
+runEntryPoint: main.py
+defaultFile: quix_function.py
