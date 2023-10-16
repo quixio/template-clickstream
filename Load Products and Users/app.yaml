@@ -1,4 +1,4 @@
-name: Load Product and Users
+name: Load Products and Users
 language: python
 variables:
   - name: redis_host
