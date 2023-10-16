@@ -11,6 +11,7 @@ r = redis.Redis(
     decode_responses=True)
 
 
+# Read products from products.tsv and store the category in Redis
 def load_products():
     products = pd.read_csv('products.tsv', sep='\t')
     for index, row in products.iterrows():
@@ -20,22 +21,25 @@ def load_products():
     print(f"Imported {len(products)} products")
 
 
+# Read visitor data from users.tsv and store gender, birthday and age in Redis
 def load_users():
     users = pd.read_csv('users.tsv', sep='\t')
     total_users = len(users)
     imported_users = 0
-    for index, row in users.iterrows():
+    for _, row in users.iterrows():
         key = f'visitor:{row["SWID"]}'
-        try:
+
+        # Birthday may not be present, check for NaN
+        if not pd.isna(row['BIRTH_DT']):
             birthday = datetime.strptime(row['BIRTH_DT'], '%d-%b-%y')
             if birthday.year > 2005:
                 birthday = birthday.replace(year=birthday.year - 100)
 
             r.hset(key, 'birthday', birthday.strftime('%Y-%m-%d'))
-        except Exception as e:
-            print("Cannot parse birthday: ", row['BIRTH_DT'], e)
 
-        r.hset(key, 'gender', row['GENDER_CD'])
+        # Age may not be present, check for NaN
+        if not pd.isna(row['GENDER_CD']):
+            r.hset(key, 'gender', row['GENDER_CD'])
 
         imported_users += 1
 
