@@ -86,6 +86,26 @@ deployments:
         description: External Redis password
         required: true
         value: redis_password
+  - name: Detect User Behaviour
+    application: Detect User Behaviour
+    deploymentType: Service
+    version: 23bbdad4c9d757c8039d9a8c94b74c4911d2cd68
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic for f1 data
+        required: true
+        value: enriched-click-data
+      - name: output
+        inputType: OutputTopic
+        description: This is the output topic for hard braking events
+        required: true
+        value: user-behaviour
 
 # This section describes the Topics of the data pipeline
 topics:
