@@ -26,8 +26,8 @@ deployments:
         description: Set to 1 to keep original timings, if set to false, send each click event every 0.2 seconds
         required: false
         value: 0
-  - name: Load Product and Users
-    application: Load Product and Users
+  - name: Load Products and Users
+    application: Load Products and Users
     deploymentType: Job
     version: 29129f8f2cfd10e926bf812b9c768a86929011ad
     resources:
