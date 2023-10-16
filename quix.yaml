@@ -29,7 +29,7 @@ deployments:
   - name: Load Product and Users
     application: Load Product and Users
     deploymentType: Job
-    version: 1461e157dd4153322c6795b6016b998762546add
+    version: 29129f8f2cfd10e926bf812b9c768a86929011ad
     resources:
       cpu: 200
       memory: 500
@@ -93,8 +93,8 @@ topics:
     configuration:
       partitions: 2
       replicationFactor: 2
-      retentionInMinutes: 60
-      retentionInBytes: 52428800
+      retentionInMinutes: -1
+      retentionInBytes: 1048576000
   - name: enriched-click-data
     persisted: false
     configuration:
