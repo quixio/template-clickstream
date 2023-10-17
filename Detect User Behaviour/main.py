@@ -1,6 +1,7 @@
 import quixstreams as qx
-from behaviour_detector import BehaviourDetector
 import os
+import pandas as pd
+from behaviour_detector import BehaviourDetector
 
 # Quix injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
@@ -10,6 +11,18 @@ print("Opening input and output topics")
 consumer_topic = client.get_topic_consumer(os.environ["input"], "default-consumer-group")
 producer_topic = client.get_topic_producer(os.environ["output"])
 behaviour_detector = BehaviourDetector(producer_topic)
+
+frames_received = 0
+
+
+# Callback triggered for each new timeseries data. This method will enrich the data
+def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
+    global frames_received
+    frames_received += 1
+    if frames_received % 100 == 0:
+        print(f"Received {frames_received} frames")
+
+    behaviour_detector.process_dataframe(df)
 
 
 # Callback called for each incoming stream
