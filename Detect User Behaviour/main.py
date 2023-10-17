@@ -28,7 +28,7 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
 # Callback called for each incoming stream
 def read_stream(consumer_stream: qx.StreamConsumer):
     # React to new data received from input topic.
-    consumer_stream.timeseries.on_dataframe_received = behaviour_detector.on_dataframe_handler
+    consumer_stream.timeseries.on_dataframe_received = on_dataframe_handler
 
 
 # Hook up events before initiating read to avoid losing out on any data
