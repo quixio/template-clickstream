@@ -6,15 +6,10 @@ variables:
     description: This is the input topic for f1 data
     defaultValue: ''
     required: true
-  - name: output
-    inputType: OutputTopic
-    description: This is the output topic for hard braking events
-    defaultValue: hard-braking
-    required: true
   - name: window_minutes
     inputType: FreeText
     description: Minutes for the rolling window to detect user behaviour
-    defaultValue: '30'
+    defaultValue: 30
     required: false
 dockerfile: build/dockerfile
 runEntryPoint: main.py
