@@ -15,6 +15,12 @@ else:
 
 
 def applies_for_offer1(row):
+    """Check if the visitor applies for offer 1."""
+    if not "Product Category" in row \
+            or not "Visitor Age" in row \
+            or not "Visitor Gender" in row:
+        return False
+
     if row["Product Category"] in ["home&garden", "automotive"] \
             and 35 <= row["Visitor Age"] <= 60 \
             and row["Visitor Gender"] == "M":
@@ -24,7 +30,12 @@ def applies_for_offer1(row):
 
 
 def applies_for_offer2(row):
-    """Check if the visitor applies for offer 1."""
+    """Check if the visitor applies for offer 2."""
+    if not "Product Category" in row \
+            or not "Visitor Age" in row \
+            or not "Visitor Gender" in row:
+        return False
+
     if row["Product Category"] in ["clothing", "shoes", "handbags"] \
             and 25 <= row["Visitor Age"] <= 35 \
             and row["Visitor Gender"] == "F":
