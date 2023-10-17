@@ -89,7 +89,7 @@ deployments:
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
-    version: 972e89f7cdb993f77781bf7674afbc5d8c144d84
+    version: 11a755c0deef6c046210c2be387fbdd95af50464
     resources:
       cpu: 1000
       memory: 500
