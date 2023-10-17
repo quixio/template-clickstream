@@ -1,7 +1,10 @@
+import os
+
 import quixstreams as qx
 import pandas as pd
 from datetime import timedelta, datetime
 
+window_minutes = os.environ['window_minutes']
 
 class BehaviourDetector:
     columns = ["time", "Visitor Unique ID", "Product Category", "Visitor Age", "Visitor Gender", "Purchase ID",
@@ -23,7 +26,7 @@ class BehaviourDetector:
         self.merge_dataframe(received_df)
 
         # Remove old data
-        self.remove_old_data(minutes=30)
+        self.remove_old_data(minutes=window_minutes)
 
         # Get visitors who opened 3 or more products in the same category
         visitors = self.get_visitors_opened_same_category()
