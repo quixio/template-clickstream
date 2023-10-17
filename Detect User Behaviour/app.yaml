@@ -3,7 +3,7 @@ language: python
 variables:
   - name: input
     inputType: InputTopic
-    description: This is the input topic for f1 data
+    description: This is the input topic for enriched user data
     defaultValue: ''
     required: true
   - name: window_minutes
