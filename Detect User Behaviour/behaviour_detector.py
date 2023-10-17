@@ -48,8 +48,7 @@ class BehaviourDetector:
     columns = ["time", "Visitor Unique ID", "Product Category", "Visitor Age", "IP Address", "Visitor Gender",
                "Purchase ID", "Product Page URL"]
 
-    def __init__(self, topic_producer: qx.TopicProducer):
-        self.topic_producer = topic_producer
+    def __init__(self):
         self.df = pd.DataFrame(columns=self.columns)
 
         # Initialize a deque to keep track of webhook calls

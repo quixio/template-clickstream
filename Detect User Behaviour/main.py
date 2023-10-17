@@ -9,8 +9,7 @@ client = qx.QuixStreamingClient()
 
 print("Opening input and output topics")
 consumer_topic = client.get_topic_consumer(os.environ["input"], "default-consumer-group")
-producer_topic = client.get_topic_producer(os.environ["output"])
-behaviour_detector = BehaviourDetector(producer_topic)
+behaviour_detector = BehaviourDetector()
 
 frames_received = 0
 
