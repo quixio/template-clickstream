@@ -1,9 +1,7 @@
 import os
 import time
-from collections import deque
-
-import quixstreams as qx
 import pandas as pd
+from collections import deque
 from datetime import timedelta, datetime
 
 import requests
