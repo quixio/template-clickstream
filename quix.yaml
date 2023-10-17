@@ -89,7 +89,7 @@ deployments:
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
-    version: cc2a2e6fa9bf3a10f7eee70c7bdbd9fd31605a63
+    version: 4860c73d5cae40d582d495021a4b3b579fbf86fd
     resources:
       cpu: 1000
       memory: 500
@@ -101,11 +101,6 @@ deployments:
         description: This is the input topic for f1 data
         required: true
         value: enriched-click-data
-      - name: output
-        inputType: OutputTopic
-        description: This is the output topic for hard braking events
-        required: true
-        value: user-behaviour
       - name: window_minutes
         inputType: FreeText
         description: Minutes for the rolling window to detect user behaviour
