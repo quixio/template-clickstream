@@ -40,7 +40,6 @@ class BehaviourDetector:
     def __init__(self, topic_producer: qx.TopicProducer):
         self.topic_producer = topic_producer
         self.df = pd.DataFrame(columns=self.columns)
-        self.frames_received = 0
 
         # Initialize a deque to keep track of webhook calls
         self.webhook_calls = deque()
