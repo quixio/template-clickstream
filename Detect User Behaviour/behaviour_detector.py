@@ -4,7 +4,7 @@ import quixstreams as qx
 import pandas as pd
 from datetime import timedelta, datetime
 
-window_minutes = os.environ['window_minutes']
+window_minutes = int(os.environ['window_minutes'])
 
 class BehaviourDetector:
     columns = ["time", "Visitor Unique ID", "Product Category", "Visitor Age", "Visitor Gender", "Purchase ID",
