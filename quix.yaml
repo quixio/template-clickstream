@@ -98,7 +98,7 @@ deployments:
     variables:
       - name: input
         inputType: InputTopic
-        description: This is the input topic for f1 data
+        description: This is the input topic for enriched click data
         required: true
         value: enriched-click-data
       - name: window_minutes
@@ -119,8 +119,8 @@ topics:
     configuration:
       partitions: 2
       replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 1048576000
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
   - name: enriched-click-data
     persisted: false
     configuration:
