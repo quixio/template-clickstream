@@ -17,8 +17,6 @@ frames_received = 0
 
 # Send special offers for each visitor in its own stream
 def send_special_offers(special_offers: pd.DataFrame):
-    print("All offers", special_offers)
-
     for index, row in special_offers.iterrows():
         visitor_id = row['Visitor Unique ID'].strip('{}')
         print("Sending offer to visitor", visitor_id)
@@ -28,6 +26,7 @@ def send_special_offers(special_offers: pd.DataFrame):
 
         # Send the offer to the stream
         frame = pd.DataFrame([row])
+        frame["timestamp"] = pd.Timestamp.now()
         stream.timeseries.buffer.publish(frame)
 
 
