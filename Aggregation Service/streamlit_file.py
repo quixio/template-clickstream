@@ -1,6 +1,6 @@
 import time
-
 import streamlit as st
+import pandas as pd
 
 from app.conf import (
     STREAMLIT_DATAFRAME_POLL_PERIOD,
@@ -63,6 +63,9 @@ placeholder_gender_category = st.empty()
 # A placeholder for age group - category table
 placeholder_age_group_category = st.empty()
 
+# A placeholder for 5 most active visitors table
+placeholder_most_active_visitors = st.empty()
+
 # A placeholder for the raw data table
 placeholder_raw = st.empty()
 
@@ -78,25 +81,25 @@ while True:
     # The df can be shared between threads and changed over time, so we copy it
     real_time_df_copy = real_time_df[:]
 
-    with placeholder_col1.container():
-        # Plot line chart in the first column
-        draw_line_chart_failsafe(
-            real_time_df_copy,
-            # Use "datetime" column for X axis
-            x="Date and Time",
-            # Use a column from the first select widget for Y axis
-            # You may also plot multiple values
-            y=[parameter1],
-        )
-
-    # Plot line chart in the second column
-    with placeholder_col2.container():
-        draw_line_chart_failsafe(
-            real_time_df_copy,
-            x="Date and Time",
-            # Use a column from the second select widget for Y axis
-            y=[parameter2],
-        )
+    # with placeholder_col1.container():
+    #     # Plot line chart in the first column
+    #     draw_line_chart_failsafe(
+    #         real_time_df_copy,
+    #         # Use "datetime" column for X axis
+    #         x="Date and Time",
+    #         # Use a column from the first select widget for Y axis
+    #         # You may also plot multiple values
+    #         y=[parameter1],
+    #     )
+    #
+    # # Plot line chart in the second column
+    # with placeholder_col2.container():
+    #     draw_line_chart_failsafe(
+    #         real_time_df_copy,
+    #         x="Date and Time",
+    #         # Use a column from the second select widget for Y axis
+    #         y=[parameter2],
+    #     )
 
     # Display categories grouped by gender
     with placeholder_gender_category.container():
@@ -113,6 +116,16 @@ while True:
         df_pivot = df.pivot(index='Product Category', columns='Visitor Age Group', values='count')
 
         st.dataframe(df_pivot)
+
+    # Display 5 most active visitors
+    with placeholder_most_active_visitors.container():
+        st.markdown("### 5 most active visitors in the last hour")
+        # Get data only from last hour
+        df = real_time_df_copy[real_time_df_copy["Date and Time"] > (pd.Timestamp.now() - pd.Timedelta(hours=1))]
+
+        df = df.groupby(["Visitor Unique ID", "Visitor Gender", "Visitor Age Group"]).size().reset_index(name="count")
+        df = df.sort_values(by=['count'], ascending=False).head(5)
+        st.dataframe(df)
 
     # Display the raw dataframe data
     with placeholder_raw.container():

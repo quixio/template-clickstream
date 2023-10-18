@@ -1,5 +1,6 @@
 import pandas as pd
 import quixstreams as qx
+from datetime import datetime
 
 from .store import StreamStateStore
 
@@ -53,7 +54,7 @@ def start_quixstreams(topic_name: str, state_store: StreamStateStore):
             """
             Callback called for each incoming data frame
             """
-            df_i["Date and Time"] = pd.to_datetime(df_i["Date and Time"])
+            df_i["Date and Time"] = pd.to_datetime(datetime.now())
 
             if "Visitor Age" in df_i.columns:
                 df_i["Visitor Age Group"] = df_i["Visitor Age"].apply(get_age_group)
