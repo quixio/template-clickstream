@@ -17,13 +17,10 @@ st.set_page_config(
 # PARAMETERS SECTION
 # Define a list of parameters to show in select widgets.
 AVAILABLE_PARAMS = [
-    "Steer",
-    "Speed",
-    "LapDistance",
-    "Gear",
-    "EngineTemp",
-    "EngineRPM",
-    "Brake",
+    "Visitor Age",
+    "Visitor Gender",
+    "Product Category",
+    "Visitor Birthdate",
 ]
 
 # DASHBOARD LAYOUT SECTION
