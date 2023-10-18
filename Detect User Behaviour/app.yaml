@@ -3,7 +3,7 @@ language: python
 variables:
   - name: input
     inputType: InputTopic
-    description: This is the input topic for enriched user data
+    description: This is the input topic for f1 data
     defaultValue: ''
     required: true
   - name: window_minutes
@@ -11,6 +11,11 @@ variables:
     description: Minutes for the rolling window to detect user behaviour
     defaultValue: 30
     required: false
+  - name: output
+    inputType: OutputTopic
+    description: Topic to write offers
+    defaultValue: ''
+    required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: behaviour_detector.py
