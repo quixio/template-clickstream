@@ -30,6 +30,7 @@ def send_special_offers(special_offers: pd.DataFrame):
         stream.timeseries.buffer.publish(frame)
 
 
+# Callback called for each incoming dataframe
 def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     global frames_received
     frames_received += 1
