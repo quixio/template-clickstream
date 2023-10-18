@@ -36,8 +36,10 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     if frames_received % 100 == 0:
         print(f"Received {frames_received} frames")
 
+    # Original dataframe may contain more than one row
     behaviour_detector.process_dataframe(df)
 
+    # And the special offers recipients may contain 0 or more rows
     special_offers = behaviour_detector.get_special_offers_recipients()
 
     if not special_offers.empty:
