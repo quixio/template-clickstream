@@ -5,9 +5,11 @@ from .store import StreamStateStore
 
 __all__ = ("start_quixstreams",)
 
-valid_columns = ["Date and Time", "Product Category", "Visitor Age Group", "Visitor Gender"]
+valid_columns = ["Date and Time", "Visitor Unique ID", "Product Page URL", "Product Category", "Visitor Age Group",
+                 "Visitor Gender"]
 
 qx.Logging.update_factory(qx.LogLevel.Debug)
+
 
 def get_age_group(age):
     if age < 10:
