@@ -69,7 +69,7 @@ deployments:
       cpu: 200
       memory: 500
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: redis_host
         inputType: FreeText
@@ -86,6 +86,31 @@ deployments:
         description: External Redis password
         required: true
         value: redis_password
+  - name: Detect User Behaviour
+    application: Detect User Behaviour
+    deploymentType: Service
+    version: 1a98944521e60008c586cbe5ce86f973a1f1dcd3
+    resources:
+      cpu: 1000
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic for enriched click data
+        required: true
+        value: enriched-click-data
+      - name: window_minutes
+        inputType: FreeText
+        description: Minutes for the rolling window to detect user behaviour
+        required: false
+        value: 30
+      - name: output
+        inputType: OutputTopic
+        description: Topic to write offers
+        required: true
+        value: special-offers
 
 # This section describes the Topics of the data pipeline
 topics:
@@ -94,9 +119,16 @@ topics:
     configuration:
       partitions: 2
       replicationFactor: 2
-      retentionInMinutes: -1
-      retentionInBytes: 1048576000
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
   - name: enriched-click-data
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
+  - name: special-offers
     persisted: false
     configuration:
       partitions: 2

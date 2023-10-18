@@ -1,0 +1,21 @@
+name: Detect User Behaviour
+language: python
+variables:
+  - name: input
+    inputType: InputTopic
+    description: This is the input topic for enriched click data
+    defaultValue: ''
+    required: true
+  - name: window_minutes
+    inputType: FreeText
+    description: Minutes for the rolling window to detect user behaviour
+    defaultValue: 30
+    required: false
+  - name: output
+    inputType: OutputTopic
+    description: Topic to write offers
+    defaultValue: ''
+    required: true
+dockerfile: build/dockerfile
+runEntryPoint: main.py
+defaultFile: behaviour_detector.py
