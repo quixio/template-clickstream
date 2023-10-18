@@ -52,7 +52,17 @@ def start_quixstreams(topic_name: str, state_store: StreamStateStore):
             Callback called for each incoming data frame
             """
             df_i["Date and Time"] = pd.to_datetime(df_i["Date and Time"])
-            df_i["Visitor Age Group"] = df_i["Visitor Age"].apply(get_age_group)
+
+            if "Visitor Age" in df_i.columns:
+                df_i["Visitor Age Group"] = df_i["Visitor Age"].apply(get_age_group)
+            else:
+                df_i["Visitor Age Group"] = "Unknown"
+
+            if "Visitor Gender" in df_i.columns:
+                df_i["Visitor Gender"] = df_i["Visitor Gender"].apply(lambda x: x[0] if isinstance(x, str) else "U")
+            else:
+                df_i["Visitor Gender"] = "U"
+
             df_i = df_i[[col for col in valid_columns if col in df_i.columns]]
 
             # Add new data to the store

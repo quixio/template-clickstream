@@ -17,7 +17,7 @@ st.set_page_config(
 # PARAMETERS SECTION
 # Define a list of parameters to show in select widgets.
 AVAILABLE_PARAMS = [
-    "Visitor Age",
+    "Visitor Age Group",
     "Visitor Gender",
     "Product Category",
     "Visitor Birthdate",
@@ -57,6 +57,12 @@ with col2:
     # A placeholder for the second chart to update it later with data
     placeholder_col2 = st.empty()
 
+# A placeholder for gender - category table
+placeholder_gender_category = st.empty()
+
+# A placeholder for age group - category table
+placeholder_age_group_category = st.empty()
+
 # A placeholder for the raw data table
 placeholder_raw = st.empty()
 
@@ -77,7 +83,7 @@ while True:
         draw_line_chart_failsafe(
             real_time_df_copy,
             # Use "datetime" column for X axis
-            x="datetime",
+            x="Date and Time",
             # Use a column from the first select widget for Y axis
             # You may also plot multiple values
             y=[parameter1],
@@ -87,10 +93,26 @@ while True:
     with placeholder_col2.container():
         draw_line_chart_failsafe(
             real_time_df_copy,
-            x="datetime",
+            x="Date and Time",
             # Use a column from the second select widget for Y axis
             y=[parameter2],
         )
+
+    # Display categories grouped by gender
+    with placeholder_gender_category.container():
+        st.markdown("### Category per gender")
+        df = real_time_df_copy.groupby(["Visitor Gender", "Product Category"]).size().reset_index(name="count")
+        df_pivot = df.pivot(index='Product Category', columns='Visitor Gender', values='count')
+
+        st.dataframe(df_pivot)
+
+    # Display categories grouped by age group
+    with placeholder_age_group_category.container():
+        st.markdown("### Category per age group")
+        df = real_time_df_copy.groupby(["Visitor Age Group", "Product Category"]).size().reset_index(name="count")
+        df_pivot = df.pivot(index='Product Category', columns='Visitor Age Group', values='count')
+
+        st.dataframe(df_pivot)
 
     # Display the raw dataframe data
     with placeholder_raw.container():
