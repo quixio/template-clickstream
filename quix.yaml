@@ -111,6 +111,24 @@ deployments:
         description: Topic to write offers
         required: true
         value: special-offers
+  - name: Aggregation Service
+    application: Aggregation Service
+    deploymentType: Service
+    version: 6b64a522c6cf5cf176218ca8257abf5433e676a3
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: aggregationservice
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: true
+        value: enriched-click-data
 
 # This section describes the Topics of the data pipeline
 topics:
