@@ -1,6 +1,6 @@
 # Event Detection
 
-This application is used to enrich the click data with the product category and the visitor gender, birthday and age.
+This application is used to enrich the click data with the product category and the visitor gender, birthday, age and country.
 
 This data is obtained from Redis, which is populated using other application.
 
