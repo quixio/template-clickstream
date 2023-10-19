@@ -9,12 +9,12 @@ deployments:
   - name: Stream data from CSV
     application: Stream data from CSV
     deploymentType: Service
-    version: 9ae2e8b19d02eab7d1c199f1ba3cd49ba471bf15
+    version: 47f0bced84493761958c9e1ce6c384b0eb1f94f7
     resources:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: output
         inputType: OutputTopic
