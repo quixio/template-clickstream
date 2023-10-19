@@ -3,6 +3,8 @@ from datetime import datetime
 import pandas as pd
 import os
 import redis
+from geoip import geolite2
+import pycountry
 
 # Quix injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
@@ -44,34 +46,45 @@ def calculate_age(birthdate: str):
 def get_product_category(product: str):
     return redis_client.hget(f'product:{product}', 'cat')
 
+# Method to get the product title for a product from Redis
+def get_product_title(product: str):
+    return redis_client.hget(f'product:{product}', 'title')
+
 
 # Method to get the visitor gender from Redis
 def get_visitor_gender(visitor: str):
-    # Origin visitor format: {visitor_id}
-    visitor_without_brackets = visitor.strip('{}')
-    return redis_client.hget(f'visitor:{visitor_without_brackets}', 'gender')
+    return redis_client.hget(f'visitor:{visitor}', 'gender')
 
 
 # Method to get the visitor birthdate from Redis
 def get_visitor_birthdate(visitor: str):
-    visitor_without_brackets = visitor.strip('{}')
-    return redis_client.hget(f'visitor:{visitor_without_brackets}', 'birthday')
+    return redis_client.hget(f'visitor:{visitor}', 'birthday')
 
 
 # Method to get the visitor age
 def get_visitor_age(visitor: str):
-    visitor_without_brackets = visitor.strip('{}')
-    birthday = redis_client.hget(f'visitor:{visitor_without_brackets}', 'birthday')
+    birthday = redis_client.hget(f'visitor:{visitor}', 'birthday')
     return calculate_age(birthday)
+
+
+def get_country_from_ip(ip: str):
+    match = geolite2.lookup(ip)
+    if match is not None:
+        country = pycountry.countries.get(alpha_2=match.country)
+        return country.name
+
+    return "Unknown"
 
 
 # Callback triggered for each new timeseries data. This method will enrich the data
 def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     # Enrich data
-    df['Product Category'] = df['Product Page URL'].apply(get_product_category)
-    df['Visitor Gender'] = df['Visitor Unique ID'].apply(get_visitor_gender)
-    df['Visitor Birthdate'] = df['Visitor Unique ID'].apply(get_visitor_birthdate)
-    df['Visitor Age'] = df['Visitor Birthdate'].apply(calculate_age)
+    df['category'] = df['productId'].apply(get_product_category)
+    df['title'] = df['productId'].apply(get_product_title())
+    df['gender'] = df['userId'].apply(get_visitor_gender)
+    df['birthdate'] = df['userId'].apply(get_visitor_birthdate)
+    df['age'] = df['birthdate'].apply(calculate_age)
+    df['country'] = df['ip'].apply(get_country_from_ip)
 
     # Create a new stream (or reuse it if it was already created).
     # We will be using one stream per visitor id, so we can parallelise the processing

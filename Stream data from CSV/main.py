@@ -4,6 +4,7 @@ import pandas as pd
 import time
 from datetime import datetime
 import threading
+import re
 
 # True = keep original timings.
 # False = No delay! Speed through it as fast as possible.
@@ -36,12 +37,10 @@ def publish_row(row):
     df_row = pd.DataFrame([row])
 
     # add a new timestamp column with the current data and time
-    df_row['Timestamp'] = datetime.utcnow()
-    df_row['Date and Time'] = pd.to_datetime(datetime.utcnow())
-
+    df_row['timestamp'] = datetime.utcnow()
 
     # publish the data to the Quix stream created earlier
-    stream_producer = producer_topic.get_or_create_stream(row['Visitor Unique ID'])
+    stream_producer = producer_topic.get_or_create_stream(row['userId'])
     stream_producer.timeseries.publish(df_row)
 
     row_counter += 1
@@ -59,24 +58,23 @@ def process_csv_file(csv_file):
     print("TSV file loading.")
     df = pd.read_csv(csv_file, sep="\t")
 
-    # Get subset of columns
-    df = df[["Unix Timestamp", "Date and Time", "Visitor ID", "Session ID", "Version Information", "Image Request",
-             "Purchase ID", "IP Address", "JavaScript Version", "Cookies Enabled", "Browser Color Depth",
-             "Product Page URL", "Visitor Unique ID"]]
+    # Get subset of columns, so it's easier to work with
+    df = df[["Unix Timestamp", "Visitor Unique ID", "IP Address", "29", "Product Page URL"]]
 
     print("File loaded.")
 
     row_count = len(df)
     print(f"Publishing {row_count} rows.")
 
-    has_timestamp_column = False
+    df = df.rename(columns={
+        "Visitor Unique ID": "userId",
+        "IP Address": "ip",
+        "29": "userAgent",  # The original file does not have name for this column
+        "Unix Timestamp": "original_timestamp",
+    })
 
-    # If the data contains a 'Timestamp'
-    if "Unix Timestamp" in df:
-        has_timestamp_column = True
-        # keep the original timestamp to ensure the original timing is maintained
-        df = df.rename(columns={"Unix Timestamp": "original_timestamp"})
-        print("Timestamp column renamed.")
+    df["userId"] = df["userId"].apply(lambda x: x.strip("{}"))
+    df["productId"] = df["Product Page URL"].apply(lambda x: re.search(r"http://www.acme.com/(\w+)/(\w+)", x).group(2))
 
     # Get the column headers as a list
     headers = df.columns.tolist()
@@ -94,7 +92,7 @@ def process_csv_file(csv_file):
             row_data = {header: row[header] for header in headers}
             publish_row(row_data)
 
-            if not keep_timing or not has_timestamp_column:
+            if not keep_timing:
                 # Don't want to keep the original timing or no timestamp? That's ok, just sleep for 200ms
                 time.sleep(0.2)
             else:

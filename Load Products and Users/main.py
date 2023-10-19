@@ -13,17 +13,18 @@ r = redis.Redis(
 
 # Read products from products.tsv and store the category in Redis
 def load_products():
-    products = pd.read_csv('products.tsv', sep='\t')
+    products = pd.read_json('products.json', lines=True)
     for index, row in products.iterrows():
         key = f'product:{row["url"]}'
         r.hset(key, 'cat', row['category'])
+        r.hset(key, 'title', row['title'])
 
     print(f"Imported {len(products)} products")
 
 
 # Read visitor data from users.tsv and store gender, birthday and age in Redis
 def load_users():
-    users = pd.read_csv('users.tsv', sep='\t')
+    users = pd.read_json('users.json', lines=True)
     total_users = len(users)
     imported_users = 0
     for _, row in users.iterrows():

@@ -14,14 +14,14 @@ else:
 
 def applies_for_offer1(row):
     """Check if the visitor applies for offer 1."""
-    if not "Product Category" in row \
-            or not "Visitor Age" in row \
-            or not "Visitor Gender" in row:
+    if not "category" in row \
+            or not "age" in row \
+            or not "gender" in row:
         return False
 
-    if row["Product Category"] in ["home&garden", "automotive"] \
-            and 35 <= row["Visitor Age"] <= 60 \
-            and row["Visitor Gender"] == "M":
+    if row["category"] in ["home&garden", "automotive"] \
+            and 35 <= row["age"] <= 60 \
+            and row["gender"] == "M":
         return True
 
     return False
@@ -29,22 +29,21 @@ def applies_for_offer1(row):
 
 def applies_for_offer2(row):
     """Check if the visitor applies for offer 2."""
-    if not "Product Category" in row \
-            or not "Visitor Age" in row \
-            or not "Visitor Gender" in row:
+    if not "category" in row \
+            or not "age" in row \
+            or not "gender" in row:
         return False
 
-    if row["Product Category"] in ["clothing", "shoes", "handbags"] \
-            and 25 <= row["Visitor Age"] <= 35 \
-            and row["Visitor Gender"] == "F":
+    if row["category"] in ["clothing", "shoes", "handbags"] \
+            and 25 <= row["age"] <= 35 \
+            and row["gender"] == "F":
         return True
 
     return False
 
 
 class BehaviourDetector:
-    columns = ["time", "Visitor Unique ID", "Product Category", "Visitor Age", "IP Address", "Visitor Gender",
-               "Purchase ID", "Product Page URL"]
+    columns = ["time", "timestamp", "visitorId", "category", "age", "ip", "gender", "productId"]
 
     def __init__(self):
         self._df = pd.DataFrame(columns=self.columns)
@@ -68,7 +67,7 @@ class BehaviourDetector:
 
         # Here we group data by visitor and category, add a new column with the aggregated categories,
         # and count the number of rows
-        aggregated_data = (self._df.groupby(['Visitor Unique ID', 'IP Address'])['Product Category']
+        aggregated_data = (self._df.groupby(['userId', 'ip'])['category']
                            .agg([('aggregated_product_category', ', '.join), ('count', 'count')]).reset_index())
 
         # And we keep only the visitors who opened 3 or more products in the same category
@@ -115,15 +114,15 @@ class BehaviourDetector:
 
     def _remove_visitors(self, visitors: pd.DataFrame):
         """Remove visitors from the dataframe, so we don't launch same offer to the same visitor."""
-        self._df = self._df[~self._df['Visitor Unique ID'].isin(visitors['Visitor Unique ID'])]
+        self._df = self._df[~self._df['userId'].isin(visitors['userId'])]
 
     def _remove_page_refreshes(self):
         """Remove consecutive duplicates of "Product Page URL" for same visitor."""
 
-        # First, we sort the dataframe by Visitor Unique ID and time, so we can detect if the visitor refreshed the page
-        df_sorted = self._df.sort_values(by=["Visitor Unique ID", "time"])
+        # First, we sort the dataframe by userId and time, so we can detect if the visitor refreshed the page
+        df_sorted = self._df.sort_values(by=["userId", "time"])
 
-        # Then, remove if the Visitor Unique ID and Product Page URL are the same as the previous row
-        duplicate_condition = ((df_sorted["Visitor Unique ID"] == df_sorted["Visitor Unique ID"].shift(1)) &
-                               (df_sorted["Product Page URL"] == df_sorted["Product Page URL"].shift(1)))
+        # Then, remove if the userId and Product Page URL are the same as the previous row
+        duplicate_condition = ((df_sorted["userId"] == df_sorted["userId"].shift(1)) &
+                               (df_sorted["productId"] == df_sorted["productId"].shift(1)))
         self._df = df_sorted[~duplicate_condition]
