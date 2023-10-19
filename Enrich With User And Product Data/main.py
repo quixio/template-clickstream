@@ -80,7 +80,7 @@ def get_country_from_ip(ip: str):
 def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     # Enrich data
     df['category'] = df['productId'].apply(get_product_category)
-    df['title'] = df['productId'].apply(get_product_title())
+    df['title'] = df['productId'].apply(get_product_title)
     df['gender'] = df['userId'].apply(get_visitor_gender)
     df['birthdate'] = df['userId'].apply(get_visitor_birthdate)
     df['age'] = df['birthdate'].apply(calculate_age)
