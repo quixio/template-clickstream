@@ -51,6 +51,15 @@ def publish_row(row):
         print(f"Published {published_total} rows")
 
 
+def get_product_id(url):
+    match = re.search(r"http://www.acme.com/(\w+)/(\w+)", url)
+
+    if match is not None:
+        return match.group(2)
+
+    return url
+
+
 def process_csv_file(csv_file):
     global shutting_down
 
@@ -74,7 +83,7 @@ def process_csv_file(csv_file):
     })
 
     df["userId"] = df["userId"].apply(lambda x: x.strip("{}"))
-    df["productId"] = df["Product Page URL"].apply(lambda x: re.search(r"http://www.acme.com/(\w+)/(\w+)", x).group(2))
+    df["productId"] = df["Product Page URL"].apply(get_product_id)
 
     # Get the column headers as a list
     headers = df.columns.tolist()
