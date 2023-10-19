@@ -88,6 +88,9 @@ def process_csv_file(csv_file):
             if shutting_down:
                 break
 
+            # Set the timestamp to the current time
+            row['Date and Time'] = pd.to_datetime(datetime.now())
+
             # Create a dictionary that includes both column headers and row values
             row_data = {header: row[header] for header in headers}
             publish_row(row_data)
