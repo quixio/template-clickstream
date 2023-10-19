@@ -29,10 +29,10 @@ deployments:
   - name: Enrich With User And Product Data
     application: Enrich With User And Product Data
     deploymentType: Service
-    version: d957b09c252cb0b9f43fb3136a5e660a723f99f1
+    version: 4b877c71935b8541f0d18d5f5a6f90ae858d4d98
     resources:
       cpu: 200
-      memory: 500
+      memory: 1000
       replicas: 1
     desiredStatus: Stopped
     variables:
