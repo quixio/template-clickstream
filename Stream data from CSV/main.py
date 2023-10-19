@@ -36,7 +36,9 @@ def publish_row(row):
     df_row = pd.DataFrame([row])
 
     # add a new timestamp column with the current data and time
-    df_row['Timestamp'] = datetime.now()
+    df_row['Timestamp'] = datetime.utcnow()
+    df_row['Date and Time'] = pd.to_datetime(datetime.utcnow())
+
 
     # publish the data to the Quix stream created earlier
     stream_producer = producer_topic.get_or_create_stream(row['Visitor Unique ID'])
@@ -87,9 +89,6 @@ def process_csv_file(csv_file):
             # If shutdown has been requested, exit the loop.
             if shutting_down:
                 break
-
-            # Set the timestamp to the current time
-            row['Date and Time'] = pd.to_datetime(datetime.now())
 
             # Create a dictionary that includes both column headers and row values
             row_data = {header: row[header] for header in headers}
