@@ -17,7 +17,8 @@ shutting_down = False
 
 # Quix Platform injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
-client = qx.QuixStreamingClient()
+TOKEN = "pat-28b44aa4cd9447bd8f2f05e910d72c6b"
+client = qx.QuixStreamingClient(token=TOKEN)
 
 # The producer topic is where the data will be published to
 # It's the output from this demo data source code.
@@ -67,9 +68,6 @@ def process_csv_file(csv_file):
     print("TSV file loading.")
     df = pd.read_csv(csv_file, sep="\t")
 
-    # Get subset of columns, so it's easier to work with
-    df = df[["Unix Timestamp", "Visitor Unique ID", "IP Address", "29", "Product Page URL"]]
-
     print("File loaded.")
 
     row_count = len(df)
@@ -84,6 +82,9 @@ def process_csv_file(csv_file):
 
     df["userId"] = df["userId"].apply(lambda x: x.strip("{}"))
     df["productId"] = df["Product Page URL"].apply(get_product_id)
+
+    # Get subset of columns, so it's easier to work with
+    df = df[["original_timestamp", "userId", "ip", "userAgent", "productId"]]
 
     # Get the column headers as a list
     headers = df.columns.tolist()
