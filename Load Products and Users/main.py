@@ -13,9 +13,9 @@ r = redis.Redis(
 
 # Read products from products.tsv and store the category in Redis
 def load_products():
-    products = pd.read_json('products.json', lines=True)
+    products = pd.read_json('products.json')
     for index, row in products.iterrows():
-        key = f'product:{row["url"]}'
+        key = f'product:{row["id"]}'
         r.hset(key, 'cat', row['category'])
         r.hset(key, 'title', row['title'])
 
@@ -28,19 +28,15 @@ def load_users():
     total_users = len(users)
     imported_users = 0
     for _, row in users.iterrows():
-        key = f'visitor:{row["SWID"]}'
+        key = f'visitor:{row["userId"]}'
 
         # Birthday may not be present, check for NaN
-        if not pd.isna(row['BIRTH_DT']):
-            birthday = datetime.strptime(row['BIRTH_DT'], '%d-%b-%y')
-            if birthday.year > 2005:
-                birthday = birthday.replace(year=birthday.year - 100)
-
-            r.hset(key, 'birthday', birthday.strftime('%Y-%m-%d'))
+        if not pd.isna(row['birthDate']):
+            r.hset(key, 'birthday', row['birthDate'])
 
         # Age may not be present, check for NaN
-        if not pd.isna(row['GENDER_CD']):
-            r.hset(key, 'gender', row['GENDER_CD'])
+        if not pd.isna(row['gender']):
+            r.hset(key, 'gender', row['gender'])
 
         imported_users += 1
 
