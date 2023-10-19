@@ -9,7 +9,7 @@ deployments:
   - name: Stream data from CSV
     application: Stream data from CSV
     deploymentType: Service
-    version: b4ea8e2e0991e59b955ae648cd7c1cd74bf2edf0
+    version: 9ae2e8b19d02eab7d1c199f1ba3cd49ba471bf15
     resources:
       cpu: 200
       memory: 1000
@@ -60,7 +60,7 @@ deployments:
         inputType: Secret
         description: External Redis password
         required: true
-        value: redis_password
+        secretKey: redis_password
   - name: Load Products and Users
     application: Load Products and Users
     deploymentType: Service
@@ -85,7 +85,7 @@ deployments:
         inputType: Secret
         description: External Redis password
         required: true
-        value: redis_password
+        secretKey: redis_password
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
