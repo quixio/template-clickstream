@@ -9,7 +9,7 @@ deployments:
   - name: Stream data from CSV
     application: Stream data from CSV
     deploymentType: Service
-    version: b4ea8e2e0991e59b955ae648cd7c1cd74bf2edf0
+    version: ac27b4f082a5447df37b6673cfcb17bc4c11e17b
     resources:
       cpu: 200
       memory: 1000
@@ -29,10 +29,10 @@ deployments:
   - name: Enrich With User And Product Data
     application: Enrich With User And Product Data
     deploymentType: Service
-    version: d957b09c252cb0b9f43fb3136a5e660a723f99f1
+    version: d327bb74c35ea5e707ae5d1855baf7958743278e
     resources:
       cpu: 200
-      memory: 500
+      memory: 1000
       replicas: 1
     desiredStatus: Running
     variables:
@@ -60,16 +60,15 @@ deployments:
         inputType: Secret
         description: External Redis password
         required: true
-        value: redis_password
+        secretKey: redis_password
   - name: Load Products and Users
     application: Load Products and Users
-    deploymentType: Service
-    version: 4e9fc5d428998db25942db34663bfc0beeadd91c
+    deploymentType: Job
+    version: 7a369a17b0d8e6f640f205f5d3e87ef628b0dd02
     resources:
       cpu: 200
       memory: 500
       replicas: 1
-    desiredStatus: Stopped
     variables:
       - name: redis_host
         inputType: FreeText
@@ -85,14 +84,14 @@ deployments:
         inputType: Secret
         description: External Redis password
         required: true
-        value: redis_password
+        secretKey: redis_password
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
-    version: 1a98944521e60008c586cbe5ce86f973a1f1dcd3
+    version: 07f1b4f7c994fc18fd0adac366c9909cc58118d9
     resources:
       cpu: 1000
-      memory: 500
+      memory: 1000
       replicas: 1
     desiredStatus: Running
     variables:

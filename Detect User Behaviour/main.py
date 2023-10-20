@@ -18,16 +18,14 @@ frames_received = 0
 # Send special offers for each visitor in its own stream
 def send_special_offers(special_offers: pd.DataFrame):
     for index, row in special_offers.iterrows():
-        visitor_id = row['Visitor Unique ID'].strip('{}')
+        visitor_id = row['userId']
         print("Sending offer to visitor", visitor_id)
 
         # Use the visitor ID as the stream name
         stream = producer_topic.get_or_create_stream(visitor_id)
 
         # Send the offer to the stream
-        frame = pd.DataFrame([row])
-        frame["timestamp"] = pd.Timestamp.now()
-        stream.timeseries.buffer.publish(frame)
+        stream.events.publish(qx.EventData("offer", pd.Timestamp.utcnow(), row["offer"]))
 
 
 # Callback called for each incoming dataframe
