@@ -43,7 +43,7 @@ def applies_for_offer2(row):
 
 
 class BehaviourDetector:
-    columns = ["time", "timestamp", "visitorId", "category", "age", "ip", "gender", "productId"]
+    columns = ["time", "timestamp", "userId", "category", "age", "ip", "gender", "productId"]
 
     def __init__(self):
         self._df = pd.DataFrame(columns=self.columns)

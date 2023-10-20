@@ -104,16 +104,16 @@ while True:
     # Display categories grouped by gender
     with placeholder_gender_category.container():
         st.markdown("### Category per gender")
-        df = real_time_df_copy.groupby(["Visitor Gender", "Product Category"]).size().reset_index(name="count")
-        df_pivot = df.pivot(index='Product Category', columns='Visitor Gender', values='count')
+        df = real_time_df_copy.groupby(["gender", "category"]).size().reset_index(name="count")
+        df_pivot = df.pivot(index='category', columns='gender', values='count')
 
         st.dataframe(df_pivot)
 
     # Display categories grouped by age group
     with placeholder_age_group_category.container():
         st.markdown("### Category per age group")
-        df = real_time_df_copy.groupby(["Visitor Age Group", "Product Category"]).size().reset_index(name="count")
-        df_pivot = df.pivot(index='Product Category', columns='Visitor Age Group', values='count')
+        df = real_time_df_copy.groupby(["ageGroup", "category"]).size().reset_index(name="count")
+        df_pivot = df.pivot(index='category', columns='ageGroup', values='count')
 
         st.dataframe(df_pivot)
 
@@ -121,9 +121,9 @@ while True:
     with placeholder_most_active_visitors.container():
         st.markdown("### 5 most active visitors in the last hour")
         # Get data only from last hour
-        df = real_time_df_copy[real_time_df_copy["Date and Time"] > (pd.Timestamp.now() - pd.Timedelta(hours=1))]
+        df = real_time_df_copy[real_time_df_copy["datetime"] > (pd.Timestamp.now() - pd.Timedelta(hours=1))]
 
-        df = df.groupby(["Visitor Unique ID", "Visitor Gender", "Visitor Age Group"]).size().reset_index(name="count")
+        df = df.groupby(["userId", "gender", "ageGroup"]).size().reset_index(name="count")
         df = df.sort_values(by=['count'], ascending=False).head(5)
         st.dataframe(df)
 

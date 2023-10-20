@@ -24,7 +24,7 @@ def _read_df_from_url(url: str, timeout: int):
     response = urllib.request.urlopen(url, timeout=timeout)
     with io.BytesIO(response.read()) as f:
         df = pd.read_csv(f)
-    df["Date and Time"] = pd.to_datetime(df["Date and Time"])
+    df["datetime"] = pd.to_datetime(df["timestamp"])
     return df
 
 
