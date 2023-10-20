@@ -1,4 +1,3 @@
 quixstreams
 pandas
 redis
-user-agents-next
