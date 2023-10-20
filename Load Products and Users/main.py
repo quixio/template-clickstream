@@ -53,7 +53,7 @@ def main():
 
     # Do some assertions to make sure the data is loaded correctly
     print("Checking data...")
-    if r.hget("product:http://www.acme.com/SH5584743/VD55162989", "cat") != "grocery":
+    if r.hget("product:VR55181666", "cat") != "handbags":
         raise Exception("Wrong category for product")
 
     if r.hget("visitor:001BFE35-555B-48E1-9ED3-A4BE7677C36C", "birthday") != "1982-02-16":
