@@ -5,6 +5,7 @@ import os
 import redis
 from geoip import geolite2
 import pycountry
+from user_agents_next import parse
 
 # Quix injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
@@ -44,16 +45,16 @@ def calculate_age(birthdate: str):
 
 # Method to get the product category for a product from Redis
 def get_product_category(product: str):
-    return redis_client.hget(f'product:{product}', 'cat')
+    return redis_client.hget(f'product:{product}', 'cat') or "Unknown"
 
 # Method to get the product title for a product from Redis
 def get_product_title(product: str):
-    return redis_client.hget(f'product:{product}', 'title')
+    return redis_client.hget(f'product:{product}', 'title') or "Unknown"
 
 
 # Method to get the visitor gender from Redis
 def get_visitor_gender(visitor: str):
-    return redis_client.hget(f'visitor:{visitor}', 'gender')
+    return redis_client.hget(f'visitor:{visitor}', 'gender') or "U"
 
 
 # Method to get the visitor birthdate from Redis
@@ -68,10 +69,33 @@ def get_visitor_age(visitor: str):
 
 
 def get_country_from_ip(ip: str):
-    match = geolite2.lookup(ip)
-    if match is not None:
-        country = pycountry.countries.get(alpha_2=match.country)
-        return country.name
+    try:
+        match = geolite2.lookup(ip)
+        if match is not None:
+            country = pycountry.countries.get(alpha_2=match.country)
+            return country.name
+    except Exception as e:
+        print(f"Error looking up country for IP {ip}: {e}")
+
+    return "Unknown"
+
+
+def get_device_type(user_agent: str):
+    try:
+        ua = parse(user_agent)
+        if ua.is_mobile:
+            return "Mobile"
+        elif ua.is_tablet:
+            return "Tablet"
+        elif ua.is_pc:
+            return "Desktop"
+        elif ua.is_bot:
+            return "Bot"
+
+        return "Other"
+
+    except Exception as e:
+        print(f"Error parsing user agent {user_agent}: {e}")
 
     return "Unknown"
 
@@ -85,6 +109,7 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     df['birthdate'] = df['userId'].apply(get_visitor_birthdate)
     df['age'] = df['birthdate'].apply(calculate_age)
     df['country'] = df['ip'].apply(get_country_from_ip)
+    df['deviceType'] = df['userAgent'].apply(get_device_type)
 
     # Create a new stream (or reuse it if it was already created).
     # We will be using one stream per visitor id, so we can parallelise the processing
