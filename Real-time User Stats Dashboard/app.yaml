@@ -1,4 +1,4 @@
-name: Aggregation Service
+name: Real-time User Stats Dashboard
 language: python
 variables:
   - name: input
