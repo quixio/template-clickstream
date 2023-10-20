@@ -63,13 +63,12 @@ deployments:
         secretKey: redis_password
   - name: Load Products and Users
     application: Load Products and Users
-    deploymentType: Service
+    deploymentType: Job
     version: 7a369a17b0d8e6f640f205f5d3e87ef628b0dd02
     resources:
       cpu: 200
       memory: 500
       replicas: 1
-    desiredStatus: Running
     variables:
       - name: redis_host
         inputType: FreeText
