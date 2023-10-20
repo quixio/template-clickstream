@@ -29,7 +29,7 @@ deployments:
   - name: Enrich With User And Product Data
     application: Enrich With User And Product Data
     deploymentType: Service
-    version: f567ecfc88b96a0ac795f2ecc23e3bfdd131ab05
+    version: 95eb5223c9279c3875a5a42cdf541219571b5e5a
     resources:
       cpu: 200
       memory: 1000
@@ -64,7 +64,7 @@ deployments:
   - name: Load Products and Users
     application: Load Products and Users
     deploymentType: Service
-    version: 4e9fc5d428998db25942db34663bfc0beeadd91c
+    version: c4066eadd98a37e3dc8c0d6f9691958ba102ea4b
     resources:
       cpu: 200
       memory: 500
