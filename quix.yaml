@@ -9,7 +9,7 @@ deployments:
   - name: Stream data from CSV
     application: Stream data from CSV
     deploymentType: Service
-    version: f650e150381adfdbcc9ba4094667093c64362776
+    version: ac27b4f082a5447df37b6673cfcb17bc4c11e17b
     resources:
       cpu: 200
       memory: 1000
