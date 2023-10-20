@@ -25,9 +25,7 @@ def send_special_offers(special_offers: pd.DataFrame):
         stream = producer_topic.get_or_create_stream(visitor_id)
 
         # Send the offer to the stream
-        frame = pd.DataFrame([row])
-        frame["timestamp"] = pd.Timestamp.now()
-        stream.timeseries.buffer.publish(frame)
+        stream.events.publish(qx.EventData("offer", pd.Timestamp.utcnow(), row["offer"]))
 
 
 # Callback called for each incoming dataframe
