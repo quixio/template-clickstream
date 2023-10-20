@@ -56,7 +56,7 @@ def main():
     if r.hget("product:http://www.acme.com/SH5584743/VD55162989", "cat") != "grocery":
         raise Exception("Wrong category for product")
 
-    if r.hget("visitor:0044AF02-16EC-42B0-96DD-52679773A9D6", "birthday") != "2006-07-17":
+    if r.hget("visitor:001BFE35-555B-48E1-9ED3-A4BE7677C36C", "birthday") != "1982-02-16":
         raise Exception("Wrong birthday for user")
 
 
