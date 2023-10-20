@@ -64,12 +64,12 @@ deployments:
   - name: Load Products and Users
     application: Load Products and Users
     deploymentType: Service
-    version: c4066eadd98a37e3dc8c0d6f9691958ba102ea4b
+    version: 7a369a17b0d8e6f640f205f5d3e87ef628b0dd02
     resources:
       cpu: 200
       memory: 500
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: redis_host
         inputType: FreeText
@@ -89,12 +89,12 @@ deployments:
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
-    version: 1a98944521e60008c586cbe5ce86f973a1f1dcd3
+    version: 6ed0f4033b6bc4cc0e33aab9ed9bb8aa33c028d2
     resources:
       cpu: 1000
-      memory: 500
+      memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
