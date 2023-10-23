@@ -1,10 +1,7 @@
 import os
-import time
 import pandas as pd
-from collections import deque
 from datetime import timedelta, datetime
 
-import requests
 
 if 'window_minutes' not in os.environ:
     window_minutes = 30
@@ -26,7 +23,7 @@ offers = {
 
 
 def applies_for_offer(row):
-    """Check if the visitor applies for offer 1."""
+    """Check if the visitor applies for any offer and return the offer code"""
     if "category" not in row \
             or "age" not in row \
             or "gender" not in row:
