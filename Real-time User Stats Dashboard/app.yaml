@@ -1,0 +1,10 @@
+name: Real-time User Stats Dashboard
+language: python
+variables:
+  - name: input
+    inputType: InputTopic
+    description: Name of the input topic to listen to.
+    required: true
+dockerfile: build/dockerfile
+runEntryPoint: main.py
+defaultFile: streamlit_file.py
