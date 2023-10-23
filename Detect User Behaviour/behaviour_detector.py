@@ -1,10 +1,7 @@
 import os
-import time
 import pandas as pd
-from collections import deque
 from datetime import timedelta, datetime
 
-import requests
 
 if 'window_minutes' not in os.environ:
     window_minutes = 30
@@ -26,7 +23,7 @@ offers = {
 
 
 def applies_for_offer(row):
-    """Check if the visitor applies for offer 1."""
+    """Check if the visitor applies for any offer and return the offer code"""
     if "category" not in row \
             or "age" not in row \
             or "gender" not in row:
@@ -51,7 +48,8 @@ class BehaviourDetector:
     # Method to process the incoming dataframe
     def process_dataframe(self, received_df: pd.DataFrame):
         # Filter out data that cannot apply for offers
-        received_df = received_df[received_df.apply(self._check_offers, axis=1)]
+        received_df["offer"] = received_df.apply(applies_for_offer, axis=1)
+        received_df = received_df[received_df["offer"].notnull()]
 
         # Exit if there is no data to process
         if len(received_df) == 0:
@@ -66,12 +64,11 @@ class BehaviourDetector:
 
         # Here we group data by visitor and category, add a new column with the aggregated categories,
         # and count the number of rows
-        aggregated_data = (self._df.groupby(['userId', 'ip'])['category']
+        aggregated_data = (self._df.groupby(['userId', 'offer'])['category']
                            .agg([('aggregated_product_category', ', '.join), ('count', 'count')]).reset_index())
 
         # And we keep only the visitors who opened 3 or more products in the same category
         visitors_to_send_offers = aggregated_data[aggregated_data['count'] > 2]
-        visitors_to_send_offers['offer'] = visitors_to_send_offers.apply(applies_for_offer, axis=1)
 
         self._special_offers_recipients = pd.concat([self._special_offers_recipients, visitors_to_send_offers],
                                                     ignore_index=True)
