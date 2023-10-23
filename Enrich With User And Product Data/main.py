@@ -108,6 +108,8 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     df['gender'] = df['userId'].apply(get_visitor_gender)
     df['birthdate'] = df['userId'].apply(get_visitor_birthdate)
     df['age'] = df['birthdate'].apply(calculate_age)
+    df['country'] = df['ip'].apply(get_country_from_ip)
+    df['deviceType'] = df['userAgent'].apply(get_device_type)
 
     # Create a new stream (or reuse it if it was already created).
     # We will be using one stream per visitor id, so we can parallelise the processing
