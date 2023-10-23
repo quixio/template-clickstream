@@ -76,7 +76,7 @@ def get_country_from_ip(ip: str):
             country = pycountry.countries.get(alpha_2=match.country)
             return country.name
     except Exception as e:
-        print(f"Error looking up country for IP {ip}: {e}")
+        print(f"Error looking up country for IP {ip}:", e)
 
     return "Unknown"
 
