@@ -110,6 +110,24 @@ deployments:
         description: Topic to write offers
         required: true
         value: special-offers
+  - name: Real-time User Stats Dashboard
+    application: Real-time User Stats Dashboard
+    deploymentType: Service
+    version: a8b456c84c3ebeadf31de65dbdb3c6e50c8ec796
+    resources:
+      cpu: 500
+      memory: 1000
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: realtimeuserstatsdashboard
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: true
+        value: enriched-click-data
 
 # This section describes the Topics of the data pipeline
 topics:
