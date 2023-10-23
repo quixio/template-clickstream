@@ -119,24 +119,36 @@ while True:
         )
 
     with placeholder_col13.container():
-        try:
-            # Right now, group by device type
-            df = real_time_df_copy[
-                real_time_df_copy["datetime"] > (datetime.datetime.utcnow() - datetime.timedelta(minutes=10))]
+        # Right now, group by device type
+        df = real_time_df_copy[
+            real_time_df_copy["datetime"] > (datetime.datetime.utcnow() - datetime.timedelta(minutes=10))]
 
-            # Keep unique userId
-            df = df.drop_duplicates(subset=['userId'])
+        # Keep unique userId
+        df = df.drop_duplicates(subset=['userId'])
 
-            df = df.groupby(['deviceType']).size().reset_index(name='count')
+        df = df.groupby(['deviceType']).size().reset_index(name='count')
 
-            st.markdown(f"### {df['count'].sum()}")
-            st.markdown("##### active users on site")
+        total = df['count'].sum()
+        mobile = df[df['deviceType'] == 'Mobile']['count'].sum() / total * 100
+        tablet = df[df['deviceType'] == 'Tablet']['count'].sum() / total * 100
+        desktop = df[df['deviceType'] == 'Desktop']['count'].sum() / total * 100
+        other = 100.0 - mobile - tablet - desktop
 
-            # Draw a pie chart
-            fig = px.pie(df, values='count', names='deviceType')
-            st.plotly_chart(fig, use_container_width=True, use_container_height=True)
-        except:
-            pass
+        title = f"{total} active users on site"
+        x_data = [[desktop, tablet, mobile, other]]
+        labels = ["Desktop", "Tablet", "Mobile", "Other"]
+        y_data = ["Device type"]
+
+        data = [["Device type", "Desktop", desktop],
+                ["Device type", "Tablet", tablet],
+                ["Device type", "Mobile", mobile],
+                ["Device type", "Other", other]]
+
+        chart_df = pd.DataFrame(data, columns=["Device", "Device type", "Percentage"])
+        fig = px.bar(chart_df, x="Device", y="Percentage", color="Device type", height=300)
+
+        st.markdown(title)
+        st.plotly_chart(fig)
 
     with placeholder_col21.container():
         # Top 10 viewed pages in the last hour
@@ -147,15 +159,12 @@ while True:
         st.dataframe(df, hide_index=True, use_container_width=True)
 
     with placeholder_col22.container():
-        try:
-            # Latest 10 Visitor Details
-            # Get last 10 rows
-            df = real_time_df_copy.tail(10)[:]
-            df["Date and Time"] = pd.to_datetime(df["datetime"])
-            df = df[['Date and Time', 'ip', 'country']]
-            st.dataframe(df, hide_index=True, use_container_width=True)
-        except:
-            pass
+        # Latest 10 Visitor Details
+        # Get last 10 rows
+        df = real_time_df_copy.tail(10)[:]
+        df["Date and Time"] = pd.to_datetime(df["datetime"])
+        df = df[['Date and Time', 'ip', 'country']]
+        st.dataframe(df, hide_index=True, use_container_width=True)
 
     with placeholder_col23.container():
         # Category popularity in the Last Hour
