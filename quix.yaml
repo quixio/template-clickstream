@@ -113,7 +113,7 @@ deployments:
   - name: Real-time User Stats Dashboard
     application: Real-time User Stats Dashboard
     deploymentType: Service
-    version: 7b302db39f76a08534fd4640c46cbf064b021432
+    version: 1921a345c8d364aebdf8f216b04d0883662ca782
     resources:
       cpu: 200
       memory: 2000
