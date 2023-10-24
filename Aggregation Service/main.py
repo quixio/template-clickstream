@@ -52,8 +52,8 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
 
     buffer = pd.concat([buffer, df], ignore_index=True)
 
-    # Send data to redis only every second
-    if (pd.to_datetime(pd.Timestamp.now()) - last_sent_to_redis).seconds < 1:
+    # Send data to redis only every 30 seconds
+    if (pd.to_datetime(pd.Timestamp.now()) - last_sent_to_redis).seconds < 30:
         return
 
     aggregate_eight_hours(buffer.copy())
