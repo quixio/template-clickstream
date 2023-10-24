@@ -128,6 +128,39 @@ deployments:
         description: Name of the input topic to listen to.
         required: true
         value: enriched-click-data
+  - name: Aggregation Service
+    application: Aggregation Service
+    deploymentType: Service
+    version: cd0d899f2ecf48534cc8fbebf84ab9107705afb7
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    state:
+      enabled: true
+      size: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic to read data from
+        required: true
+        value: enriched-click-data
+      - name: redis_host
+        inputType: FreeText
+        description: External Redis hostname
+        required: true
+        value: redis-12878.c250.eu-central-1-1.ec2.cloud.redislabs.com
+      - name: redis_port
+        inputType: FreeText
+        description: External Redis port
+        required: true
+        value: 12878
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        secretKey: redis_password
 
 # This section describes the Topics of the data pipeline
 topics:
