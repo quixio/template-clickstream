@@ -118,8 +118,8 @@ def process_csv_file(csv_file):
                     if delay_seconds < 0:
                         delay_seconds = 0
 
-                    if delay_seconds > 1:
-                        print("Delaying for", delay_seconds, "seconds")
+                    if delay_seconds > 10:
+                        delay_seconds = 10
 
                     time.sleep(delay_seconds)
 
