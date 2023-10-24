@@ -2,36 +2,40 @@ import os
 import pandas as pd
 from datetime import timedelta, datetime
 
-
 if 'window_minutes' not in os.environ:
     window_minutes = 30
 else:
     window_minutes = int(os.environ['window_minutes'])
 
+# Applies for an offer if:
+#   - Women: 25-35, within the last 30mins
+#       - Open a page (any) in shoes cat
+#       - Subsequently, open a page (any) in clothing cat
+#       - Subsequently, open another page (different page from #1) in shoes cat
+#   - Men 36-45, same as above but show different offer. (edited)
+
 offers = {
     "offer1": {
-        "categories": ["home&garden", "automotive"],
-        "age": [35, 60],
+        "age": [36, 45],
         "gender": "M"
     },
     "offer2": {
-        "categories": ["clothing", "shoes", "handbags"],
         "age": [25, 35],
         "gender": "F"
     }
 }
 
+offer_categories = ["clothing", "shoes", "clothing"]
+
 
 def applies_for_offer(row):
     """Check if the visitor applies for any offer and return the offer code"""
-    if "category" not in row \
-            or "age" not in row \
+    if "age" not in row \
             or "gender" not in row:
         return None
 
     for key, value in offers.items():
-        if row["category"] in value["categories"] \
-                and value["age"][0] <= row["age"] <= value["age"][1] \
+        if value["age"][0] <= row["age"] <= value["age"][1] \
                 and row["gender"] == value["gender"]:
             return key
 
@@ -40,10 +44,11 @@ def applies_for_offer(row):
 
 class BehaviourDetector:
     columns = ["time", "timestamp", "userId", "category", "age", "ip", "gender", "productId", "offer"]
+    visitor_columns = ["userId", "offer", "category", "productId"]
 
     def __init__(self):
         self._df = pd.DataFrame(columns=self.columns)
-        self._special_offers_recipients = pd.DataFrame()
+        self._special_offers_recipients = pd.DataFrame(columns=self.visitor_columns)
 
     # Method to process the incoming dataframe
     def process_dataframe(self, received_df: pd.DataFrame):
@@ -62,20 +67,32 @@ class BehaviourDetector:
         self._remove_old_data(minutes=window_minutes)
         self._remove_page_refreshes()
 
-        # Here we group data by visitor and category, add a new column with the aggregated categories,
-        # and count the number of rows
-        aggregated_data = (self._df.groupby(['userId', 'offer'])['category']
-                           .agg([('aggregated_product_category', ', '.join), ('count', 'count')]).reset_index())
+        # If a visitor has more than 3 records (without page refreshes), remove all but the last 3
+        # This is to keep detecting possible offers if the 3 first visits do not apply for any offer
+        self._df = self._df.groupby('userId').tail(3)
 
-        # And we keep only the visitors who opened 3 or more products in the same category
-        visitors_to_send_offers = aggregated_data[aggregated_data['count'] > 2]
+        # Here we group data by visitor and category, add a new column with all categories and
+        # product ids
+        aggregated_data = (self._df.groupby(['userId', 'offer'])
+                           .agg({'category': list,
+                                 'productId': list})
+                           .reset_index())
 
-        self._special_offers_recipients = pd.concat([self._special_offers_recipients, visitors_to_send_offers],
-                                                    ignore_index=True)
+        for index, row in aggregated_data.iterrows():
+            if len(row['category']) != len(offer_categories):
+                continue
+            if row['category'] != offer_categories:
+                continue
+            if row['productId'][0] == row['productId'][2]:
+                continue
 
-        # Remove visitors from the dataframe, so we don't launch the offer to the same visitor until they visit
-        # 3 or more products in the selected categories again
-        self._remove_visitors(visitors_to_send_offers)
+            valid_offer = pd.DataFrame([[row['userId'], row['offer'], row['category'], row['productId']]],
+                                       columns=self.visitor_columns)
+            self._special_offers_recipients = pd.concat([self._special_offers_recipients, valid_offer],
+                                                        ignore_index=True)
+
+        # Remove records if we already sent an offer
+        self._remove_visitors(self._special_offers_recipients)
 
     def get_special_offers_recipients(self):
         """Return the recipients of the special offers."""
