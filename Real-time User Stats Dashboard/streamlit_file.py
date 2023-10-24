@@ -11,19 +11,11 @@ from app.streamlit_utils import get_stream_df, draw_line_chart_failsafe
 
 # Basic configuration of the Streamlit dashboard
 st.set_page_config(
-    page_title="Real-Time Data Science Dashboard",
+    page_title="Real-Time User Stats Dashboard",
     page_icon="✅",
     layout="wide",
 )
 
-# PARAMETERS SECTION
-# Define a list of parameters to show in select widgets.
-AVAILABLE_PARAMS = [
-    "Visitor Age Group",
-    "Visitor Gender",
-    "Product Category",
-    "Visitor Birthdate",
-]
 
 # DASHBOARD LAYOUT SECTION
 # The dashboard layout will consist of 3 columns and two rows.
@@ -36,7 +28,7 @@ with col11:
 
 with col12:
     # Header of the second column
-    st.markdown("### Sessions in the last 8 hours (segmented by 30 mins)")
+    st.markdown("### Sessions in the last 8 hours")
     # A placeholder for the second chart to update it later with data
     placeholder_col12 = st.empty()
 
@@ -70,7 +62,7 @@ placeholder_raw = st.empty()
 
 # REAL-TIME METRICS SECTION
 # Below we update the charts with the data we receive from Quix in real time.
-# Each 0.5s Streamlit requests new data from Quix and updates the charts.
+# Each 2s Streamlit requests new data from Quix and updates the charts.
 # Keep the dashboard layout code before "while" loop, otherwise new elements
 # will be appended on each iteration.
 while True:
@@ -88,14 +80,10 @@ while True:
         # Aggregate by minute
         df = df.groupby(pd.Grouper(key='datetime', freq='1min')).size().reset_index(name='count')
 
-        draw_line_chart_failsafe(
-            df,
-            # Use "datetime" column for X axis
-            x="datetime",
-            # Use a column from the first select widget for Y axis
-            # You may also plot multiple values
-            y=["count"],
-        )
+        fig = px.line(df, x="datetime", y="count", height=310)
+        fig.update_xaxes(title_text='Time', tickformat='%H:%M')
+        fig.update_yaxes(title_text='Visits', range=[0, max(df['count'])])  # Set y minimum always 0
+        st.plotly_chart(fig)
 
     with placeholder_col12.container():
         # Sessions in the last 8 hours (segmented by 30 mins)
@@ -106,17 +94,12 @@ while True:
         df = df.groupby(['datetime', 'userId']).size().reset_index(name='count')
 
         # Aggregate by 30 minutes (sum counts)
-
         df = df.groupby(pd.Grouper(key='datetime', freq='30min')).sum('count').reset_index()
 
-        draw_line_chart_failsafe(
-            df,
-            # Use "datetime" column for X axis
-            x="datetime",
-            # Use a column from the first select widget for Y axis
-            # You may also plot multiple values
-            y=["count"],
-        )
+        fig = px.line(df, x="datetime", y="count", height=310)
+        fig.update_xaxes(title_text='Time', tickformat='%H:%M')
+        fig.update_yaxes(title_text='Sessions', range=[0, max(df['count'])])  # Set y minimum always 0
+        st.plotly_chart(fig, use_container_width=True)
 
     with placeholder_col13.container():
         # Right now, group by device type
@@ -145,10 +128,29 @@ while True:
                 ["Device type", "Other", other]]
 
         chart_df = pd.DataFrame(data, columns=["Device", "Device type", "Percentage"])
-        fig = px.bar(chart_df, x="Device", y="Percentage", color="Device type", height=300)
+
+        fig = px.bar(chart_df, y="Device", x="Percentage", color="Device type", orientation="h", height=270)
+        fig.update_layout(
+            barmode='stack',
+            yaxis={'categoryorder':'total ascending'},
+            hovermode="x",
+            bargap=0.1,
+            bargroupgap=0.1,
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1,
+                xanchor="center",
+                x=0.5
+            )
+        )
+
+        fig.update_traces(texttemplate='%{value:.2f}%', textposition='inside')
+        fig.update_xaxes(visible=False, showticklabels=False)
+        fig.update_yaxes(visible=False, showticklabels=False)
 
         st.markdown(title)
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, use_container_width=True)
 
     with placeholder_col21.container():
         # Top 10 viewed pages in the last hour
@@ -182,5 +184,5 @@ while True:
         st.markdown("### Raw Data View")
         st.dataframe(real_time_df_copy)
 
-    # Wait for 0.5s before asking for new data from Quix
+    # Wait for 2s before asking for new data from Quix
     time.sleep(STREAMLIT_DATAFRAME_POLL_PERIOD)
