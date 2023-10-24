@@ -7,7 +7,7 @@ import plotly.express as px
 from app.conf import (
     STREAMLIT_DATAFRAME_POLL_PERIOD,
 )
-from app.streamlit_utils import get_stream_df, draw_line_chart_failsafe
+from app.streamlit_utils import get_stream_df
 
 # Basic configuration of the Streamlit dashboard
 st.set_page_config(
