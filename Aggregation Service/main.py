@@ -2,7 +2,7 @@ import quixstreams as qx
 import os
 import redis
 import pandas as pd
-from rocksdict import Rdict, Options
+from rocksdict import Rdict
 
 # make sure the state dir exists
 if not os.path.exists("state"):
