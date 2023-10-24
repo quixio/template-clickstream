@@ -1,3 +1,4 @@
+import quixstreams as qx
 import io
 import threading
 
@@ -12,13 +13,13 @@ class StreamStateStore:
     saves them to the disk
     """
 
-    def __init__(self, max_size: int = 50000, max_hours: int = 6):
+    def __init__(self, stream_consumer: qx.StreamConsumer, max_size: int = 50000, max_hours: int = 6):
         """
         Initialize the store
 
         :param max_size: number of the most recent rows to keep
         """
-        self._df = pd.DataFrame()
+        self._df = stream_consumer.get_dict_state("dashboard_data")
         self._max_size = max_size
         self._max_hours = max_hours
         self._lock = threading.Lock()
@@ -33,7 +34,7 @@ class StreamStateStore:
             self._df = pd.concat([self._df, new_df])
             self._df = self._df.iloc[-self._max_size:, :]
 
-            #if "timestamp" in self._df.columns and len(self._df) > 0:
+            # if "timestamp" in self._df.columns and len(self._df) > 0:
             #    # Keep only the last N hours
             #    self._df = self._df[self._df["timestamp"] > (pd.Timestamp.now() - pd.Timedelta(hours=self._max_hours))]
 
