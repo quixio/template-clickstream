@@ -1,7 +1,6 @@
 quixstreams
 pandas
 redis
-python-geoip-python3
-python-geoip-geolite2
+IPToCC
 pycountry
 user-agents-next

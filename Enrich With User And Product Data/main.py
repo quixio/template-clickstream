@@ -4,7 +4,7 @@ from datetime import datetime
 import pandas as pd
 import os
 import redis
-from geoip import geolite2
+from iptocc import get_country_code
 from user_agents_next import parse
 
 # Quix injects credentials automatically to the client.
@@ -71,10 +71,9 @@ def get_visitor_age(visitor: str):
 
 def get_country_from_ip(ip: str):
     try:
-        match = geolite2.lookup(ip)
-        if match is not None:
-            country = pycountry.countries.get(alpha_2=match.country)
-            return country.name
+        country_code = get_country_code(ip)
+        country = pycountry.countries.get(alpha_2=country_code)
+        return country.name
     except Exception as e:
         print(f"Error looking up country for IP {ip}:", e)
 
