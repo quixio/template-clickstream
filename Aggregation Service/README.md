@@ -1,31 +1,14 @@
-# Sample template
+# Aggregation service
 
-[This project](https://github.com/quixio/quix-samples/tree/main/python/empty) is a template for developing Quix Code Samples with Python.
-
-## How to run
-
-Create a [Quix](https://portal.platform.quix.ai/self-sign-up?xlink=github) account or log-in and visit the Samples to use this project.
-
-Clicking `Edit code` on the Sample, forks the project to your own Git repo so you can customize it before deploying.
+This service reads data from the 'enrich data' topic, performs aggregations, and writes the results to Redis. These aggregations are then consumed by a Streamlit dashboard for visualization and analysis.
 
 ## Environment variables
 
-This code sample uses the following environment variables:
+The code sample uses the following environment variables:
 
-- **VariableName**: {Description of the variable}
-- **input**: {Description of the variable}
-- **output**: {Description of the variable}
+- **input**: This is the input topic
+- **redis_host**: This is the host for Redis
+- **redis_port**: This is the port for Redis
+- **redis_password**: This is the password for Redis
 
-## Requirements/prerequisites (optional)
 
-{This will contain any external resource needed to run this sample and the instructions to get them.}
-
-## Contribute
-
-Submit forked projects to the Quix [GitHub](https://github.com/quixio/quix-samples) repo. Any new project that we accept will be attributed to you and you'll receive $200 in Quix credit.
-
-## Open source
-
-This project is open source under the Apache 2.0 license and available in our [GitHub](https://github.com/quixio/quix-samples) repo.
-
-Please star us and mention us on social to show your appreciation.

@@ -9,7 +9,7 @@ variables:
   - name: output
     inputType: OutputTopic
     description: This is the output topic, where we will send the enriched data
-    defaultValue: hard-braking
+    defaultValue: ''
     required: true
   - name: redis_host
     inputType: FreeText
