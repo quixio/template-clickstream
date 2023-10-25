@@ -121,7 +121,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: dashboard
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
