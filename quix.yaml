@@ -9,7 +9,7 @@ deployments:
   - name: Stream data from CSV
     application: Stream data from CSV
     deploymentType: Service
-    version: ac27b4f082a5447df37b6673cfcb17bc4c11e17b
+    version: 20189b29c0177b97eb8a97073a15712834d515d1
     resources:
       cpu: 200
       memory: 1000
@@ -25,11 +25,11 @@ deployments:
         inputType: FreeText
         description: Set to 1 to keep original timings, if set to false, send each click event every 0.2 seconds
         required: false
-        value: 0
+        value: 1
   - name: Enrich With User And Product Data
     application: Enrich With User And Product Data
     deploymentType: Service
-    version: d327bb74c35ea5e707ae5d1855baf7958743278e
+    version: 4a24cd34b62fa7293013952524f72435d244a87a
     resources:
       cpu: 200
       memory: 1000
@@ -110,6 +110,39 @@ deployments:
         description: Topic to write offers
         required: true
         value: special-offers
+  - name: Aggregation Service
+    application: Aggregation Service
+    deploymentType: Service
+    version: 8aaeef20ddfbdec7543d7dee7debb98949fe10b0
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    state:
+      enabled: true
+      size: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic to read data from
+        required: true
+        value: enriched-click-data
+      - name: redis_host
+        inputType: FreeText
+        description: External Redis hostname
+        required: true
+        value: redis-12878.c250.eu-central-1-1.ec2.cloud.redislabs.com
+      - name: redis_port
+        inputType: FreeText
+        description: External Redis port
+        required: true
+        value: 12878
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        secretKey: redis_password
 
 # This section describes the Topics of the data pipeline
 topics:

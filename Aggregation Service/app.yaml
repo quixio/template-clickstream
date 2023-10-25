@@ -1,14 +1,9 @@
-name: Enrich With User And Product Data
+name: Aggregation Service
 language: python
 variables:
   - name: input
     inputType: InputTopic
-    description: This is the input topic where we will get user interactions
-    defaultValue: ''
-    required: true
-  - name: output
-    inputType: OutputTopic
-    description: This is the output topic, where we will send the enriched data
+    description: This is the input topic to read data from
     defaultValue: ''
     required: true
   - name: redis_host

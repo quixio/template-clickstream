@@ -1,3 +1,6 @@
 quixstreams
 pandas
 redis
+IPToCC
+pycountry
+user-agents-next
