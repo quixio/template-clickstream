@@ -55,7 +55,7 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     global last_sent_to_redis
     global buffer
 
-    df["datetime"] = pd.to_datetime(df["timestamp"]) + pd.Timedelta(hours=2)
+    df["datetime"] = pd.to_datetime(df["timestamp"])
     buffer = pd.concat([buffer, df], ignore_index=True)
 
     print("------------------------------------------------")
