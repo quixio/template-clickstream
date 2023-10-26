@@ -132,12 +132,12 @@ deployments:
         inputType: FreeText
         description: External Redis hostname
         required: true
-        value: redis-12878.c250.eu-central-1-1.ec2.cloud.redislabs.com
+        value: broker.vicedo.eu
       - name: redis_port
         inputType: FreeText
         description: External Redis port
         required: true
-        value: 12878
+        value: 6379
       - name: redis_password
         inputType: Secret
         description: External Redis password
