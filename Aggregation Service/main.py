@@ -1,7 +1,6 @@
+import quixstreams as qx
 import time
 from threading import Thread
-
-import quixstreams as qx
 import os
 import redis
 import pandas as pd
@@ -30,15 +29,31 @@ r = redis.Redis(
     password=os.environ['redis_password'],
     decode_responses=True)
 
+columns = {
+    "timestamp": pd.Series(dtype='datetime64[ns]'),
+    "original_timestamp": pd.Series(dtype='int'),
+    "userId": pd.Series(dtype='str'),
+    "ip": pd.Series(dtype='str'),
+    "userAgent": pd.Series(dtype='str'),
+    "productId": pd.Series(dtype='str'),
+    "category": pd.Series(dtype='str'),
+    "title": pd.Series(dtype='str'),
+    "gender": pd.Series(dtype='str'),
+    "country": pd.Series(dtype='str'),
+    "deviceType": pd.Series(dtype='str'),
+    "age": pd.Series(dtype='int'),
+    "birthdate": pd.Series(dtype='datetime64[ns]'),
+    "datetime": pd.Series(dtype='datetime64[ns]')
+}
+
 columns_from_enrich = ["timestamp", "original_timestamp", "userId", "ip", "userAgent", "productId",
                        "category", "title", "gender", "country", "deviceType", "age", "birthdate"]
 
 # Default value for the last hour data, will be initialized from state store
 if "last_hour_data" not in db.keys():
     print("Initialize last_hour_data in state store")
-    df = pd.DataFrame(columns=columns_from_enrich)
-    df["datetime"] = pd.to_datetime(df["timestamp"])
-    db["last_hour_data"] = df
+    initial_df = pd.DataFrame(columns)
+    db["last_hour_data"] = initial_df
 
 if "eight_hours_aggregation" not in db.keys():
     print("Initialize eight_hours_aggregation in state store")
@@ -74,10 +89,7 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
 
 def calculate_device_popularity(df: pd.DataFrame):
     last_10_minutes = df[df["datetime"] > (pd.to_datetime(pd.Timestamp.now()) - pd.Timedelta(hours=2, minutes=10))]
-    # last_10_minutes = last_10_minutes.drop_duplicates(subset=['userId', 'deviceType'])
     last_10_minutes = last_10_minutes.groupby(['deviceType']).size().reset_index(name='count')
-
-    #print(last_10_minutes)
 
     total = last_10_minutes['count'].sum() or 1
     mobile = last_10_minutes[last_10_minutes['deviceType'] == 'Mobile']['count'].sum() / total * 100
@@ -91,14 +103,12 @@ def calculate_device_popularity(df: pd.DataFrame):
             ["Device type", "Other", other]]
 
     device_type_popularity = pd.DataFrame(data, columns=["Device", "Device type", "Percentage"])
-    #print("Device type popularity:", [desktop, tablet, mobile, other])
     r.set("device_type_popularity", device_type_popularity.to_json())
 
 
 def calculate_category_popularity(df: pd.DataFrame):
     category_popularity = df.groupby(['category']).size().reset_index(name='count')
     category_popularity = category_popularity.sort_values(by=['count'], ascending=False)
-    #print("Category popularity:", len(category_popularity))
     r.set("category_popularity", category_popularity.to_json())
 
 
@@ -110,21 +120,18 @@ def calculate_10_last_visitors(df: pd.DataFrame):
     latest_visitors['Relative Time'] = latest_visitors['Relative Time'].apply(lambda x: humanize.naturaltime(x))
     latest_visitors = latest_visitors.sort_values(by='datetime', ascending=False)
     latest_visitors = latest_visitors[['Relative Time', 'Date and Time', 'ip', 'country']]
-    #print('Latest visitors:', len(latest_visitors))
     r.set('latest_visitors', latest_visitors.to_json())
 
 
 def calculate_products_last_hour(df: pd.DataFrame):
     products_last_hour = df.groupby(['productId', 'category']).size().reset_index(name='count')
     products_last_hour = products_last_hour.sort_values(by=['count'], ascending=False).head(10)
-    #print("Products last hour:", len(products_last_hour))
     r.set("products_last_hour", products_last_hour.to_json())
 
 
 def calculate_visits_last_15min(df: pd.DataFrame):
     last_15_minutes = df[df["datetime"] > (pd.to_datetime(pd.Timestamp.now()) - pd.Timedelta(minutes=15))]
     last_15_minutes = last_15_minutes.groupby(pd.Grouper(key='datetime', freq='1min')).size().reset_index(name='count')
-    #print("Last 15 minutes:", len(last_15_minutes))
     r.set("last_15_minutes", last_15_minutes.to_json())
 
 
@@ -149,42 +156,42 @@ def read_stream(consumer_stream: qx.StreamConsumer):
 
 def send_data_to_redis():
     while True:
-        # Append data and discard data older than 1 hour
-        last_hour_data = db["last_hour_data"]
-        one_hour = pd.to_datetime(pd.Timestamp.now()) - pd.Timedelta(hours=3)
-        updated_last_hour_data = last_hour_data[last_hour_data["datetime"] > one_hour]
+        try:
+            # Append data and discard data older than 1 hour
+            last_hour_data = db["last_hour_data"]
+            one_hour = pd.to_datetime(pd.Timestamp.now()) - pd.Timedelta(hours=1)
+            updated_last_hour_data = last_hour_data[last_hour_data["datetime"] > one_hour]
 
-        if not updated_last_hour_data.equals(last_hour_data):
-            last_hour_data = updated_last_hour_data
-            db["last_hour_data"] = last_hour_data
+            if not updated_last_hour_data.equals(last_hour_data):
+                last_hour_data = updated_last_hour_data
+                db["last_hour_data"] = last_hour_data
 
-        #print("------------------------------------------------")
-        #print("Data in last_hour_data:", len(last_hour_data))
+            # This method uses its own rolling window, so we only have to pass the buffer
+            aggregate_eight_hours(db["eight_hours_aggregation"].copy())
 
-        # This method uses its own rolling window, so we only have to pass the buffer
-        aggregate_eight_hours(db["eight_hours_aggregation"].copy())
+            # Get average visits in the last 15 minutes
+            calculate_visits_last_15min(last_hour_data.copy())
 
-        # Get average visits in the last 15 minutes
-        calculate_visits_last_15min(last_hour_data.copy())
+            # Get top viewed productId in the last hour, keep only productId, category and count
+            calculate_products_last_hour(last_hour_data.copy())
 
-        # Get top viewed productId in the last hour, keep only productId, category and count
-        calculate_products_last_hour(last_hour_data.copy())
+            # Get latest 10 visitors details (date and time, ip and country)
+            calculate_10_last_visitors(last_hour_data.copy())
 
-        # Get latest 10 visitors details (date and time, ip and country)
-        calculate_10_last_visitors(last_hour_data.copy())
+            # Get category popularity in the last hour
+            calculate_category_popularity(last_hour_data.copy())
 
-        # Get category popularity in the last hour
-        calculate_category_popularity(last_hour_data.copy())
+            # Get device type popularity in the last 10 minutes
+            calculate_device_popularity(last_hour_data.copy())
 
-        # Get device type popularity in the last 10 minutes
-        calculate_device_popularity(last_hour_data.copy())
+            # Send all data
+            sorted_data = last_hour_data.sort_values(by='datetime', ascending=False)
+            r.set("raw_data", sorted_data.head(100).to_json())
 
-        # Send all data
-        sorted_data = last_hour_data.sort_values(by='datetime', ascending=False)
-        r.set("raw_data", sorted_data.head(100).to_json())
-
-        # Sleep for 1 second
-        time.sleep(1)
+            # Sleep for 1 second
+            time.sleep(1)
+        except Exception as e:
+            print("Error in sender thread", e)
 
 
 if __name__ == "__main__":
