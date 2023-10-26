@@ -15,7 +15,6 @@ r = redis.Redis(
 def load_products():
     products = pd.read_json('products.json')
     for index, row in products.iterrows():
-        print(row['id'])
         key = f'product:{row["id"]}'
         r.hset(key, 'cat', row['category'])
         r.hset(key, 'title', row['title'])
