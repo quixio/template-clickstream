@@ -88,11 +88,14 @@ deployments:
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
-    version: 44bc6ca353b1d62c2b6ba4a3b0e80b45b6498bd8
+    version: 361f4b8ad8d0a958c75b01f8a89034a5eae51819
     resources:
-      cpu: 1000
-      memory: 1000
+      cpu: 200
+      memory: 500
       replicas: 1
+    state:
+      enabled: true
+      size: 1
     desiredStatus: Running
     variables:
       - name: input
