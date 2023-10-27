@@ -91,7 +91,12 @@ def calculate_device_popularity(df: pd.DataFrame):
     last_10_minutes = df[df["datetime"] > (pd.to_datetime(pd.Timestamp.now()) - pd.Timedelta(hours=2, minutes=10))]
     last_10_minutes = last_10_minutes.groupby(['deviceType']).size().reset_index(name='count')
 
-    total = last_10_minutes['count'].sum() or 1
+    total = last_10_minutes['count'].sum()
+
+    if total == 0:
+        empty_frame = pd.DataFrame([], columns=["Device", "Device type", "Percentage"])
+        r.set("device_type_popularity", empty_frame.to_json())
+
     mobile = last_10_minutes[last_10_minutes['deviceType'] == 'Mobile']['count'].sum() / total * 100
     tablet = last_10_minutes[last_10_minutes['deviceType'] == 'Tablet']['count'].sum() / total * 100
     desktop = last_10_minutes[last_10_minutes['deviceType'] == 'Desktop']['count'].sum() / total * 100
