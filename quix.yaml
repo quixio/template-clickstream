@@ -14,7 +14,7 @@ deployments:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: output
         inputType: OutputTopic
@@ -50,12 +50,12 @@ deployments:
         inputType: FreeText
         description: External Redis hostname
         required: true
-        value: redis-12878.c250.eu-central-1-1.ec2.cloud.redislabs.com
+        value: {{ redis_host }}
       - name: redis_port
         inputType: FreeText
         description: External Redis port
         required: true
-        value: 12878
+        value: {{ redis_port }}
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -74,12 +74,12 @@ deployments:
         inputType: FreeText
         description: External Redis hostname
         required: true
-        value: redis-12878.c250.eu-central-1-1.ec2.cloud.redislabs.com
+        value: {{ redis_host }}
       - name: redis_port
         inputType: FreeText
         description: External Redis port
         required: true
-        value: 12878
+        value: {{ redis_port }}
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -113,7 +113,7 @@ deployments:
   - name: Aggregation Service
     application: Aggregation Service
     deploymentType: Service
-    version: 8aaeef20ddfbdec7543d7dee7debb98949fe10b0
+    version: 5200a21ff67db484ead755c1c655a23b90784ee6
     resources:
       cpu: 200
       memory: 500
@@ -132,12 +132,12 @@ deployments:
         inputType: FreeText
         description: External Redis hostname
         required: true
-        value: redis-12878.c250.eu-central-1-1.ec2.cloud.redislabs.com
+        value: {{ redis_host }}
       - name: redis_port
         inputType: FreeText
         description: External Redis port
         required: true
-        value: 12878
+        value: {{ redis_port }}
       - name: redis_password
         inputType: Secret
         description: External Redis password
