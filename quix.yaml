@@ -50,12 +50,12 @@ deployments:
         inputType: FreeText
         description: External Redis hostname
         required: true
-        value: broker.vicedo.eu
+        value: {{ redis_host }}
       - name: redis_port
         inputType: FreeText
         description: External Redis port
         required: true
-        value: 6379
+        value: {{ redis_port }}
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -74,12 +74,12 @@ deployments:
         inputType: FreeText
         description: External Redis hostname
         required: true
-        value: broker.vicedo.eu
+        value: {{ redis_host }}
       - name: redis_port
         inputType: FreeText
         description: External Redis port
         required: true
-        value: 6379
+        value: {{ redis_port }}
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -132,12 +132,12 @@ deployments:
         inputType: FreeText
         description: External Redis hostname
         required: true
-        value: broker.vicedo.eu
+        value: {{ redis_host }}
       - name: redis_port
         inputType: FreeText
         description: External Redis port
         required: true
-        value: 6379
+        value: {{ redis_port }}
       - name: redis_password
         inputType: Secret
         description: External Redis password
