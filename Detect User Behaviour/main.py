@@ -8,7 +8,7 @@ from behaviour_detector import BehaviourDetector
 client = qx.QuixStreamingClient()
 
 print("Opening input and output topics")
-consumer_topic = client.get_topic_consumer(os.environ["input"], "detect-user-behaviour")
+consumer_topic = client.get_topic_consumer(os.environ["input"])
 producer_topic = client.get_topic_producer(os.environ["output"])
 
 behaviour_detector = BehaviourDetector()
@@ -16,16 +16,15 @@ frames_received = 0
 
 
 # Send special offers for each visitor in its own stream
-def send_special_offers(special_offers: pd.DataFrame):
-    for index, row in special_offers.iterrows():
-        visitor_id = row['userId']
+def send_special_offers(special_offers: list):
+    for visitor_id, offer in special_offers:
         print("Sending offer to visitor", visitor_id)
 
         # Use the visitor ID as the stream name
         stream = producer_topic.get_or_create_stream(visitor_id)
 
         # Send the offer to the stream
-        stream.events.publish(qx.EventData("offer", pd.Timestamp.utcnow(), row["offer"]))
+        stream.events.publish(qx.EventData("offer", pd.Timestamp.utcnow(), offer))
 
 
 # Callback called for each incoming dataframe
@@ -36,12 +35,12 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
         print(f"Received {frames_received} frames")
 
     # Original dataframe may contain more than one row
-    behaviour_detector.process_dataframe(df)
+    behaviour_detector.process_dataframe(stream_consumer, df)
 
     # And the special offers recipients may contain 0 or more rows
     special_offers = behaviour_detector.get_special_offers_recipients()
 
-    if not special_offers.empty:
+    if len(special_offers) > 0:
         send_special_offers(special_offers)
         behaviour_detector.clear_special_offers_recipients()
 
