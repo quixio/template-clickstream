@@ -96,10 +96,11 @@ def calculate_device_popularity(df: pd.DataFrame):
     if total == 0:
         empty_frame = pd.DataFrame([], columns=["Device", "Device type", "Percentage"])
         r.set("device_type_popularity", empty_frame.to_json())
+        return
 
-    mobile = (last_10_minutes[last_10_minutes['deviceType'] == 'Mobile']['count'].sum() or 0) / total * 100
-    tablet = (last_10_minutes[last_10_minutes['deviceType'] == 'Tablet']['count'].sum() or 0) / total * 100
-    desktop = (last_10_minutes[last_10_minutes['deviceType'] == 'Desktop']['count'].sum() or 0) / total * 100
+    mobile = last_10_minutes[last_10_minutes['deviceType'] == 'Mobile']['count'].sum() / total * 100
+    tablet = last_10_minutes[last_10_minutes['deviceType'] == 'Tablet']['count'].sum() / total * 100
+    desktop = last_10_minutes[last_10_minutes['deviceType'] == 'Desktop']['count'].sum() / total * 100
     other = 100.0 - mobile - tablet - desktop
 
     data = [["Device type", "Desktop", desktop],
