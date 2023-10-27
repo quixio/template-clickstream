@@ -1,7 +1,6 @@
 import quixstreams as qx
 import os
 import pandas as pd
-from datetime import timedelta, datetime
 
 if 'window_minutes' not in os.environ:
     window_minutes = 30
