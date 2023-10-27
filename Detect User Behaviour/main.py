@@ -8,7 +8,7 @@ from behaviour_detector import BehaviourDetector
 client = qx.QuixStreamingClient()
 
 print("Opening input and output topics")
-consumer_topic = client.get_topic_consumer(os.environ["input"], "local-jordi")
+consumer_topic = client.get_topic_consumer(os.environ["input"])
 producer_topic = client.get_topic_producer(os.environ["output"])
 
 behaviour_detector = BehaviourDetector()

@@ -9,6 +9,17 @@ else:
     window_minutes = int(os.environ['window_minutes'])
 
 
+def check_time_elapsed(row, current_state):
+    if len(current_state["rows"]) == 0:
+        return True
+
+    timestamp_row = row["timestamp"]
+    timestamp_first_interaction = current_state["rows"][0]["timestamp"]
+    window_ns = window_minutes * 60 * 1e9
+
+    return timestamp_row - timestamp_first_interaction < window_ns
+
+
 class BehaviourDetector:
     columns = ["time", "timestamp", "userId", "category", "age", "ip", "gender", "productId", "offer"]
     visitor_columns = ["userId", "offer", "category", "productId"]
@@ -16,7 +27,9 @@ class BehaviourDetector:
     transitions = {
         "init": [
             {
-                "condition": lambda row, current_state: row["category"] == "clothing",
+                "condition": lambda row, current_state: row["category"] == "clothing"
+                                                        and ((row["gender"] == "M" and 35 <= row["age"] <= 45)
+                                                             or (row["gender"] == "F" and 25 <= row["age"] <= 35)),
                 "next_state": "clothes_visited",
             }
         ],
@@ -45,7 +58,6 @@ class BehaviourDetector:
     }
 
     def __init__(self):
-        self._df = pd.DataFrame(columns=self.columns)
         self._special_offers_recipients = []
 
     # Method to process the incoming dataframe
@@ -57,10 +69,10 @@ class BehaviourDetector:
             user_state["offer"] = "offer1" if row["gender"] == 'M' else "offer2"
 
             # Initialize state if not present
-            if not "state" in user_state:
+            if "state" not in user_state:
                 user_state["state"] = "init"
 
-            if not "rows" in user_state:
+            if "rows" not in user_state:
                 user_state["rows"] = []
 
             # Ignore page refreshes
@@ -70,7 +82,8 @@ class BehaviourDetector:
             # Transition to next state if condition is met
             transitioned = False
             for transition in self.transitions[user_state["state"]]:
-                if transition["condition"](row, user_state):
+                if transition["condition"](row, user_state) and check_time_elapsed(row, user_state):
+                    print("Transitioning from", user_state["state"], "to", transition["next_state"], "for", user_id)
                     user_state["state"] = transition["next_state"]
                     user_state["rows"].append(row)
                     transitioned = True
