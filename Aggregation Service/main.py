@@ -88,7 +88,7 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
 
 
 def calculate_device_popularity(df: pd.DataFrame):
-    last_10_minutes = df[df["datetime"] > (pd.to_datetime(pd.Timestamp.now()) - pd.Timedelta(hours=2, minutes=10))]
+    last_10_minutes = df[df["datetime"] > (pd.to_datetime(pd.Timestamp.now()) - pd.Timedelta(minutes=10))]
     last_10_minutes = last_10_minutes.groupby(['deviceType']).size().reset_index(name='count')
 
     total = last_10_minutes['count'].sum()
