@@ -64,10 +64,13 @@ class BehaviourDetector:
         # Filter out data that cannot apply for offers
         for label, row in received_df.iterrows():
             user_id = row["userId"]
+
+            # Get state
             user_state = stream_consumer.get_dict_state(user_id)
-            user_state["offer"] = "offer1" if row["gender"] == 'M' else "offer2"
 
             # Initialize state if not present
+            user_state["offer"] = "offer1" if row["gender"] == 'M' else "offer2"
+
             if "state" not in user_state:
                 user_state["state"] = "init"
 
