@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Print the contents of environment.prod.ts to the console
+cat /environments/environment.prod.ts
+
 # Create or update the Angular environment file (environment.prod.ts)
 echo "export const environment = {" > /environments/environment.prod.ts
 echo "  isProduction: true," >> /environments/environment.prod.ts
