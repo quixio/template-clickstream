@@ -5,6 +5,7 @@ RUN npm install --force
 COPY --from=git /project /app/
 RUN ls
 
+RUN chmod +x /app/build-config.sh
 RUN /app/build-config.sh
 
 RUN npm run build -- --output-path=./dist/out --configuration=production
