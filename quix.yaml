@@ -157,6 +157,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: webshop-88c72cf
+    desiredStatus: Running
     variables:
       - name: bearer_token
         inputType: FreeText
