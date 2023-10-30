@@ -78,10 +78,15 @@ export class QuixService {
         clickTopic$,
         offersTopic$
       ]).subscribe(([bearerToken, workspaceId, portalApi, clickTopic, offersTopic]) => {
+
+        console.log("1. TOKEN=" + this.token)
+
         this.token = this.stripLineFeed(bearerToken);
         this.workspaceId = this.stripLineFeed(workspaceId);
         this.clickTopic = this.stripLineFeed(clickTopic);
         this.offersTopic = this.stripLineFeed(offersTopic);
+
+        console.log("2. TOKEN=" + this.token)
 
         // work out what domain the portal api is on:
         portalApi = portalApi.replace("\n", "");
