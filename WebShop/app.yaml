@@ -11,5 +11,5 @@ variables:
     description: This is the output topic to write data to
     defaultValue: output-topic
     required: true
-dockerfile: build/dockerfile
+dockerfile: src/build/dockerfile
 defaultFile: src/app/services/quix.service.ts
