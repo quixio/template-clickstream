@@ -6,5 +6,10 @@ variables:
     description: ''
     defaultValue: abc111
     required: false
+  - name: Deployment__Id
+    inputType: FreeText
+    description: ''
+    defaultValue: dep001
+    required: false
 dockerfile: build/dockerfile
 defaultFile: src/app/services/quix.service.ts
