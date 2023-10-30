@@ -11,5 +11,10 @@ variables:
     description: ''
     defaultValue: dep001
     required: false
+  - name: offers_topic
+    inputType: InputTopic
+    description: ''
+    defaultValue: special-offers
+    required: false
 dockerfile: build/dockerfile
 defaultFile: src/app/services/quix.service.ts
