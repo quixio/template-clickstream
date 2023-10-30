@@ -1,10 +1,5 @@
 name: Template UI
 language: nodejs
-variables:
-  - name: output
-    inputType: OutputTopic
-    description: This is the output topic to write data to
-    defaultValue: output-topic
-    required: true
+variables: []
 dockerfile: build/dockerfile
 defaultFile: src/app/services/quix.service.ts
