@@ -149,7 +149,7 @@ deployments:
   - name: Template UI
     application: WebShop
     deploymentType: Service
-    version: 1904f75ad6c087f97d01de109ba81cf174674b9f
+    version: 2dd7524877a54f9b951a7ca12438d29b59373c7b
     resources:
       cpu: 200
       memory: 500
@@ -157,7 +157,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: webshop-88c72cf
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: bearer_token
         inputType: FreeText
