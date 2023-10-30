@@ -10,5 +10,9 @@ echo "  OFFERS_TOPIC: '${offers_topic}'," >> /usr/share/nginx/html/environment.p
 echo "  DEPLOYMENT_ID: '${Deployment__Id}'" >> /usr/share/nginx/html/environment.prod.ts
 echo "};" >> /usr/share/nginx/html/environment.prod.ts
 
+# Print the contents of environment.prod.ts to the console
+cat /usr/share/nginx/html/environment.prod.ts
+
+
 # Start the NGINX server
 nginx -g "daemon off;"
