@@ -12,4 +12,4 @@ variables:
     defaultValue: output-topic
     required: true
 dockerfile: build/dockerfile
-defaultFile: /src/app/services/quix.service.ts
+defaultFile: src/app/services/quix.service.ts
