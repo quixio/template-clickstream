@@ -1,5 +1,12 @@
 #!/bin/sh
 
+
+# /usr/share/nginx/html
+pwd
+
+
+
+
 # Print the contents of environment.prod.ts to the console
 cat /app/src/environments/environment.prod1.ts
 
