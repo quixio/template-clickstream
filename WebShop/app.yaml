@@ -1,5 +1,10 @@
 name: Template UI
 language: nodejs
-variables: []
+variables:
+  - name: bearer_token
+    inputType: FreeText
+    description: ''
+    defaultValue: abc111
+    required: false
 dockerfile: build/dockerfile
 defaultFile: src/app/services/quix.service.ts
