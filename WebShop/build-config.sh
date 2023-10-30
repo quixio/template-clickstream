@@ -3,6 +3,7 @@
 # Check if 'ls' is available
 command -v ls >/dev/null 2>&1 || { echo >&2 "ls is required but not found. Aborting."; exit 1; }
 
+export
 
 # List files and folders in the current working directory
 ls
