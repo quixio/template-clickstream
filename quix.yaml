@@ -149,7 +149,7 @@ deployments:
   - name: Template UI
     application: WebShop
     deploymentType: Service
-    version: 45c3a79336dcb0b00ce399dd9569f8cafd9741b6
+    version: 5bafad31f63a63148cc267ce4468879ed5b97372
     resources:
       cpu: 200
       memory: 500
@@ -168,7 +168,7 @@ deployments:
         inputType: FreeText
         description: ''
         required: false
-        value: dep001
+        value: f3d41425-a0ff-4d45-bded-2fcfa861b5c7
       - name: offers_topic
         inputType: InputTopic
         description: ''
