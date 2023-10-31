@@ -107,7 +107,7 @@ deployments:
         inputType: FreeText
         description: Minutes for the rolling window to detect user behaviour
         required: false
-        value: 30
+        value: 10
       - name: output
         inputType: OutputTopic
         description: Topic to write offers
