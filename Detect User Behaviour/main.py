@@ -51,12 +51,11 @@ def read_stream(consumer_stream: qx.StreamConsumer):
     consumer_stream.timeseries.on_dataframe_received = on_dataframe_handler
 
 
-if __name__ == "__main__":
-    # Hook up events before initiating read to avoid losing out on any data
-    consumer_topic.on_stream_received = read_stream
+# Hook up events before initiating read to avoid losing out on any data
+consumer_topic.on_stream_received = read_stream
 
-    print("Listening to streams. Press CTRL-C to exit.")
+print("Listening to streams. Press CTRL-C to exit.")
 
-    # Hook up to termination signal (for docker image) and CTRL-C
-    # And handle graceful exit of the model.
-    qx.App.run()
+# Hook up to termination signal (for docker image) and CTRL-C
+# And handle graceful exit of the model.
+qx.App.run()
