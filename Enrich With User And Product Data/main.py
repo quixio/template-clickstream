@@ -45,21 +45,25 @@ def calculate_age(birthdate: str):
 
 # Method to get the product category for a product from Redis
 def get_product_category(product: str):
+    print(f"Getting category for {product}")
     return redis_client.hget(f'product:{product}', 'cat') or "Unknown"
 
 
 # Method to get the product title for a product from Redis
 def get_product_title(product: str):
+    print(f"Getting title for {product}")
     return redis_client.hget(f'product:{product}', 'title') or "Unknown"
 
 
 # Method to get the visitor gender from Redis
 def get_visitor_gender(visitor: str):
+    print(f"Getting gender for {visitor}")
     return redis_client.hget(f'visitor:{visitor}', 'gender') or "U"
 
 
 # Method to get the visitor birthdate from Redis
 def get_visitor_birthdate(visitor: str):
+    print(f"Getting birthday for {visitor}")
     return redis_client.hget(f'visitor:{visitor}', 'birthday')
 
 
@@ -109,6 +113,8 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     df['age'] = df['birthdate'].apply(calculate_age)
     df['country'] = df['ip'].apply(get_country_from_ip)
     df['deviceType'] = df['userAgent'].apply(get_device_type)
+
+    print(df)
 
     # Create a new stream (or reuse it if it was already created).
     # We will be using one stream per visitor id, so we can parallelise the processing
