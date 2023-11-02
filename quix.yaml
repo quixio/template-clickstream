@@ -1,7 +1,6 @@
 # Quix Project Descriptor
 # This file describes the data pipeline and configuration of resources of a Quix Project.
 
-
 metadata:
   version: 1.0
 
@@ -158,7 +157,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: webshop-88c72cf
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: bearer_token
         inputType: FreeText
