@@ -178,7 +178,7 @@ deployments:
         inputType: InputTopic
         description: ''
         required: false
-        value: enriched-click-data
+        value: click-data
 
 # This section describes the Topics of the data pipeline
 topics:
