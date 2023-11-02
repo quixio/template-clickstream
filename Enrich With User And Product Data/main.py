@@ -114,7 +114,6 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     df['country'] = df['ip'].apply(get_country_from_ip)
     df['deviceType'] = df['userAgent'].apply(get_device_type)
 
-    print(df)
 
     # Create a new stream (or reuse it if it was already created).
     # We will be using one stream per visitor id, so we can parallelise the processing
