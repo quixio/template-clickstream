@@ -149,7 +149,7 @@ deployments:
   - name: Template UI
     application: WebShop
     deploymentType: Service
-    version: 5bafad31f63a63148cc267ce4468879ed5b97372
+    version: 626dd941c911af47343d13d531e9fb6b315c33cc
     resources:
       cpu: 200
       memory: 500
@@ -178,7 +178,7 @@ deployments:
         inputType: InputTopic
         description: ''
         required: false
-        value: enriched-click-data
+        value: click-data
 
 # This section describes the Topics of the data pipeline
 topics:
