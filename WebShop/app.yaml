@@ -17,9 +17,9 @@ variables:
     defaultValue: special-offers
     required: false
   - name: click_topic
-    inputType: InputTopic
+    inputType: OutputTopic
     description: ''
-    defaultValue: enriched-click-data
+    defaultValue: click-data
     required: false
 dockerfile: src/build/dockerfile
 defaultFile: src/app/services/quix.service.ts
