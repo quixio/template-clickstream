@@ -61,9 +61,12 @@ class BehaviourDetector:
 
     # Method to process the incoming dataframe
     def process_dataframe(self, stream_consumer: qx.StreamConsumer, received_df: pd.DataFrame):
-        # Filter out data that cannot apply for offers
         for label, row in received_df.iterrows():
             user_id = row["userId"]
+
+            # Filter out data that cannot apply for offers
+            if "gender" not in row:
+                continue
 
             # Get state
             user_state = stream_consumer.get_dict_state(user_id)
