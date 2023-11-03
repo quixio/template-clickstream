@@ -7,6 +7,7 @@ import { EventData } from '../models/eventData';
 import { ParameterData } from '../models/parameterData';
 import { Data } from '../models/data';
 
+
 export enum ConnectionStatus {
   Connected = 'Connected',
   Reconnecting = 'Reconnecting',
