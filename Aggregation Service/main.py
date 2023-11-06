@@ -151,7 +151,7 @@ def aggregate_eight_hours(df: pd.DataFrame):
     if not eight_hours.equals(eight_hours_aggregation):
         db["eight_hours_aggregation"] = eight_hours
 
-    # Group by datetime and sum the count
+    # Group by datetime, because we are storing by datetime and user, and sum the count
     eight_hours = eight_hours.groupby(['datetime']).sum(numeric_only=True).reset_index()
 
     # Store the aggregated_df in Redis
