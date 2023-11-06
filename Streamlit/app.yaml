@@ -11,6 +11,11 @@ variables:
     description: ''
     defaultValue: ''
     required: false
+  - name: redis_password
+    inputType: InputTopic
+    description: ''
+    defaultValue: ''
+    required: false
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
