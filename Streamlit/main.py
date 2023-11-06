@@ -31,20 +31,18 @@ if os.environ.get("Quix__Workspace__Id") is not None:
     redis_host = os.environ.get("redis_host")
     redis_port = os.environ.get("redis_port")
     redis_password = os.environ.get("redis_password")
-    pass
 elif st.secrets["redis_host"] is not None:
     # this is running in Streamlit and the 'redis_host' secret is available
     # attempt to get these from streamlit secrets
     redis_host = st.secrets.redis_host
     redis_port = st.secrets.redis_port
     redis_password = st.secrets.redis_password
-
-    pass
 else:
     # we don't know where this is running. Make sure you set the values for:
-    # redis_host
-    # redis_port
-    # redis_password
+    print("We don't know where this is running. Make sure you set the values for:")
+    print("redis_host")
+    print("redis_port")
+    print("redis_password")
     pass
 
 r = redis.Redis(
