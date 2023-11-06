@@ -190,7 +190,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: streamlit-dashboard
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: redis_host
         inputType: FreeText
