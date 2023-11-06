@@ -12,7 +12,7 @@ variables:
     defaultValue: ''
     required: false
   - name: redis_password
-    inputType: InputTopic
+    inputType: FreeText
     description: ''
     defaultValue: ''
     required: false
