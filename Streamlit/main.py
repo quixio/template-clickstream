@@ -47,9 +47,9 @@ else:
     print(" - redis_password")
 
 r = redis.Redis(
-    host=st.secrets.redis_host,
-    port=st.secrets.redis_port,
-    password=st.secrets.redis_password,
+    host=redis_host,
+    port=redis_port,
+    password=redis_password,
     decode_responses=True)
 
 # DASHBOARD LAYOUT SECTION
