@@ -40,9 +40,9 @@ elif st.secrets["redis_host"] is not None:
 else:
     # we don't know where this is running. Make sure you set the values for:
     print("We don't know where this is running. Make sure you set the values for:")
-    print("redis_host")
-    print("redis_port")
-    print("redis_password")
+    print(" - redis_host")
+    print(" - redis_port")
+    print(" - redis_password")
 
 r = redis.Redis(
     host=st.secrets.redis_host,
