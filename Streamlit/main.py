@@ -1,10 +1,11 @@
-import time
-from io import StringIO
-
-import pandas as pd
-import plotly.express as px
-import redis
 import streamlit as st
+import plotly.express as px
+from io import StringIO
+import pandas as pd
+import time
+import redis
+import os
+
 
 # Basic configuration of the Streamlit dashboard
 st.set_page_config(
@@ -17,6 +18,25 @@ st.set_page_config(
 )
 
 st.header("Real-Time User Stats Dashboard", divider="blue")
+
+redis_host = ""
+redis_port = ""
+redis_password = ""
+
+# work out which environment we're running on!
+# check for Quix__Workspace__Id to see if we are in Quix platform.
+if os.environ.get("Quix__Workspace__Id") is not None:
+    # this is running in Quix
+    pass
+elif st.secrets["redis_host"] is not None:
+    # this is running in Streamlit and the 'redis_host' secret is available
+    pass
+else:
+    # we don't know where this is running. Make sure you set the values for:
+    # redis_host
+    # redis_port
+    # redis_password
+    pass
 
 r = redis.Redis(
     host=st.secrets.redis_host,
