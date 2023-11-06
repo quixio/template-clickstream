@@ -32,7 +32,7 @@ if os.environ.get("Quix__Workspace__Id") is not None:
     redis_host = os.environ.get("redis_host")
     redis_port = os.environ.get("redis_port")
     redis_password = os.environ.get("redis_password")
-elif st.secrets["redis_host"] is not None:
+elif os.environ.get("redis_host") is not None:
     # this is running in Streamlit and the 'redis_host' secret is available
     # attempt to get these from streamlit secrets
     print("Getting Redis credentials from Streamlit secrets")
