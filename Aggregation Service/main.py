@@ -152,7 +152,7 @@ def aggregate_eight_hours(df: pd.DataFrame):
         db["eight_hours_aggregation"] = eight_hours
 
     # Group by datetime and sum the count
-    eight_hours = eight_hours.groupby(['datetime']).sum().reset_index()
+    eight_hours = eight_hours.groupby(['datetime']).sum(numeric_only=True).reset_index()
 
     # Store the aggregated_df in Redis
     r.set("sessions", eight_hours.to_json())
