@@ -1,24 +1,16 @@
-# Streamlit
+# Streamlit dashboard
 
-[This project](https://github.com/quixio/quix-samples/tree/main/python/destinations/streamlit) is an example of how to run a real time Streamlit dashboard within Quix
+This project is the Streamlit dashboard for the click stream template.
 
-## How to run
-
-Create a [Quix](https://portal.platform.quix.ai/self-sign-up?xlink=github) account or log-in and visit the Samples to use this project.
-
-Clicking `Deploy` on the Sample, deploys a pre-built container in Quix. Complete the environment variables to configure the container.
-
-Clicking `Edit code` on the Sample, forks the project to your own Git repo so you can customize it before deploying.
+Use the dashboard to see various statistics about the site visitors.
 
 ## Environment variables
 
 This code sample uses the following environment variables:
 
-- **input**: The topic to stream data from (`f1-data`)
-
-## Requirements
-
-Deploy the `Demo Data` source from the Quix Code Samples. This will stream Codemasters&reg; F1&reg; 2019 telemetry data into a topic called `f1-data`
+- **redis_host**: The Redis server to use.
+- **redis_port**: The Redis port.
+- **redis_password**: The password for the Redis account.
 
 ## Contribute
 
