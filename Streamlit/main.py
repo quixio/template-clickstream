@@ -43,7 +43,6 @@ else:
     print("redis_host")
     print("redis_port")
     print("redis_password")
-    pass
 
 r = redis.Redis(
     host=st.secrets.redis_host,
