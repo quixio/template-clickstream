@@ -194,19 +194,19 @@ deployments:
     variables:
       - name: redis_host
         inputType: FreeText
-        description: ''
-        required: false
-        value: ''
+        description: External Redis hostname
+        required: true
+        value: {{ redis_host }}
       - name: redis_port
         inputType: FreeText
-        description: ''
-        required: false
-        value: ''
+        description: External Redis port
+        required: true
+        value: {{ redis_port }}
       - name: redis_password
-        inputType: FreeText
-        description: ''
-        required: false
-        value: ''
+        inputType: Secret
+        description: External Redis password
+        required: true
+        secretKey: redis_password
 
 # This section describes the Topics of the data pipeline
 topics:
