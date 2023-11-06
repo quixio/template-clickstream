@@ -182,7 +182,7 @@ deployments:
   - name: Streamlit
     application: Streamlit
     deploymentType: Service
-    version: 38588efa7833837834aea7b3664d3480f51648ba
+    version: b862127ec06fd7f8421e89e83b3d4e0119db485d
     resources:
       cpu: 200
       memory: 500
