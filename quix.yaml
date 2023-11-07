@@ -34,7 +34,7 @@ deployments:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -124,7 +124,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -179,6 +179,34 @@ deployments:
         description: ''
         required: false
         value: click-data
+  - name: Streamlit
+    application: Streamlit
+    deploymentType: Service
+    version: a3130ae0d9f555e5b7d51b084a07659179a6f30c
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: streamlit-dashboard
+    desiredStatus: Running
+    variables:
+      - name: redis_host
+        inputType: FreeText
+        description: External Redis hostname
+        required: true
+        value: {{ redis_host }}
+      - name: redis_port
+        inputType: FreeText
+        description: External Redis port
+        required: true
+        value: {{ redis_port }}
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        secretKey: redis_password
 
 # This section describes the Topics of the data pipeline
 topics:

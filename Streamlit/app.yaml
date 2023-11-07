@@ -1,0 +1,21 @@
+name: Streamlit
+language: python
+variables:
+  - name: redis_host
+    inputType: FreeText
+    description: ''
+    defaultValue: ''
+    required: false
+  - name: redis_port
+    inputType: FreeText
+    description: ''
+    defaultValue: ''
+    required: false
+  - name: redis_password
+    inputType: FreeText
+    description: ''
+    defaultValue: ''
+    required: false
+dockerfile: build/dockerfile
+runEntryPoint: main.py
+defaultFile: main.py
