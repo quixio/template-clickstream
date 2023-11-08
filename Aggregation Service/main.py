@@ -108,7 +108,7 @@ def calculate_device_popularity(df: pd.DataFrame):
             ["Device type", "Mobile", mobile],
             ["Device type", "Other", other]]
 
-    device_type_popularity = pd.DataFrame(data, columns=["Device", "Device type", "Percentage"])
+    device_type_popularity = pd.DataFrame(data, columns=["Device", "Device type", "Total"])
     r.set("device_type_popularity", device_type_popularity.to_json())
 
 
