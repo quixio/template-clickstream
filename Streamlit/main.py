@@ -6,7 +6,6 @@ import time
 import redis
 import os
 
-
 # Basic configuration of the Streamlit dashboard
 st.set_page_config(
     page_title="Real-Time User Stats Dashboard (Quix)",
@@ -22,6 +21,8 @@ st.header("Real-Time User Stats Dashboard", divider="blue")
 redis_host = ""
 redis_port = ""
 redis_password = ""
+
+default_height = 200
 
 # work out which environment we're running on!
 # check for Quix__Workspace__Id to see if we are in Quix platform.
@@ -94,8 +95,19 @@ with st.container():
         # A placeholder for the second chart to update it later with data
         placeholder_col23 = st.empty()
 
-# A placeholder for the raw data table
-placeholder_raw = st.empty()
+with st.container():
+    col31, col32 = st.columns([1, 2])
+    with col31:
+        # Header of the first column
+        st.header("Top 10 viewed pages in the last hour")
+        # A placeholder for the first chart to update it later with data
+        placeholder_col31 = st.empty()
+
+    with col32:
+        # Header of the second column
+        st.header("Latest Visitor Details")
+        # A placeholder for the second chart to update it later with data
+        placeholder_col32 = st.empty()
 
 # REAL-TIME METRICS SECTION
 # Below we update the charts with the data we receive from Quix in real time.
@@ -115,7 +127,7 @@ while True:
         # Then merge the two dataframes by time and fill missing values with 0, so we have a value for each minute
         df = pd.merge(base_df, df, on='datetime', how='left').fillna(0)
 
-        fig = px.line(df, x="datetime", y="count", height=310)
+        fig = px.line(df, x="datetime", y="count", height=default_height)
         fig.update_xaxes(title_text='Time', tickformat='%H:%M')
         fig.update_yaxes(title_text='Visits', range=[0, max(1, max(df['count']))])  # Set y minimum always 0
         st.plotly_chart(fig, use_container_width=True)
@@ -132,7 +144,8 @@ while True:
         # Then merge the two dataframes by time and fill missing values with 0, so we have a value for each minute
         df = pd.merge(base_df, df, on='datetime', how='left').fillna(0)
 
-        fig = px.line(df, x="datetime", y="count", height=310)
+        # Draw a bar chart with time as x axis and sessions as y axis
+        fig = px.bar(df, x="datetime", y="count", height=default_height)
         fig.update_xaxes(title_text='Time', tickformat='%H:%M')
         fig.update_yaxes(title_text='Sessions', range=[0, max(1, max(df['count']))])  # Set y minimum always 0
         st.plotly_chart(fig, use_container_width=True)
@@ -145,39 +158,27 @@ while True:
             st.markdown("N/A")
             continue
 
-        fig = px.bar(chart_df, y="Device", x="Percentage", color="Device type", orientation="h", height=270)
-        fig.update_layout(
-            barmode='stack',
-            yaxis={'categoryorder': 'total ascending'},
-            hovermode="x",
-            bargap=0.1,
-            bargroupgap=0.1,
-            legend=dict(
-                orientation="h",
-                yanchor="bottom",
-                y=1,
-                xanchor="center",
-                x=0.5
-            )
-        )
+        # Create 2 columns
+        c1, c2 = st.columns([1, 2])
 
-        fig.update_traces(texttemplate='%{value:.2f}%', textposition='inside')
-        fig.update_xaxes(visible=False, showticklabels=False)
-        fig.update_yaxes(visible=False, showticklabels=False)
+        # Write in the first column the number of active users
+        c1.markdown("33")
 
-        st.plotly_chart(fig, use_container_width=True)
+        # Plot a pie chart in the second column
+        fig = px.pie(chart_df, values='Percentage', names='Device type', height=default_height)
+        c2.plotly_chart(fig, use_container_width=True)
 
     with placeholder_col21.container():
         # Top 10 viewed pages in the last hour
         products_last_hour = StringIO(r.get("products_last_hour"))
         df = pd.read_json(products_last_hour)
-        st.dataframe(df, hide_index=True, use_container_width=True)
+        st.dataframe(df, hide_index=True, use_container_width=True, height=default_height)
 
     with placeholder_col22.container():
         # Latest 10 Visitor Details
         data = StringIO(r.get("latest_visitors"))
         df = pd.read_json(data)
-        st.dataframe(df, hide_index=True, use_container_width=True)
+        st.dataframe(df, hide_index=True, use_container_width=True, height=default_height)
 
     with placeholder_col23.container():
         # Category popularity in the Last Hour
@@ -188,12 +189,14 @@ while True:
             st.markdown("N/A")
             continue
 
-        # Draw a pie chart
-        fig = px.pie(df, values='count', names='category')
+        # Draw a bar chart with distinct colors for each bar
+        fig = px.bar(df, x="category", y="count", height=default_height, color="category")
+        fig.update_xaxes(title_text='Category')
+        fig.update_yaxes(title_text='Visits', range=[0, max(1, max(df['count']))])
         st.plotly_chart(fig, use_container_width=True)
 
     # Display the raw dataframe data
-    with placeholder_raw.container():
+    with placeholder_col32.container():
         st.markdown("### Raw Data View")
         data = StringIO(r.get("raw_data"))
         if data is None:
