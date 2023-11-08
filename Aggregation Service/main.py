@@ -94,7 +94,7 @@ def calculate_device_popularity(df: pd.DataFrame):
     total = last_10_minutes['count'].sum()
 
     if total == 0:
-        empty_frame = pd.DataFrame([], columns=["Device", "Device type", "Percentage"])
+        empty_frame = pd.DataFrame([], columns=["Device", "Device type", "Total"])
         r.set("device_type_popularity", empty_frame.to_json())
         return
 
