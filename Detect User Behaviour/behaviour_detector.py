@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import logging
 from rlh import RedisStreamLogHandler
+import time
 
 if 'window_minutes' not in os.environ:
     window_minutes = 30
@@ -11,12 +12,9 @@ else:
 
 logger = logging.getLogger("States")
 
-
 stream_log_handler = logging.StreamHandler()
 stream_log_handler.setLevel(logging.DEBUG)
 logger.addHandler(stream_log_handler)
-
-print(f"Creating redis log handler {os.environ['redis_host']}")
 
 redis_log_handler = RedisStreamLogHandler(stream_name="state_logs",
                                           host=os.environ['redis_host'],
@@ -84,11 +82,9 @@ class BehaviourDetector:
 
     # Method to process the incoming dataframe
     def process_dataframe(self, stream_consumer: qx.StreamConsumer, received_df: pd.DataFrame):
-        print(received_df)
-
         for label, row in received_df.iterrows():
             user_id = row["userId"]
-            print(f"Processing frame for {user_id}")
+            logger.debug(f"Processing frame for {user_id}")
 
             # Filter out data that cannot apply for offers
             if "gender" not in row:
@@ -100,10 +96,10 @@ class BehaviourDetector:
                 continue
 
             # Get state
-            print(f"Getting state for {user_id}")
+            logger.debug(f"Getting state for {user_id}")
+            start = time.time()
             user_state = stream_consumer.get_dict_state(user_id)
-            print(f"Loaded state for {user_id}: {user_state}")
-
+            logger.debug(f"Loaded state for {user_id}. Took {time.time() - start} seconds")
 
             # Initialize state if not present
             user_state["offer"] = "offer1" if row["gender"] == 'M' else "offer2"
@@ -116,16 +112,14 @@ class BehaviourDetector:
 
             # Ignore page refreshes
             if user_state["rows"] and user_state["rows"][-1]["productId"] == row["productId"]:
-                print(f"Ignoring page refresh for {user_id}")
+                logger.debug(f"Ignoring page refresh for {user_id}")
                 continue
 
             # Transition to next state if condition is met
-            print(f"Applying transitions for {user_id}")
+            logger.debug(f"Applying transitions for {user_id}")
             transitioned = False
             for transition in self.transitions[user_state["state"]]:
                 if transition["condition"](row, user_state) and check_time_elapsed(row, user_state):
-                    print(f"Transitioned state for {user_id}")
-
                     user_state["state"] = transition["next_state"]
                     user_state["rows"].append(row)
                     transitioned = True
@@ -136,16 +130,13 @@ class BehaviourDetector:
 
             # Reset to initial state if no transition was made
             if not transitioned:
-                print(f"Resetting state to init for {user_id}")
-
+                logger.debug(f"Resetting state to init for {user_id}")
                 user_state["state"] = "init"
                 user_state["rows"] = []
                 continue
 
             # Trigger offer
             if user_state["state"] == "offer":
-                print(f"Triggering offer for {user_id}")
-
                 logger.info(f"[User {user_id[-4:]} triggered offer {user_state['offer']}]")
                 user_state["state"] = "init"
                 user_state["rows"] = []
