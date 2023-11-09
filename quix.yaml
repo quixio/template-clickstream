@@ -64,22 +64,22 @@ deployments:
   - name: Load Products and Users
     application: Load Products and Users
     deploymentType: Job
-    version: 7a369a17b0d8e6f640f205f5d3e87ef628b0dd02
+    version: f933b227b6e5bd5d6c213ca4155fe66b9359890f
     resources:
       cpu: 200
       memory: 500
       replicas: 1
     variables:
-      - name: redis_port
-        inputType: Secret
-        description: External Redis port
-        required: true
-        secretKey: redis_port
       - name: redis_host
         inputType: Secret
         description: External Redis host
         required: true
         secretKey: redis_host
+      - name: redis_port
+        inputType: Secret
+        description: External Redis port
+        required: true
+        secretKey: redis_port
       - name: redis_password
         inputType: Secret
         description: External Redis password
