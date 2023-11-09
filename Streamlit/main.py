@@ -173,7 +173,7 @@ while True:
 
         # Calculate the sum of all devices
         total_devices = chart_df['Total'].sum()
-        c1.markdown(f"Total devices")
+        c1.markdown("Total devices")
         c1.markdown(f"# {total_devices}")
 
         # Calculate the percentage of each device type
