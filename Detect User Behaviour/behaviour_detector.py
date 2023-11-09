@@ -118,6 +118,7 @@ class BehaviourDetector:
                 continue
 
             # Transition to next state if condition is met
+            print(f"Applying transitions for {user_id}")
             transitioned = False
             for transition in self.transitions[user_state["state"]]:
                 if transition["condition"](row, user_state) and check_time_elapsed(row, user_state):
