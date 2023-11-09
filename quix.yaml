@@ -88,7 +88,7 @@ deployments:
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
-    version: 6c0c95df3d974d5826909d0695c48e3b2c849eea
+    version: 2bae14dd679127451cd0cd9c10728ab7dcc7ad27
     resources:
       cpu: 200
       memory: 500
@@ -96,7 +96,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -131,7 +131,7 @@ deployments:
   - name: Aggregation Service
     application: Aggregation Service
     deploymentType: Service
-    version: a027d8d4dad82206312f994cace1c6ec78dacafe
+    version: 8174346f79d4404f59e8c46f89c5dddf3a98743c
     resources:
       cpu: 200
       memory: 500
@@ -197,7 +197,7 @@ deployments:
   - name: Streamlit
     application: Streamlit
     deploymentType: Service
-    version: a3130ae0d9f555e5b7d51b084a07659179a6f30c
+    version: 2bae14dd679127451cd0cd9c10728ab7dcc7ad27
     resources:
       cpu: 200
       memory: 500
