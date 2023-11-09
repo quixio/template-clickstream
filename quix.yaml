@@ -88,7 +88,7 @@ deployments:
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
-    version: 3d06c210fad06c1ec3010cf8d8c90da20b1420c5
+    version: 45a0ae5d22cf80451a30539660719f273c7a5f9f
     resources:
       cpu: 200
       memory: 500
@@ -113,6 +113,21 @@ deployments:
         description: Topic to write offers
         required: true
         value: special-offers
+      - name: redis_host
+        inputType: FreeText
+        description: External Redis hostname
+        required: true
+        value: a
+      - name: redis_port
+        inputType: FreeText
+        description: External Redis port
+        required: true
+        value: a
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        secretKey: redis_password
   - name: Aggregation Service
     application: Aggregation Service
     deploymentType: Service
