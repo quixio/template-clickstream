@@ -12,9 +12,9 @@ variables:
     defaultValue: redis_port
     required: false
   - name: redis_password
-    inputType: FreeText
+    inputType: Secret
     description: ''
-    defaultValue: ''
+    defaultValue: redis_password
     required: false
 dockerfile: build/dockerfile
 runEntryPoint: main.py
