@@ -115,14 +115,13 @@ class BehaviourDetector:
             # Reset to initial state if no transition was made
             if not transitioned:
                 user_state["state"] = "init"
-                user_state["time"] = []
+                user_state["rows"] = []
                 continue
 
             # Trigger offer
             if user_state["state"] == "offer":
                 logger.info(f"[User {user_id[-4:]} triggered offer {user_state['offer']}]")
                 user_state["state"] = "init"
-                user_state["time"] = []
                 user_state["rows"] = []
                 self._special_offers_recipients.append((user_id, user_state["offer"]))
 

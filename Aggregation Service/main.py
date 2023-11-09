@@ -146,16 +146,13 @@ def aggregate_eight_hours(df: pd.DataFrame):
     eight_hours_aggregation = db["eight_hours_aggregation"]
 
     # Get the last 8 hours
-    eight_hours = df[df["datetime"] >= (pd.to_datetime(pd.Timestamp.now()) - pd.Timedelta(hours=8))]
+    eight_hours = df[df["datetime"] >= (pd.to_datetime(pd.Timestamp.now()) - pd.Timedelta(hours=8, minutes=30))]
 
     if not eight_hours.equals(eight_hours_aggregation):
         db["eight_hours_aggregation"] = eight_hours
 
     # Group by datetime, because we are storing by datetime and user, and sum the count
-    eight_hours = eight_hours.groupby(['datetime']).sum(numeric_only=True).reset_index()
-
-    # Group by datetime and sum the count
-    eight_hours = eight_hours.groupby(['datetime']).sum().reset_index()
+    eight_hours = eight_hours.groupby(['datetime']).count().reset_index()
 
     # Store the aggregated_df in Redis
     r.set("sessions", eight_hours.to_json())

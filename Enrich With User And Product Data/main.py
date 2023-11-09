@@ -17,7 +17,7 @@ producer_topic = client.get_topic_producer(os.environ["output"])
 
 redis_client = redis.Redis(
     host=os.environ['redis_host'],
-    port=os.environ['redis_port'],
+    port=int(os.environ['redis_port']),
     password=os.environ['redis_password'],
     decode_responses=True)
 
