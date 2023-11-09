@@ -7,9 +7,9 @@ variables:
     defaultValue: redis_host
     required: true
   - name: redis_port
-    inputType: FreeText
+    inputType: Secret
     description: External Redis port
-    defaultValue: ''
+    defaultValue: redis_port
     required: true
   - name: redis_password
     inputType: Secret
