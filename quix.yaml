@@ -88,7 +88,7 @@ deployments:
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
-    version: 41ca314e4e757ffecaa4f2426e41f56f37a5745b
+    version: a3511e8a91ba59d8a0634976da0dfbc522ed2787
     resources:
       cpu: 200
       memory: 500
@@ -113,16 +113,16 @@ deployments:
         description: Topic to write offers
         required: true
         value: special-offers
-      - name: redis_port
-        inputType: Secret
-        description: External Redis port
-        required: true
-        secretKey: redis_port
       - name: redis_host
         inputType: Secret
         description: External Redis host
         required: true
         secretKey: redis_host
+      - name: redis_port
+        inputType: Secret
+        description: External Redis port
+        required: true
+        secretKey: redis_port
       - name: redis_password
         inputType: Secret
         description: External Redis password
