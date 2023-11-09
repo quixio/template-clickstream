@@ -88,6 +88,7 @@ class BehaviourDetector:
 
         for label, row in received_df.iterrows():
             user_id = row["userId"]
+            print(f"Processing frame for {user_id}")
 
             # Filter out data that cannot apply for offers
             if "gender" not in row:
