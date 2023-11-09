@@ -82,6 +82,11 @@ class BehaviourDetector:
 
             # Filter out data that cannot apply for offers
             if "gender" not in row:
+                logger.debug(f"User {user_id[-4:]} does not have gender, ignoring")
+                continue
+
+            if "age" not in row:
+                logger.debug(f"User {user_id[-4:]} does not have age, ignoring")
                 continue
 
             # Get state
