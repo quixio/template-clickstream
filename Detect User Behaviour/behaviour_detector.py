@@ -100,6 +100,7 @@ class BehaviourDetector:
                 continue
 
             # Get state
+            print(f"Getting state for {user_id}")
             user_state = stream_consumer.get_dict_state(user_id)
 
             # Initialize state if not present
@@ -113,12 +114,15 @@ class BehaviourDetector:
 
             # Ignore page refreshes
             if user_state["rows"] and user_state["rows"][-1]["productId"] == row["productId"]:
+                print(f"Ignoring page refresh for {user_id}")
                 continue
 
             # Transition to next state if condition is met
             transitioned = False
             for transition in self.transitions[user_state["state"]]:
                 if transition["condition"](row, user_state) and check_time_elapsed(row, user_state):
+                    print(f"Transitioned state for {user_id}")
+
                     user_state["state"] = transition["next_state"]
                     user_state["rows"].append(row)
                     transitioned = True
@@ -129,12 +133,16 @@ class BehaviourDetector:
 
             # Reset to initial state if no transition was made
             if not transitioned:
+                print(f"Resetting state to init for {user_id}")
+
                 user_state["state"] = "init"
                 user_state["rows"] = []
                 continue
 
             # Trigger offer
             if user_state["state"] == "offer":
+                print(f"Triggering offer for {user_id}")
+
                 logger.info(f"[User {user_id[-4:]} triggered offer {user_state['offer']}]")
                 user_state["state"] = "init"
                 user_state["rows"] = []
