@@ -25,7 +25,7 @@ consumer_topic = client.get_topic_consumer(os.environ["input"])
 # Create the redis client, to store the aggregated data
 r = redis.Redis(
     host=os.environ['redis_host'],
-    port=os.environ['redis_port'],
+    port=int(os.environ['redis_port']),
     password=os.environ['redis_password'],
     decode_responses=True)
 

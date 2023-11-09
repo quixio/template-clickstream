@@ -10,19 +10,15 @@ if 'window_minutes' not in os.environ:
 else:
     window_minutes = int(os.environ['window_minutes'])
 
-# Create the redis client, to send the logs
-r = redis.Redis(host=os.environ['redis_host'],
-                port=int(os.environ['redis_port']),
-                password=os.environ['redis_password'],
-                decode_responses=True)
-
 logger = logging.getLogger("States")
 
 stream_log_handler = logging.StreamHandler()
 stream_log_handler.setLevel(logging.DEBUG)
 logger.addHandler(stream_log_handler)
 
-redis_log_handler = RedisKeyHandler("logs", client=r, ttl=60 * 60 * 24)
+redis_log_handler = RedisKeyHandler("logs", ttl=60 * 60 * 24,
+                                    host=os.environ['redis_host'], port=int(os.environ['redis_port']),
+                                    password=os.environ['redis_password'])
 redis_log_handler.setLevel(logging.INFO)
 logger.addHandler(redis_log_handler)
 
