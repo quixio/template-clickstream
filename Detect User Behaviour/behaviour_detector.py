@@ -102,6 +102,8 @@ class BehaviourDetector:
             # Get state
             print(f"Getting state for {user_id}")
             user_state = stream_consumer.get_dict_state(user_id)
+            print(f"Loaded state for {user_id}: {user_state}")
+
 
             # Initialize state if not present
             user_state["offer"] = "offer1" if row["gender"] == 'M' else "offer2"
