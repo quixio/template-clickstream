@@ -40,9 +40,11 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
         logger.debug(f"Received {frames_received} frames")
 
     # Original dataframe may contain more than one row
+    logger.debug("Processing dataframe")
     behaviour_detector.process_dataframe(stream_consumer, df)
 
     # And the special offers recipients may contain 0 or more rows
+    logger.debug("Getting possible offer recipients")
     special_offers = behaviour_detector.get_special_offers_recipients()
 
     if len(special_offers) > 0:
