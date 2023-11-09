@@ -1,4 +1,5 @@
 quixstreams
 pandas
 requests
-
+redis-log-handler
+redis

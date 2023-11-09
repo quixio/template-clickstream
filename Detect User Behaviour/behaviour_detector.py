@@ -1,11 +1,30 @@
 import quixstreams as qx
 import os
 import pandas as pd
+import redis
+import logging
+from redis_log_handler import RedisKeyHandler
 
 if 'window_minutes' not in os.environ:
     window_minutes = 30
 else:
     window_minutes = int(os.environ['window_minutes'])
+
+# Create the redis client, to send the logs
+r = redis.Redis(host=os.environ['redis_host'],
+                port=int(os.environ['redis_port']),
+                password=os.environ['redis_password'],
+                decode_responses=True)
+
+logger = logging.getLogger("States")
+
+stream_log_handler = logging.StreamHandler()
+stream_log_handler.setLevel(logging.DEBUG)
+logger.addHandler(stream_log_handler)
+
+redis_log_handler = RedisKeyHandler("logs", client=r, ttl=60 * 60 * 24)
+redis_log_handler.setLevel(logging.INFO)
+logger.addHandler(redis_log_handler)
 
 
 def check_time_elapsed(row, current_state):
@@ -88,7 +107,9 @@ class BehaviourDetector:
             transitioned = False
             for transition in self.transitions[user_state["state"]]:
                 if transition["condition"](row, user_state) and check_time_elapsed(row, user_state):
-                    print("Transitioning from", user_state["state"], "to", transition["next_state"], "for", user_id)
+                    logger.info(f"[User {user_id} entered state {transition['next_state']}]"
+                                f"[Event: clicked {row['productId']}]"
+                                f"[Category: {row['category']}]")
                     user_state["state"] = transition["next_state"]
                     user_state["rows"].append(row)
                     transitioned = True
@@ -102,7 +123,8 @@ class BehaviourDetector:
 
             # Trigger offer
             if user_state["state"] == "offer":
-                print("Triggered offer", user_state["offer"], "for", user_id)
+                logger.info(f"[User {user_id} entered state {user_state['state']}]"
+                            f"[Event: Triggered offer {user_state['offer']}]")
                 user_state["state"] = "init"
                 user_state["time"] = []
                 user_state["rows"] = []

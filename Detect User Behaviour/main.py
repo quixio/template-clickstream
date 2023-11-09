@@ -2,12 +2,16 @@ import quixstreams as qx
 import os
 import pandas as pd
 from behaviour_detector import BehaviourDetector
+import logging
 
 # Quix injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
 client = qx.QuixStreamingClient()
 
-print("Opening input and output topics")
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
+logger.info("Opening input and output topics")
 consumer_topic = client.get_topic_consumer(os.environ["input"])
 producer_topic = client.get_topic_producer(os.environ["output"])
 
@@ -18,7 +22,7 @@ frames_received = 0
 # Send special offers for each visitor in its own stream
 def send_special_offers(special_offers: list):
     for visitor_id, offer in special_offers:
-        print("Sending offer to visitor", visitor_id)
+        logger.info("Sending offer to visitor", visitor_id)
 
         # Use the visitor ID as the stream name
         stream = producer_topic.get_or_create_stream(visitor_id)
@@ -32,7 +36,7 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     global frames_received
     frames_received += 1
     if frames_received % 100 == 0:
-        print(f"Received {frames_received} frames")
+        logger.debug(f"Received {frames_received} frames")
 
     # Original dataframe may contain more than one row
     behaviour_detector.process_dataframe(stream_consumer, df)
@@ -55,7 +59,7 @@ if __name__ == "__main__":
     # Hook up events before initiating read to avoid losing out on any data
     consumer_topic.on_stream_received = read_stream
 
-    print("Listening to streams. Press CTRL-C to exit.")
+    logger.info("Listening to streams. Press CTRL-C to exit.")
 
     # Hook up to termination signal (for docker image) and CTRL-C
     # And handle graceful exit of the model.
