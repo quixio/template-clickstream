@@ -12,9 +12,9 @@ variables:
     defaultValue: ''
     required: true
   - name: redis_host
-    inputType: FreeText
+    inputType: Secret
     description: External Redis hostname
-    defaultValue: ''
+    defaultValue: redis_host
     required: true
   - name: redis_port
     inputType: FreeText
