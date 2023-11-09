@@ -9,6 +9,7 @@ import logging
 client = qx.QuixStreamingClient()
 
 logger = logging.getLogger()
+logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.DEBUG)
 
 logger.info("Opening input and output topics")
@@ -22,7 +23,7 @@ frames_received = 0
 # Send special offers for each visitor in its own stream
 def send_special_offers(special_offers: list):
     for visitor_id, offer in special_offers:
-        logger.info("Sending offer to visitor", visitor_id)
+        logger.info(f"Sending offer to visitor {visitor_id}")
 
         # Use the visitor ID as the stream name
         stream = producer_topic.get_or_create_stream(visitor_id)
