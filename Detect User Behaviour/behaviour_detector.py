@@ -10,19 +10,6 @@ if 'window_minutes' not in os.environ:
 else:
     window_minutes = int(os.environ['window_minutes'])
 
-logger = logging.getLogger("States")
-
-stream_log_handler = logging.StreamHandler()
-stream_log_handler.setLevel(logging.DEBUG)
-logger.addHandler(stream_log_handler)
-
-redis_log_handler = RedisStreamLogHandler(stream_name="state_logs",
-                                          host=os.environ['redis_host'],
-                                          port=int(os.environ['redis_port']),
-                                          password=os.environ['redis_password'])
-redis_log_handler.setLevel(logging.INFO)
-logger.addHandler(redis_log_handler)
-
 
 def check_time_elapsed(row, current_state):
     if len(current_state["rows"]) == 0:
@@ -33,10 +20,6 @@ def check_time_elapsed(row, current_state):
     window_ns = window_minutes * 60 * 1e9
 
     time_valid = timestamp_row - timestamp_first_interaction < window_ns
-
-    if not time_valid:
-        logger.debug(f"User {row['userId'][-4:]} state expired")
-
     return time_valid
 
 
@@ -80,26 +63,34 @@ class BehaviourDetector:
     def __init__(self):
         self._special_offers_recipients = []
 
+        self.logger = logging.getLogger("States")
+        redis_log_handler = RedisStreamLogHandler(stream_name="state_logs",
+                                                  host=os.environ['redis_host'],
+                                                  port=int(os.environ['redis_port']),
+                                                  password=os.environ['redis_password'])
+        redis_log_handler.setLevel(logging.INFO)
+        self.logger.addHandler(redis_log_handler)
+
     # Method to process the incoming dataframe
     def process_dataframe(self, stream_consumer: qx.StreamConsumer, received_df: pd.DataFrame):
         for label, row in received_df.iterrows():
             user_id = row["userId"]
-            logger.debug(f"Processing frame for {user_id}")
+            self.logger.debug(f"Processing frame for {user_id}")
 
             # Filter out data that cannot apply for offers
             if "gender" not in row:
-                logger.debug(f"User {user_id[-4:]} does not have gender, ignoring")
+                self.logger.debug(f"User {user_id[-4:]} does not have gender, ignoring")
                 continue
 
             if "age" not in row:
-                logger.debug(f"User {user_id[-4:]} does not have age, ignoring")
+                self.logger.debug(f"User {user_id[-4:]} does not have age, ignoring")
                 continue
 
             # Get state
-            logger.debug(f"Getting state for {user_id}")
+            self.logger.debug(f"Getting state for {user_id}")
             start = time.time()
             user_state = stream_consumer.get_dict_state(user_id)
-            logger.debug(f"Loaded state for {user_id}. Took {time.time() - start} seconds")
+            self.logger.debug(f"Loaded state for {user_id}. Took {time.time() - start} seconds")
 
             # Initialize state if not present
             user_state["offer"] = "offer1" if row["gender"] == 'M' else "offer2"
@@ -112,32 +103,32 @@ class BehaviourDetector:
 
             # Ignore page refreshes
             if user_state["rows"] and user_state["rows"][-1]["productId"] == row["productId"]:
-                logger.debug(f"Ignoring page refresh for {user_id}")
+                self.logger.debug(f"Ignoring page refresh for {user_id}")
                 continue
 
             # Transition to next state if condition is met
-            logger.debug(f"Applying transitions for {user_id}")
+            self.logger.debug(f"Applying transitions for {user_id}")
             transitioned = False
             for transition in self.transitions[user_state["state"]]:
                 if transition["condition"](row, user_state) and check_time_elapsed(row, user_state):
                     user_state["state"] = transition["next_state"]
                     user_state["rows"].append(row)
                     transitioned = True
-                    logger.info(f"[User {user_id[-4:]} entered state {user_state['state']}]"
+                    self.logger.info(f"[User {user_id[-4:]} entered state {user_state['state']}]"
                                 f"[Event: clicked {row['productId']}]"
                                 f"[Category: {row['category']}]")
                     break
 
             # Reset to initial state if no transition was made
             if not transitioned:
-                logger.debug(f"Resetting state to init for {user_id}")
+                self.logger.debug(f"Resetting state to init for {user_id}")
                 user_state["state"] = "init"
                 user_state["rows"] = []
                 continue
 
             # Trigger offer
             if user_state["state"] == "offer":
-                logger.info(f"[User {user_id[-4:]} triggered offer {user_state['offer']}]")
+                self.logger.info(f"[User {user_id[-4:]} triggered offer {user_state['offer']}]")
                 user_state["state"] = "init"
                 user_state["rows"] = []
                 self._special_offers_recipients.append((user_id, user_state["offer"]))
