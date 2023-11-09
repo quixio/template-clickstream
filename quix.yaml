@@ -29,7 +29,7 @@ deployments:
   - name: Enrich With User And Product Data
     application: Enrich With User And Product Data
     deploymentType: Service
-    version: 4a24cd34b62fa7293013952524f72435d244a87a
+    version: 2a2aa993061302cc52db0fabbf57ef49046623fa
     resources:
       cpu: 200
       memory: 1000
@@ -46,16 +46,16 @@ deployments:
         description: This is the output topic, where we will send the enriched data
         required: true
         value: enriched-click-data
-      - name: redis_port
-        inputType: Secret
-        description: External Redis port
-        required: true
-        secretKey: redis_port
       - name: redis_host
         inputType: Secret
         description: External Redis host
         required: true
         secretKey: redis_host
+      - name: redis_port
+        inputType: Secret
+        description: External Redis port
+        required: true
+        secretKey: redis_port
       - name: redis_password
         inputType: Secret
         description: External Redis password
