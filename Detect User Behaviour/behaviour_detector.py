@@ -84,6 +84,8 @@ class BehaviourDetector:
 
     # Method to process the incoming dataframe
     def process_dataframe(self, stream_consumer: qx.StreamConsumer, received_df: pd.DataFrame):
+        print(received_df)
+
         for label, row in received_df.iterrows():
             user_id = row["userId"]
 
