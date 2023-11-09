@@ -197,7 +197,7 @@ deployments:
   - name: Streamlit
     application: Streamlit
     deploymentType: Service
-    version: 9a642ea2d11920870b0f98dede5699df51812389
+    version: 883afc57e69f49c9b7b633be8359076282ae85af
     resources:
       cpu: 200
       memory: 500
@@ -207,16 +207,16 @@ deployments:
       urlPrefix: streamlit-dashboard
     desiredStatus: Running
     variables:
-      - name: redis_port
-        inputType: Secret
-        description: External Redis port
-        required: true
-        secretKey: redis_port
       - name: redis_host
         inputType: Secret
         description: External Redis host
         required: true
         secretKey: redis_host
+      - name: redis_port
+        inputType: Secret
+        description: External Redis port
+        required: true
+        secretKey: redis_port
       - name: redis_password
         inputType: Secret
         description: External Redis password
