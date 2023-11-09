@@ -25,7 +25,7 @@ consumer_topic = client.get_topic_consumer(os.environ["input"])
 # Create the redis client, to store the aggregated data
 r = redis.Redis(
     host=os.environ['redis_host'],
-    port=os.environ['redis_port'],
+    port=int(os.environ['redis_port']),
     password=os.environ['redis_password'],
     decode_responses=True)
 
@@ -94,21 +94,21 @@ def calculate_device_popularity(df: pd.DataFrame):
     total = last_10_minutes['count'].sum()
 
     if total == 0:
-        empty_frame = pd.DataFrame([], columns=["Device", "Device type", "Percentage"])
+        empty_frame = pd.DataFrame([], columns=["Device", "Device type", "Total"])
         r.set("device_type_popularity", empty_frame.to_json())
         return
 
-    mobile = last_10_minutes[last_10_minutes['deviceType'] == 'Mobile']['count'].sum() / total * 100
-    tablet = last_10_minutes[last_10_minutes['deviceType'] == 'Tablet']['count'].sum() / total * 100
-    desktop = last_10_minutes[last_10_minutes['deviceType'] == 'Desktop']['count'].sum() / total * 100
-    other = 100.0 - mobile - tablet - desktop
+    mobile = last_10_minutes[last_10_minutes['deviceType'] == 'Mobile']['count'].sum()
+    tablet = last_10_minutes[last_10_minutes['deviceType'] == 'Tablet']['count'].sum()
+    desktop = last_10_minutes[last_10_minutes['deviceType'] == 'Desktop']['count'].sum()
+    other = total - mobile - tablet - desktop
 
     data = [["Device type", "Desktop", desktop],
             ["Device type", "Tablet", tablet],
             ["Device type", "Mobile", mobile],
             ["Device type", "Other", other]]
 
-    device_type_popularity = pd.DataFrame(data, columns=["Device", "Device type", "Percentage"])
+    device_type_popularity = pd.DataFrame(data, columns=["Device", "Device type", "Total"])
     r.set("device_type_popularity", device_type_popularity.to_json())
 
 
@@ -146,13 +146,13 @@ def aggregate_eight_hours(df: pd.DataFrame):
     eight_hours_aggregation = db["eight_hours_aggregation"]
 
     # Get the last 8 hours
-    eight_hours = df[df["datetime"] >= (pd.to_datetime(pd.Timestamp.now()) - pd.Timedelta(hours=8))]
+    eight_hours = df[df["datetime"] >= (pd.to_datetime(pd.Timestamp.now()) - pd.Timedelta(hours=8, minutes=30))]
 
     if not eight_hours.equals(eight_hours_aggregation):
         db["eight_hours_aggregation"] = eight_hours
 
     # Group by datetime, because we are storing by datetime and user, and sum the count
-    eight_hours = eight_hours.groupby(['datetime']).sum(numeric_only=True).reset_index()
+    eight_hours = eight_hours.groupby(['datetime']).count().reset_index()
 
     # Store the aggregated_df in Redis
     r.set("sessions", eight_hours.to_json())

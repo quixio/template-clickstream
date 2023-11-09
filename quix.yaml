@@ -14,7 +14,7 @@ deployments:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: output
         inputType: OutputTopic
@@ -29,7 +29,7 @@ deployments:
   - name: Enrich With User And Product Data
     application: Enrich With User And Product Data
     deploymentType: Service
-    version: 4a24cd34b62fa7293013952524f72435d244a87a
+    version: 2a2aa993061302cc52db0fabbf57ef49046623fa
     resources:
       cpu: 200
       memory: 1000
@@ -47,15 +47,15 @@ deployments:
         required: true
         value: enriched-click-data
       - name: redis_host
-        inputType: FreeText
-        description: External Redis hostname
+        inputType: Secret
+        description: External Redis host
         required: true
-        value: {{ redis_host }}
+        secretKey: redis_host
       - name: redis_port
-        inputType: FreeText
+        inputType: Secret
         description: External Redis port
         required: true
-        value: {{ redis_port }}
+        secretKey: redis_port
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -64,22 +64,22 @@ deployments:
   - name: Load Products and Users
     application: Load Products and Users
     deploymentType: Job
-    version: 7a369a17b0d8e6f640f205f5d3e87ef628b0dd02
+    version: f933b227b6e5bd5d6c213ca4155fe66b9359890f
     resources:
       cpu: 200
       memory: 500
       replicas: 1
     variables:
       - name: redis_host
-        inputType: FreeText
-        description: External Redis hostname
+        inputType: Secret
+        description: External Redis host
         required: true
-        value: {{ redis_host }}
+        secretKey: redis_host
       - name: redis_port
-        inputType: FreeText
+        inputType: Secret
         description: External Redis port
         required: true
-        value: {{ redis_port }}
+        secretKey: redis_port
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -88,7 +88,7 @@ deployments:
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
-    version: 3d06c210fad06c1ec3010cf8d8c90da20b1420c5
+    version: 0e94ed99a2ddbd11dd08d8ae7917f532f104f173
     resources:
       cpu: 200
       memory: 500
@@ -113,10 +113,25 @@ deployments:
         description: Topic to write offers
         required: true
         value: special-offers
+      - name: redis_host
+        inputType: Secret
+        description: External Redis host
+        required: true
+        secretKey: redis_host
+      - name: redis_port
+        inputType: Secret
+        description: External Redis port
+        required: true
+        secretKey: redis_port
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        secretKey: redis_password
   - name: Aggregation Service
     application: Aggregation Service
     deploymentType: Service
-    version: f5d573921e4ea18cf33c6ad11bad0bf354150cae
+    version: 41ca314e4e757ffecaa4f2426e41f56f37a5745b
     resources:
       cpu: 200
       memory: 500
@@ -132,15 +147,15 @@ deployments:
         required: true
         value: enriched-click-data
       - name: redis_host
-        inputType: FreeText
-        description: External Redis hostname
+        inputType: Secret
+        description: External Redis host
         required: true
-        value: {{ redis_host }}
+        secretKey: redis_host
       - name: redis_port
-        inputType: FreeText
+        inputType: Secret
         description: External Redis port
         required: true
-        value: {{ redis_port }}
+        secretKey: redis_port
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -182,7 +197,7 @@ deployments:
   - name: Streamlit
     application: Streamlit
     deploymentType: Service
-    version: a3130ae0d9f555e5b7d51b084a07659179a6f30c
+    version: 883afc57e69f49c9b7b633be8359076282ae85af
     resources:
       cpu: 200
       memory: 500
@@ -193,15 +208,15 @@ deployments:
     desiredStatus: Running
     variables:
       - name: redis_host
-        inputType: FreeText
-        description: External Redis hostname
+        inputType: Secret
+        description: External Redis host
         required: true
-        value: {{ redis_host }}
+        secretKey: redis_host
       - name: redis_port
-        inputType: FreeText
+        inputType: Secret
         description: External Redis port
         required: true
-        value: {{ redis_port }}
+        secretKey: redis_port
       - name: redis_password
         inputType: Secret
         description: External Redis password
