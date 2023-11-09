@@ -16,6 +16,8 @@ stream_log_handler = logging.StreamHandler()
 stream_log_handler.setLevel(logging.DEBUG)
 logger.addHandler(stream_log_handler)
 
+print(f"Creating redis log handler {os.environ['redis_host']}")
+
 redis_log_handler = RedisStreamLogHandler(stream_name="state_logs",
                                           host=os.environ['redis_host'],
                                           port=int(os.environ['redis_port']),
