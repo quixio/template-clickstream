@@ -117,12 +117,12 @@ deployments:
         inputType: FreeText
         description: External Redis hostname
         required: true
-        value: a
+        value: {{ redis_host }}
       - name: redis_port
         inputType: FreeText
         description: External Redis port
         required: true
-        value: a
+        value: {{ redis_port }}
       - name: redis_password
         inputType: Secret
         description: External Redis password
