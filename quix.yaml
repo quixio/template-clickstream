@@ -49,13 +49,11 @@ deployments:
       - name: redis_port
         inputType: Secret
         description: External Redis port
-        defaultValue: redis_port
         required: true
         secretKey: redis_port
       - name: redis_host
         inputType: Secret
         description: External Redis host
-        defaultValue: redis_host
         required: true
         secretKey: redis_host
       - name: redis_password
@@ -75,13 +73,11 @@ deployments:
       - name: redis_port
         inputType: Secret
         description: External Redis port
-        defaultValue: redis_port
         required: true
         secretKey: redis_port
       - name: redis_host
         inputType: Secret
         description: External Redis host
-        defaultValue: redis_host
         required: true
         secretKey: redis_host
       - name: redis_password
@@ -120,13 +116,11 @@ deployments:
       - name: redis_port
         inputType: Secret
         description: External Redis port
-        defaultValue: redis_port
         required: true
         secretKey: redis_port
       - name: redis_host
         inputType: Secret
         description: External Redis host
-        defaultValue: redis_host
         required: true
         secretKey: redis_host
       - name: redis_password
@@ -152,18 +146,16 @@ deployments:
         description: This is the input topic to read data from
         required: true
         value: enriched-click-data
-      - name: redis_port
-        inputType: Secret
-        description: External Redis port
-        defaultValue: redis_port
-        required: true
-        secretKey: redis_port
       - name: redis_host
         inputType: Secret
         description: External Redis host
-        defaultValue: redis_host
         required: true
         secretKey: redis_host
+      - name: redis_port
+        inputType: Secret
+        description: External Redis port
+        required: true
+        secretKey: redis_port
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -218,13 +210,11 @@ deployments:
       - name: redis_port
         inputType: Secret
         description: External Redis port
-        defaultValue: redis_port
         required: true
         secretKey: redis_port
       - name: redis_host
         inputType: Secret
         description: External Redis host
-        defaultValue: redis_host
         required: true
         secretKey: redis_host
       - name: redis_password
