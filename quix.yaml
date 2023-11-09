@@ -46,16 +46,18 @@ deployments:
         description: This is the output topic, where we will send the enriched data
         required: true
         value: enriched-click-data
-      - name: redis_host
-        inputType: FreeText
-        description: External Redis hostname
-        required: true
-        value: {{ redis_host }}
       - name: redis_port
-        inputType: FreeText
+        inputType: Secret
         description: External Redis port
+        defaultValue: redis_port
         required: true
-        value: {{ redis_port }}
+        secret_key: redis_port
+      - name: redis_host
+        inputType: Secret
+        description: External Redis host
+        defaultValue: redis_host
+        required: true
+        secret_key: redis_host
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -70,16 +72,18 @@ deployments:
       memory: 500
       replicas: 1
     variables:
-      - name: redis_host
-        inputType: FreeText
-        description: External Redis hostname
-        required: true
-        value: {{ redis_host }}
       - name: redis_port
-        inputType: FreeText
+        inputType: Secret
         description: External Redis port
+        defaultValue: redis_port
         required: true
-        value: {{ redis_port }}
+        secret_key: redis_port
+      - name: redis_host
+        inputType: Secret
+        description: External Redis host
+        defaultValue: redis_host
+        required: true
+        secret_key: redis_host
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -113,16 +117,18 @@ deployments:
         description: Topic to write offers
         required: true
         value: special-offers
-      - name: redis_host
-        inputType: FreeText
-        description: External Redis hostname
-        required: true
-        value: {{ redis_host }}
       - name: redis_port
-        inputType: FreeText
+        inputType: Secret
         description: External Redis port
+        defaultValue: redis_port
         required: true
-        value: {{ redis_port }}
+        secret_key: redis_port
+      - name: redis_host
+        inputType: Secret
+        description: External Redis host
+        defaultValue: redis_host
+        required: true
+        secret_key: redis_host
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -146,16 +152,18 @@ deployments:
         description: This is the input topic to read data from
         required: true
         value: enriched-click-data
-      - name: redis_host
-        inputType: FreeText
-        description: External Redis hostname
-        required: true
-        value: {{ redis_host }}
       - name: redis_port
-        inputType: FreeText
+        inputType: Secret
         description: External Redis port
+        defaultValue: redis_port
         required: true
-        value: {{ redis_port }}
+        secret_key: redis_port
+      - name: redis_host
+        inputType: Secret
+        description: External Redis host
+        defaultValue: redis_host
+        required: true
+        secret_key: redis_host
       - name: redis_password
         inputType: Secret
         description: External Redis password
@@ -207,16 +215,18 @@ deployments:
       urlPrefix: streamlit-dashboard
     desiredStatus: Running
     variables:
-      - name: redis_host
-        inputType: FreeText
-        description: External Redis hostname
-        required: true
-        value: {{ redis_host }}
       - name: redis_port
-        inputType: FreeText
+        inputType: Secret
         description: External Redis port
+        defaultValue: redis_port
         required: true
-        value: {{ redis_port }}
+        secret_key: redis_port
+      - name: redis_host
+        inputType: Secret
+        description: External Redis host
+        defaultValue: redis_host
+        required: true
+        secret_key: redis_host
       - name: redis_password
         inputType: Secret
         description: External Redis password
