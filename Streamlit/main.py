@@ -5,6 +5,7 @@ import pandas as pd
 import time
 import redis
 import os
+import datetime
 
 # Basic configuration of the Streamlit dashboard
 st.set_page_config(
@@ -106,13 +107,13 @@ with st.container():
     col31, col32 = st.columns([1, 2])
     with col31:
         # Header of the first column
-        st.header("Top 10 viewed pages in the last hour")
+        st.header("State machine log")
         # A placeholder for the first chart to update it later with data
         placeholder_col31 = st.empty()
 
     with col32:
         # Header of the second column
-        st.header("Latest Visitor Details")
+        st.header("Raw Data View")
         # A placeholder for the second chart to update it later with data
         placeholder_col32 = st.empty()
 
@@ -213,14 +214,22 @@ while True:
         fig.update_yaxes(title_text='Visits', range=[0, max(1, max(df['count']))])
         st.plotly_chart(fig, use_container_width=True)
 
+    with placeholder_col31.container():
+        logs = r.xrevrange("state_logs", min="-", max="+", count=8)
+
+        text = ""
+        for _, log in logs:
+            text += f"{datetime.datetime.fromtimestamp(float(log['created'])).strftime('%Y-%m-%d %H:%M:%S')}: {log['msg']}\n"
+
+        st.code(text)
+
     # Display the raw dataframe data
     with placeholder_col32.container():
-        st.markdown("### Raw Data View")
         data = StringIO(r.get("raw_data"))
         if data is None:
             continue
         real_time_df_copy = pd.read_json(data)
-        st.dataframe(real_time_df_copy, hide_index=True)
+        st.dataframe(real_time_df_copy, hide_index=True, height=default_height, use_container_width=True)
 
     # Wait for one second before asking for new data from Quix
     time.sleep(1)
