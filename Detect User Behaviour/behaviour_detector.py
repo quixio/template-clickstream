@@ -32,7 +32,12 @@ def check_time_elapsed(row, current_state):
     timestamp_first_interaction = current_state["rows"][0]["timestamp"]
     window_ns = window_minutes * 60 * 1e9
 
-    return timestamp_row - timestamp_first_interaction < window_ns
+    time_valid = timestamp_row - timestamp_first_interaction < window_ns
+
+    if not time_valid:
+        logger.debug(f"User {row['userId'][-4:]} state expired")
+
+    return time_valid
 
 
 class BehaviourDetector:
