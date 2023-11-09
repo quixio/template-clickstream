@@ -35,9 +35,6 @@ def send_special_offers(special_offers: list):
 # Callback called for each incoming dataframe
 def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     global frames_received
-
-    print(df)
-
     frames_received += 1
     if frames_received % 100 == 0:
         logger.debug(f"Received {frames_received} frames")
