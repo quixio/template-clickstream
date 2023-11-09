@@ -131,7 +131,7 @@ deployments:
   - name: Aggregation Service
     application: Aggregation Service
     deploymentType: Service
-    version: 8174346f79d4404f59e8c46f89c5dddf3a98743c
+    version: 41ca314e4e757ffecaa4f2426e41f56f37a5745b
     resources:
       cpu: 200
       memory: 500
