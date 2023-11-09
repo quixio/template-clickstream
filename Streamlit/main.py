@@ -17,6 +17,13 @@ st.set_page_config(
 )
 
 st.header("Real-Time User Stats Dashboard", divider="blue")
+st.markdown(
+"""This dashboard vizualizes real-time agreggations and statistics from a demo clickstream. The clickstream data is being streamed from a sample log file for an online retailer and processed in a Pipeline hosted in Quix—a cloud-native solution for building event streaming applications.
+
+* To explore the back-end services that power this Dashboard, check out this Quix pipeline. (link: https://portal.platform.quix.ai/pipeline?workspace=demo-clickstream-aggregationservice )
+
+* To see how real-time clickstream analysis can be used to trigger events in a front end, see our complimentary Clickstream Event Detection demo.(link: https://template-clickstream-front-end.vercel.app/)
+""")
 
 redis_host = ""
 redis_port = ""
@@ -130,6 +137,7 @@ while True:
         fig = px.line(df, x="datetime", y="count", height=default_height)
         fig.update_xaxes(title_text='Time', tickformat='%H:%M')
         fig.update_yaxes(title_text='Visits', range=[0, max(1, max(df['count']))])  # Set y minimum always 0
+        fig.update_layout(margin=dict(r=5, l=5, t=15, b=15))
         st.plotly_chart(fig, use_container_width=True)
 
     with placeholder_col12.container():
@@ -148,6 +156,7 @@ while True:
         fig = px.bar(df, x="datetime", y="count", height=default_height)
         fig.update_xaxes(title_text='Time', tickformat='%H:%M')
         fig.update_yaxes(title_text='Sessions', range=[0, max(1, max(df['count']))])  # Set y minimum always 0
+        fig.update_layout(margin=dict(r=5, l=5, t=15, b=15))
         st.plotly_chart(fig, use_container_width=True)
 
     with placeholder_col13.container():
@@ -161,11 +170,19 @@ while True:
         # Create 2 columns
         c1, c2 = st.columns([1, 2])
 
-        # Write in the first column the number of active users
-        c1.markdown("33")
+        # Calculate the sum of all devices
+        total_devices = chart_df['Total'].sum()
+        c1.markdown(f"Total devices")
+        c1.markdown(f"# {total_devices}")
 
-        # Plot a pie chart in the second column
-        fig = px.pie(chart_df, values='Percentage', names='Device type', height=default_height)
+        # Calculate the percentage of each device type
+        chart_df['Percentage'] = (chart_df['Total'] / total_devices) * 100
+
+        # Plot a pie chart in the second column with distinct colors for each device
+        # Hide the percentage of each color if it is 0%
+        chart_df = chart_df[chart_df['Percentage'] != 0]
+        fig = px.pie(chart_df, values='Percentage', names='Device type', height=default_height, color='Device type')
+        fig.update_layout(margin=dict(r=5, l=5, t=15, b=15))
         c2.plotly_chart(fig, use_container_width=True)
 
     with placeholder_col21.container():
@@ -189,9 +206,10 @@ while True:
             st.markdown("N/A")
             continue
 
-        # Draw a bar chart with distinct colors for each bar
+        # Draw a bar chart with distinct colors for each bar. Hide X axis title so we have more space for the chart
         fig = px.bar(df, x="category", y="count", height=default_height, color="category")
-        fig.update_xaxes(title_text='Category')
+        #fig.update_xaxes(title_text='Category')
+        fig.update_layout(xaxis_title=None, margin=dict(r=5, l=5, t=5, b=5))
         fig.update_yaxes(title_text='Visits', range=[0, max(1, max(df['count']))])
         st.plotly_chart(fig, use_container_width=True)
 
