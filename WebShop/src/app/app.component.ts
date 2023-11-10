@@ -53,11 +53,11 @@ export class AppComponent implements OnInit {
     });
 
     this.ageControl.valueChanges.subscribe((age) => {
-      this.user.age = age || 18;
+      this.user.age = age || 0;
     });
 
     this.genderControl.valueChanges.subscribe((gender) => {
-      this.user.gender = gender || "Female";
+      this.user.gender = gender || "U";
     });
   }
 
