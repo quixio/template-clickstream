@@ -19,8 +19,8 @@ variables:
   - name: redis_username
     inputType: Secret
     description: External Redis username
-    required: true
-    secretKey: redis_username
+    defaultValue: redis_username
+    required: false
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
