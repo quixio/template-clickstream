@@ -35,13 +35,12 @@ export class AppComponent implements OnInit {
       age: this.ageControl.value || 18
     };
 
-    this.dataService.user = this.user;
-    const topicId = this.quixService.workspaceId + '-' + this.quixService.offersTopic;
-    this.quixService.subscribeToEvent(topicId, this.userId, "offer");
-
     this.workspaceId = this.quixService.workspaceId;
     this.ungatedToken = this.quixService.ungatedToken;
     this.deploymentId = environment.DEPLOYMENT_ID || '';
+
+    const topicId = this.quixService.workspaceId + '-' + this.quixService.offersTopic;
+    this.quixService.subscribeToEvent(topicId, this.userId, "offer");
 
     this.quixService.eventDataReceived.subscribe((event: EventData) => {
       this.dataService.openDialog(event)
@@ -49,18 +48,20 @@ export class AppComponent implements OnInit {
 
     this.quixService.readerConnStatusChanged$.subscribe((status) => {
       if (status !== ConnectionStatus.Connected) return;
-      this.ageControl.setValue(this.dataService.user.age)
+      //this.ageControl.setValue(this.dataService.user.age)
     });
 
     this.ageControl.valueChanges.subscribe((age) => {
       this.user.age = age || 0;
-      this.dataService.user = this.user;
+      this.dataService.user.age = this.user.age;
     });
 
     this.genderControl.valueChanges.subscribe((gender) => {
       this.user.gender = gender || "Unknown";
-      this.dataService.user = this.user;
+      this.dataService.user.gender = this.user.gender;
     });
+
+    this.dataService.user = this.user;
   }
 
   toggleSidenav(isOpen: boolean): void {
