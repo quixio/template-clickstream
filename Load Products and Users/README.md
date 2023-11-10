@@ -9,3 +9,4 @@ This code sample uses the following environment variables:
 - **redis_host**: Host of the redis database
 - **redis_port**: Port of the redis database
 - **redis_password**: Password of the redis database
+- **redis_username**: Username for the redis database, optional
