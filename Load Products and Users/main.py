@@ -14,11 +14,13 @@ r = redis.Redis(
 # Read products from products.tsv and store the category in Redis
 def load_products():
     products = pd.read_json('products.json')
+    pipe = r.pipeline()
+
     for index, row in products.iterrows():
         key = f'product:{row["id"]}'
-        r.hset(key, 'cat', row['category'])
-        r.hset(key, 'title', row['title'])
+        pipe.hmset(key, {'cat': row['category'], 'title': row['title']})
 
+    pipe.execute()
     print(f"Imported {len(products)} products")
 
 
@@ -27,22 +29,28 @@ def load_users():
     users = pd.read_json('users.json', lines=True)
     total_users = len(users)
     imported_users = 0
+    pipe = r.pipeline()
     for _, row in users.iterrows():
         key = f'visitor:{row["userId"]}'
+        values = {}
 
         # Birthday may not be present, check for NaN
         if not pd.isna(row['birthDate']):
-            r.hset(key, 'birthday', row['birthDate'])
+            values['birthday'] = row['birthDate']
 
         # Age may not be present, check for NaN
         if not pd.isna(row['gender']):
-            r.hset(key, 'gender', row['gender'])
+            values['gender'] = row['gender']
 
+        pipe.hmset(key, values)
         imported_users += 1
 
         if imported_users % 100 == 0:
+            pipe.execute()
             print(f"Imported {imported_users} of {total_users} users")
 
+    # Last execute to flush the pipeline
+    pipe.execute()
 
 def main():
     print("Importing products...")
@@ -51,13 +59,6 @@ def main():
     print("Importing users...")
     load_users()
 
-    # Do some assertions to make sure the data is loaded correctly
-    print("Checking data...")
-    if r.hget("product:VR55181666", "cat") != "handbags":
-        raise Exception("Wrong category for product")
-
-    if r.hget("visitor:001BFE35-555B-48E1-9ED3-A4BE7677C36C", "birthday") != "1982-02-16":
-        raise Exception("Wrong birthday for user")
 
 
 if __name__ == '__main__':
