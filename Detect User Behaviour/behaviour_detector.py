@@ -67,7 +67,8 @@ class BehaviourDetector:
         redis_log_handler = RedisStreamLogHandler(stream_name="state_logs",
                                                   host=os.environ['redis_host'],
                                                   port=int(os.environ['redis_port']),
-                                                  password=os.environ['redis_password'])
+                                                  password=os.environ['redis_password'],
+                                                  username=os.environ['redis_username'] if 'redis_username' in os.environ else None,)
         redis_log_handler.setLevel(logging.INFO)
         self.logger.addHandler(redis_log_handler)
 

@@ -27,6 +27,7 @@ r = redis.Redis(
     host=os.environ['redis_host'],
     port=int(os.environ['redis_port']),
     password=os.environ['redis_password'],
+    username=os.environ['redis_username'] if 'redis_username' in os.environ else None,
     decode_responses=True)
 
 columns = {

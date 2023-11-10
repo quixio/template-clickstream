@@ -61,6 +61,11 @@ deployments:
         description: External Redis password
         required: true
         secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: true
+        secretKey: redis_username
   - name: Load Products and Users
     application: Load Products and Users
     deploymentType: Job
@@ -85,6 +90,11 @@ deployments:
         description: External Redis password
         required: true
         secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: true
+        secretKey: redis_username
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
@@ -128,6 +138,11 @@ deployments:
         description: External Redis password
         required: true
         secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: true
+        secretKey: redis_username
   - name: Aggregation Service
     application: Aggregation Service
     deploymentType: Service
@@ -161,6 +176,11 @@ deployments:
         description: External Redis password
         required: true
         secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: true
+        secretKey: redis_username
   - name: Template UI
     application: WebShop
     deploymentType: Service
@@ -222,6 +242,11 @@ deployments:
         description: External Redis password
         required: true
         secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: true
+        secretKey: redis_username
 
 # This section describes the Topics of the data pipeline
 topics:
