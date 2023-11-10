@@ -64,7 +64,7 @@ deployments:
   - name: Load Products and Users
     application: Load Products and Users
     deploymentType: Job
-    version: f933b227b6e5bd5d6c213ca4155fe66b9359890f
+    version: 455aa428f292af382101ad9f306ef2854ce565d3
     resources:
       cpu: 200
       memory: 500
