@@ -60,21 +60,29 @@
       <div class="mb-3">
         <h4 class="mb-2 mat-subtitle-2">Select an identity</h4>
         <p class="text-body mb-3">
-          Choose a mock demographic profile which will be included in the clickstream analysis.
-          <br/>
-          <br/>
-          List items annotated with an asterisk '*' are part of the target audience for special offers.
+          Choose an Age and Gender to match the mock demographic profile. This will be included in the clickstream analysis.
         </p>
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Users</mat-label>
-          <mat-select [formControl]="userControl">
-            <mat-option *ngFor="let user of users; let i = index" [value]="user">
-              User {{ i + 1 }}: {{ user.gender | gender }}, {{ user.birthDate | age }}
-              <ng-container *ngIf="user.isTarget"> *</ng-container>
+          <mat-label>Age</mat-label>
+          <mat-select [formControl]="ageControl">
+            <mat-option *ngFor="let age of ages" [value]="age">
+              Age: {{ age }}
             </mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Gender</mat-label>
+          <mat-select [formControl]="genderControl">
+            <mat-option *ngFor="let gender of genders" [value]="gender">
+              Gender: {{ gender }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p class="text-body mb-3">
+          Your unique Visitor Id for this session is <b>{{user.userId}}</b>
+        </p>
       </div>
+
       <div class="mb-5">
         <h4 class="mb-2 mat-subtitle-2">See if you can trigger a special offer</h4>
         <p class="text-body mb-3">
