@@ -7,6 +7,7 @@ import { MediaObserver } from '@angular/flex-layout';
 import { FormControl } from '@angular/forms';
 import { EventData } from './models/eventData';
 import { actionWords, adjectives, nouns } from './constants/words';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-root',
@@ -24,13 +25,18 @@ export class AppComponent implements OnInit {
   workspaceId: string;
   deploymentId: string;
   ungatedToken: string;
-  userId: string;
   user: User;
-  constructor(private quixService: QuixService, private dataService: DataService, public media: MediaObserver) {}
+  constructor(private quixService: QuixService,
+              private dataService: DataService,
+              public media: MediaObserver,
+              private cookieService: CookieService) {}
 
   ngOnInit(): void {
+    const userId = this.cookieService.get('userId') || this.generateUniqueWords();
+    this.cookieService.set('userId', userId);
+    this.generateUniqueWords();
     this.user = {
-      userId: this.generateUniqueWords(),
+      userId: userId,
       gender: this.genderControl.value || "Female",
       age: this.ageControl.value || 18
     };
@@ -40,7 +46,7 @@ export class AppComponent implements OnInit {
     this.deploymentId = environment.DEPLOYMENT_ID || '';
 
     const topicId = this.quixService.workspaceId + '-' + this.quixService.offersTopic;
-    this.quixService.subscribeToEvent(topicId, this.userId, "offer");
+    this.quixService.subscribeToEvent(topicId, this.user.userId, "offer");
 
     this.quixService.eventDataReceived.subscribe((event: EventData) => {
       this.dataService.openDialog(event)
