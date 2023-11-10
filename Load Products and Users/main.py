@@ -16,7 +16,7 @@ def load_products():
 
     for index, row in products.iterrows():
         key = f'product:{row["id"]}'
-        pipe.hset(key, 'category', row['category'])
+        pipe.hset(key, 'cat', row['category'])
         pipe.hset(key, 'title', row['title'])
 
     pipe.execute()
