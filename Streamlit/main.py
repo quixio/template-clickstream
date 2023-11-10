@@ -234,6 +234,7 @@ while True:
         if data is None:
             continue
         real_time_df_copy = pd.read_json(data)
+        real_time_df_copy = real_time_df_copy.drop(columns=['original_timestamp'])
         st.dataframe(real_time_df_copy, hide_index=True, height=default_height, use_container_width=True)
 
     # Wait for one second before asking for new data from Quix

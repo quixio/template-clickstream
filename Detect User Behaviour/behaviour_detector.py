@@ -68,7 +68,7 @@ class BehaviourDetector:
                                                   host=os.environ['redis_host'],
                                                   port=int(os.environ['redis_port']),
                                                   password=os.environ['redis_password'],
-                                                  username=os.environ['redis_username'] if 'redis_username' in os.environ else None,)
+                                                  username=os.environ.get('redis_username'))
         redis_log_handler.setLevel(logging.INFO)
         self.logger.addHandler(redis_log_handler)
 
@@ -80,11 +80,11 @@ class BehaviourDetector:
 
             # Filter out data that cannot apply for offers
             if "gender" not in row:
-                self.logger.debug(f"User {user_id[-4:]} does not have gender, ignoring")
+                self.logger.debug(f"User {user_id} does not have gender, ignoring")
                 continue
 
             if "age" not in row:
-                self.logger.debug(f"User {user_id[-4:]} does not have age, ignoring")
+                self.logger.debug(f"User {user_id} does not have age, ignoring")
                 continue
 
             # Get state
@@ -115,9 +115,14 @@ class BehaviourDetector:
                     user_state["state"] = transition["next_state"]
                     user_state["rows"].append(row)
                     transitioned = True
-                    self.logger.info(f"[User {user_id[-4:]} entered state {user_state['state']}]"
-                                f"[Event: clicked {row['productId']}]"
-                                f"[Category: {row['category']}]")
+
+                    # Only log to info if it is a real user interaction (real user interactions do not have original_timestamp value)
+                    log_text = f"[User {user_id} entered state {user_state['state']}][Event: clicked {row['productId']}][Category: {row['category']}]"
+                    if row["original_timestamp"] is None:
+                        self.logger.info(log_text)
+                    else:
+                        self.logger.debug(log_text)
+
                     break
 
             # Reset to initial state if no transition was made
@@ -129,7 +134,13 @@ class BehaviourDetector:
 
             # Trigger offer
             if user_state["state"] == "offer":
-                self.logger.info(f"[User {user_id[-4:]} triggered offer {user_state['offer']}]")
+                # Only log to info if it is a real user interaction (real user interactions do not have original_timestamp value)
+                log_text = f"[User {user_id} triggered offer {user_state['offer']}]"
+                if row["original_timestamp"] is None:
+                    self.logger.info(log_text)
+                else:
+                    self.logger.debug(log_text)
+
                 user_state["state"] = "init"
                 user_state["rows"] = []
                 self._special_offers_recipients.append((user_id, user_state["offer"]))
