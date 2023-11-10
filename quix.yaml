@@ -146,7 +146,7 @@ deployments:
   - name: Aggregation Service
     application: Aggregation Service
     deploymentType: Service
-    version: c7b00f1849a84f19e2c041a444b67c356dada594
+    version: 49a275661e7e16c06c9aea559843489073174aca
     resources:
       cpu: 200
       memory: 500
@@ -179,7 +179,7 @@ deployments:
       - name: redis_username
         inputType: Secret
         description: External Redis username
-        required: true
+        required: false
         secretKey: redis_username
   - name: Template UI
     application: WebShop
