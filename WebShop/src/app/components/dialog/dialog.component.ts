@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { USERS } from 'src/app/constants/users';
 import { EventData } from 'src/app/models/eventData';
 import { User } from 'src/app/models/user';
 
