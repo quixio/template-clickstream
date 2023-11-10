@@ -47,12 +47,14 @@ def load_users():
     
         imported_users += 1
 
-        if imported_users % 100 == 0:
+        if imported_users % 1000 == 0:
             pipe.execute()
             print(f"Imported {imported_users} of {total_users} users")
 
     # Last execute to flush the pipeline
     pipe.execute()
+    print(f"Imported all {total_users} users")
+
 
 def main():
     print("Importing products...")
