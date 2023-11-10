@@ -6,7 +6,7 @@ import { ConnectionStatus, QuixService } from './services/quix.service';
 import { MediaObserver } from '@angular/flex-layout';
 import { FormControl } from '@angular/forms';
 import { EventData } from './models/eventData';
-import { sixLetterWordList, threeLetterWordList} from './constants/words'
+import { actionWords, adjectives, nouns } from './constants/words';
 
 @Component({
   selector: 'app-root',
@@ -66,25 +66,27 @@ export class AppComponent implements OnInit {
   }
 
   generateUniqueWords(): string {
-    const threeLetterWords: string[] = [];
-    const sixLetterWords: string[] = [];
+    const uniqueWords: string[] = [];
 
-    while (threeLetterWords.length < 2) {
-      const randomIndex = Math.floor(Math.random() * threeLetterWordList.length);
-      const randomWord = threeLetterWordList[randomIndex];
-      if (!threeLetterWords.includes(randomWord)) {
-        threeLetterWords.push(randomWord);
+    while (uniqueWords.length < 3) {
+      let randomWord: string;
+
+      if (uniqueWords.length === 0) {
+        const randomIndex = Math.floor(Math.random() * adjectives.length);
+        randomWord = adjectives[randomIndex];
+      } else if (uniqueWords.length === 1) {
+        const randomIndex = Math.floor(Math.random() * nouns.length);
+        randomWord = nouns[randomIndex];
+      } else {
+        const randomIndex = Math.floor(Math.random() * actionWords.length);
+        randomWord = actionWords[randomIndex];
+      }
+
+      if (!uniqueWords.includes(randomWord)) {
+        uniqueWords.push(randomWord);
       }
     }
 
-    while (sixLetterWords.length < 1) {
-      const randomIndex = Math.floor(Math.random() * sixLetterWordList.length);
-      const randomWord = sixLetterWordList[randomIndex];
-      if (!sixLetterWords.includes(randomWord)) {
-        sixLetterWords.push(randomWord);
-      }
-    }
-
-    return `${threeLetterWords[0]}-${sixLetterWords[0]}-${threeLetterWords[1]}`;
+    return uniqueWords.join('-');
   }
 }
