@@ -23,7 +23,7 @@ variables:
     required: true
   - name: redis_username
     inputType: Secret
-    description: ''
+    description: External Redis username
     defaultValue: redis_username
     required: false
 dockerfile: build/dockerfile
