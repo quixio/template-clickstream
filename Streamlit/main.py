@@ -29,6 +29,7 @@ st.markdown(
 redis_host = ""
 redis_port = ""
 redis_password = ""
+redis_username = ""
 
 default_height = 200
 
@@ -41,6 +42,7 @@ if os.environ.get("Quix__Workspace__Id") is not None:
     redis_host = os.environ.get("redis_host")
     redis_port = os.environ.get("redis_port")
     redis_password = os.environ.get("redis_password")
+    redis_username = os.environ.get("redis_username")
 elif os.environ.get("redis_host") is not None:
     # this is running in Streamlit and the 'redis_host' secret is available
     # attempt to get these from streamlit secrets
@@ -48,17 +50,20 @@ elif os.environ.get("redis_host") is not None:
     redis_host = st.secrets.redis_host
     redis_port = st.secrets.redis_port
     redis_password = st.secrets.redis_password
+    redis_username = st.secrets.get("redis_username")
 else:
     # we don't know where this is running. Make sure you set the values for:
     print("We don't know where this is running. Make sure you set the values for:")
     print(" - redis_host")
     print(" - redis_port")
     print(" - redis_password")
+    print(" - redis_username")
 
 r = redis.Redis(
     host=redis_host,
     port=redis_port,
     password=redis_password,
+    username=os.environ['redis_username'] if 'redis_username' in os.environ else None,
     decode_responses=True)
 
 # DASHBOARD LAYOUT SECTION

@@ -29,7 +29,7 @@ deployments:
   - name: Enrich With User And Product Data
     application: Enrich With User And Product Data
     deploymentType: Service
-    version: 2a2aa993061302cc52db0fabbf57ef49046623fa
+    version: 574598508f6405587118893c71c785535f8e4aa8
     resources:
       cpu: 200
       memory: 1000
@@ -61,10 +61,15 @@ deployments:
         description: External Redis password
         required: true
         secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: false
+        secretKey: redis_username
   - name: Load Products and Users
     application: Load Products and Users
     deploymentType: Job
-    version: f933b227b6e5bd5d6c213ca4155fe66b9359890f
+    version: 15da382a21423a52b6e989173859fcb387f5243a
     resources:
       cpu: 200
       memory: 500
@@ -85,10 +90,15 @@ deployments:
         description: External Redis password
         required: true
         secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: false
+        secretKey: redis_username
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
-    version: 0e0665740b892827b150c50d607898171182ba4e
+    version: f1e7621b27b1c37b2ee28c5c08211ced7ee87e28
     resources:
       cpu: 200
       memory: 500
@@ -128,10 +138,15 @@ deployments:
         description: External Redis password
         required: true
         secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: false
+        secretKey: redis_username
   - name: Aggregation Service
     application: Aggregation Service
     deploymentType: Service
-    version: c7b00f1849a84f19e2c041a444b67c356dada594
+    version: 49a275661e7e16c06c9aea559843489073174aca
     resources:
       cpu: 200
       memory: 500
@@ -161,6 +176,11 @@ deployments:
         description: External Redis password
         required: true
         secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: false
+        secretKey: redis_username
   - name: Template UI
     application: WebShop
     deploymentType: Service
@@ -197,7 +217,7 @@ deployments:
   - name: Streamlit
     application: Streamlit
     deploymentType: Service
-    version: 883afc57e69f49c9b7b633be8359076282ae85af
+    version: 85b7ea7d9e2206450a129aef386342b8e19d1954
     resources:
       cpu: 200
       memory: 500
@@ -222,6 +242,11 @@ deployments:
         description: External Redis password
         required: true
         secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: false
+        secretKey: redis_username
 
 # This section describes the Topics of the data pipeline
 topics:
