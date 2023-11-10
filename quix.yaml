@@ -64,7 +64,7 @@ deployments:
       - name: redis_username
         inputType: Secret
         description: External Redis username
-        required: true
+        required: false
         secretKey: redis_username
   - name: Load Products and Users
     application: Load Products and Users
@@ -93,7 +93,7 @@ deployments:
       - name: redis_username
         inputType: Secret
         description: External Redis username
-        required: true
+        required: false
         secretKey: redis_username
   - name: Detect User Behaviour
     application: Detect User Behaviour
@@ -141,7 +141,7 @@ deployments:
       - name: redis_username
         inputType: Secret
         description: External Redis username
-        required: true
+        required: false
         secretKey: redis_username
   - name: Aggregation Service
     application: Aggregation Service
@@ -245,7 +245,7 @@ deployments:
       - name: redis_username
         inputType: Secret
         description: External Redis username
-        required: true
+        required: false
         secretKey: redis_username
 
 # This section describes the Topics of the data pipeline
