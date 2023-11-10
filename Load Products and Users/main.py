@@ -42,7 +42,9 @@ def load_users():
         if not pd.isna(row['gender']):
             values['gender'] = row['gender']
 
-        pipe.hmset(key, values)
+        if values != {}:
+            pipe.hmset(key, values)
+    
         imported_users += 1
 
         if imported_users % 100 == 0:
