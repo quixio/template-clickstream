@@ -7,7 +7,6 @@ import { ConnectionStatus, QuixService } from 'src/app/services/quix.service';
 import { DataService } from './../../services/data.service';
 import { ParameterData } from 'src/app/models/parameterData';
 import { Data } from 'src/app/models/data';
-import { USERS } from 'src/app/constants/users';
 import { User } from 'src/app/models/user';
 
 
@@ -40,11 +39,13 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   sendData(): void {
     if (!this.product) return;
-    const user: User = this.dataService.user || USERS[0];
+    const user: User = this.dataService.user;
     const payload: Data = {
       timestamps: [new Date().getTime() * 1000000],
       stringValues: {
         'userId': [user.userId],
+        'age': [user.age.toString()],
+        'gender': [user.gender],
         'ip': [this.dataService.userIp],
         'userAgent': [navigator.userAgent],
         'productId': [this.product.id],
