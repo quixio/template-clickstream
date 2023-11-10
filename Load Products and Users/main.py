@@ -1,12 +1,10 @@
 import os
-from datetime import datetime
-
 import pandas as pd
 import redis
 
 r = redis.Redis(
     host=os.environ['redis_host'],
-    port=os.environ['redis_port'],
+    port=int(os.environ['redis_port']),
     password=os.environ['redis_password'],
     decode_responses=True)
 
@@ -18,7 +16,8 @@ def load_products():
 
     for index, row in products.iterrows():
         key = f'product:{row["id"]}'
-        pipe.hmset(key, {'cat': row['category'], 'title': row['title']})
+        pipe.hset(key, 'category', row['category'])
+        pipe.hset(key, 'title', row['title'])
 
     pipe.execute()
     print(f"Imported {len(products)} products")
@@ -32,19 +31,15 @@ def load_users():
     pipe = r.pipeline()
     for _, row in users.iterrows():
         key = f'visitor:{row["userId"]}'
-        values = {}
 
         # Birthday may not be present, check for NaN
         if not pd.isna(row['birthDate']):
-            values['birthday'] = row['birthDate']
+            pipe.hset(key, 'birthday', row['birthDate'])
 
         # Age may not be present, check for NaN
         if not pd.isna(row['gender']):
-            values['gender'] = row['gender']
+            pipe.hset(key, 'gender', row['gender'])
 
-        if values != {}:
-            pipe.hmset(key, values)
-    
         imported_users += 1
 
         if imported_users % 1000 == 0:
@@ -62,7 +57,6 @@ def main():
 
     print("Importing users...")
     load_users()
-
 
 
 if __name__ == '__main__':
