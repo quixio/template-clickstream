@@ -1,56 +1,16 @@
-export const threeLetterWordList = [
-  'ace', 'act', 'add', 'age', 'aid', 'aim', 'air', 'and', 'any', 'ape',
-  'apt', 'arc', 'are', 'ark', 'arm', 'art', 'ash', 'ask', 'ate', 'axe',
-  'bad', 'bag', 'ban', 'bar', 'bat', 'bay', 'bed', 'bee', 'beg', 'bet',
-  'bid', 'big', 'bin', 'bit', 'boa', 'bob', 'bog', 'boo', 'bow', 'box',
-  'boy', 'bra', 'bud', 'bug', 'bum', 'bun', 'bus', 'but', 'buy', 'bye',
-  'cab', 'cam', 'can', 'cap', 'car', 'cat', 'cob', 'cod', 'cog', 'con',
-  'cop', 'cot', 'cow', 'coy', 'cry', 'cub', 'cue', 'cup', 'cut', 'dad',
-  'dam', 'day', 'den', 'dew', 'did', 'dig', 'dim', 'dip', 'doe', 'dog',
-  'dot', 'dry', 'dub', 'due', 'dug', 'dye', 'ear', 'eat', 'eel', 'egg',
-  'ego', 'elf', 'elm', 'end', 'eon', 'era', 'eve', 'ewe', 'eye', 'fad',
-  'fan', 'far', 'fat', 'fax', 'fed', 'fee', 'few', 'fib', 'fig', 'fin',
-  'fir', 'fit', 'fix', 'flu', 'fly', 'fog', 'for', 'fox', 'fry', 'fun',
-  'fur', 'gap', 'gas', 'gay', 'gem', 'get', 'gig', 'gin', 'god', 'got',
-  'gum', 'gun', 'gut', 'guy', 'gym', 'had', 'ham', 'has', 'hat', 'hay',
-  'hem', 'hen', 'her', 'hey', 'hid', 'him', 'hip', 'his', 'hit', 'hog',
-  'hop', 'hot', 'how', 'hub', 'hue', 'hug', 'huh', 'hum', 'hut', 'ice',
-  'icy', 'ill', 'ink', 'inn', 'ion', 'its', 'ivy', 'jab', 'jam', 'jar',
-  'jaw', 'jay', 'jet', 'job', 'jog', 'joy', 'jug', 'jut', 'keg', 'key',
-  'kid', 'kin', 'kit', 'lab', 'lad', 'lag', 'lap', 'law', 'lay', 'led',
-  'lee', 'leg', 'let', 'lid', 'lie', 'lip', 'lit', 'log', 'lot', 'low',
-  'mad', 'man', 'map', 'mat', 'may', 'men', 'met', 'mew', 'mix', 'mob',
-  'mod', 'mom', 'moo', 'mop', 'mud', 'mug', 'mum', 'nab', 'nap', 'net',
-  'new', 'nil', 'nip', 'nod', 'nor', 'not', 'now', 'nun', 'nut', 'oak',
-  'oar', 'oat', 'odd', 'off', 'oil', 'old', 'one', 'opt', 'orb', 'ore',
-  'our', 'out', 'owe', 'owl', 'own', 'pad', 'pal', 'pan', 'par', 'pat',
-  'paw', 'pay', 'pea', 'peg', 'pen', 'per', 'pet', 'pew', 'pie', 'pig',
-  'pin', 'pit', 'ply', 'pod', 'pop', 'pot', 'pow', 'pro', 'pry', 'pub',
-  'pug', 'pun', 'pup', 'put', 'qua', 'rad', 'rag', 'ram', 'ran', 'rap',
-  'rat', 'raw', 'ray', 'red', 'rib', 'rid', 'rig', 'rim', 'rip', 'rob',
-  'rod', 'rot', 'row', 'rub', 'rug', 'rum', 'run', 'rut', 'rye', 'sad',
-  'sag', 'sap', 'sat', 'saw', 'say', 'sea', 'see', 'set', 'sew', 'sex',
-  'she', 'shy', 'sin', 'sip', 'sir', 'sit', 'six', 'ski', 'sky', 'sly',
-  'sob', 'sod', 'son', 'sow', 'soy', 'spa', 'spy', 'sub', 'sue', 'sum',
-  'sun', 'sup', 'tab', 'tag', 'tan', 'tap', 'tar', 'tax', 'tea', 'ten',
-  'the', 'thy', 'tie', 'tin', 'tip', 'toe', 'ton', 'too', 'top', 'toy',
-  'try', 'tub', 'tug', 'tux', 'two', 'ugh', 'ump', 'urn', 'use', 'van',
-  'vat', 'vet', 'vex', 'via', 'vie', 'vim', 'vow', 'wad', 'wag', 'war',
-  'was', 'wax', 'way', 'web', 'wed', 'wet', 'who', 'why', 'wig', 'win',
-  'wit', 'woe', 'wok', 'won', 'woo', 'wow', 'wry', 'yak', 'yam', 'yap',
-  'yaw', 'yea', 'yen', 'yes', 'yet', 'yew', 'yin', 'yip', 'yod', 'yon',
-  'you', 'yow', 'yuk', 'yum', 'zap', 'zen', 'zig', 'zip', 'zoo'
+
+export const adjectives = [
+  'happy', 'sad', 'big', 'small', 'fast', 'slow', 'beautiful', 'ugly', 'smart', 'dumb',
+  'funny', 'serious', 'kind', 'mean', 'brave', 'scared', 'tall', 'short', 'young', 'old'
 ];
 
-export const sixLetterWordList = [
-  'apple', 'banana', 'cherry', 'grape', 'lemon', 'melon', 'orange', 'peach', 'pear', 'plum',
-  'carrot', 'celery', 'onion', 'potato', 'tomato', 'pepper', 'olive', 'beans', 'peas', 'corn',
-  'bread', 'butter', 'cheese', 'milk', 'yogurt', 'honey', 'sugar', 'flour', 'rice', 'pasta',
-  'chicken', 'beef', 'pork', 'fish', 'shrimp', 'bacon', 'sausage', 'ham', 'turkey', 'lamb',
-  'coffee', 'tea', 'juice', 'water', 'soda', 'wine', 'beer', 'vodka', 'rum', 'whiskey',
-  'table', 'chair', 'sofa', 'bed', 'desk', 'lamp', 'rug', 'shelf', 'mirror', 'clock',
-  'car', 'bus', 'train', 'bike', 'boat', 'plane', 'taxi', 'truck', 'van', 'motor',
-  'sun', 'moon', 'star', 'cloud', 'rain', 'snow', 'wind', 'storm', 'fog', 'hail',
-  'book', 'pen', 'pencil', 'paper', 'notebook', 'marker', 'eraser', 'scissors', 'glue', 'tape',
-  'tree', 'flower', 'grass', 'leaf', 'branch', 'root', 'rose', 'tulip', 'daisy', 'lily'
+export const nouns = [
+  'cat', 'dog', 'house', 'car', 'book', 'tree', 'flower', 'sun', 'moon', 'star',
+  'bird', 'chair', 'table', 'computer', 'phone', 'music', 'friend', 'family', 'city', 'world'
 ];
+
+export const actionWords = [
+  'swimming', 'jumping', 'dancing', 'cycling', 'singing', 'climbing', 'skating', 'hiking', 'boxing', 'surfing',
+  'skateboarding', 'kayaking', 'biking', 'hurdling', 'diving', 'gymnastics', 'wrestling', 'fencing', 'juggling', 'parkour'
+];
+
