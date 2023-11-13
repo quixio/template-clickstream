@@ -5,6 +5,7 @@ import { Subject, map } from 'rxjs';
 import { DialogComponent } from '../components/dialog/dialog.component';
 import { User } from '../models/user';
 import { EventData } from '../models/eventData';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +17,11 @@ export class DataService {
   isSidenavOpen$ = new Subject<boolean>();
 
   constructor(private http: HttpClient, private dialog: MatDialog) {
-    this.getIpAddress();
+    //this.getIpAddress();
   }
 
-  getIpAddress(): void {
-    this.http.get("https://api.ipify.org/?format=json").pipe(map((m: any) => m.ip)).subscribe((ip) => {
-      this.userIp = ip;
-    });
+  getIpAddress(): Observable<string> {
+    return this.http.get("https://api.ipify.org/?format=json").pipe(map((m: any) => m.ip));
   }
 
   openDialog(data: EventData): void {
