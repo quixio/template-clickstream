@@ -108,7 +108,7 @@ class BehaviourDetector:
                 continue
 
             # Transition to next state if condition is met
-            self.logger.debug(f"Applying transitions for {user_id}")
+            self.logger.debug(f"Applying transitions for {user_id}. Current state: {user_state['state']}")
             transitioned = False
             for transition in self.transitions[user_state["state"]]:
                 if transition["condition"](row, user_state) and check_time_elapsed(row, user_state):
