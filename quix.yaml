@@ -184,7 +184,7 @@ deployments:
   - name: Template UI
     application: WebShop
     deploymentType: Service
-    version: b3a5b7b1c6f068fef1f41f5728c7bec490b1e884
+    version: d0d3f466e899ea9fcc36ec3af3a1acb08e436501
     resources:
       cpu: 200
       memory: 500
