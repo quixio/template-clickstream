@@ -14,7 +14,7 @@ deployments:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: output
         inputType: OutputTopic
@@ -29,7 +29,7 @@ deployments:
   - name: Enrich With User And Product Data
     application: Enrich With User And Product Data
     deploymentType: Service
-    version: 574598508f6405587118893c71c785535f8e4aa8
+    version: 47afa6eca67cdef1e012dfd9762214ce35c2af01
     resources:
       cpu: 200
       memory: 1000
@@ -98,7 +98,7 @@ deployments:
   - name: Detect User Behaviour
     application: Detect User Behaviour
     deploymentType: Service
-    version: b5236fef65c92f726c06f0e8d5a59e83f84d361a
+    version: 47afa6eca67cdef1e012dfd9762214ce35c2af01
     resources:
       cpu: 200
       memory: 500
@@ -106,7 +106,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
