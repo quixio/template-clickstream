@@ -16,7 +16,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class AppComponent implements OnInit {
 
-  ages = Array.from({length: 48}, (_, i) => i + 18);
+  ages = Array.from({ length: 48 }, (_, i) => i + 18);
   ageControl = new FormControl(this.ages[0]);
 
   genders = ["Female", "Male", "Unknown"]
@@ -27,9 +27,9 @@ export class AppComponent implements OnInit {
   ungatedToken: string;
   user: User;
   constructor(private quixService: QuixService,
-              private dataService: DataService,
-              public media: MediaObserver,
-              private cookieService: CookieService) {}
+    private dataService: DataService,
+    public media: MediaObserver,
+    private cookieService: CookieService) { }
 
   ngOnInit(): void {
     const userId = this.cookieService.get('userId') || this.generateUniqueWords();
@@ -45,16 +45,14 @@ export class AppComponent implements OnInit {
     this.ungatedToken = this.quixService.ungatedToken;
     this.deploymentId = environment.DEPLOYMENT_ID || '';
 
-    const topicId = this.quixService.workspaceId + '-' + this.quixService.offersTopic;
-    this.quixService.subscribeToEvent(topicId, this.user.userId, "offer");
-
     this.quixService.eventDataReceived.subscribe((event: EventData) => {
       this.dataService.openDialog(event)
     });
 
     this.quixService.readerConnStatusChanged$.subscribe((status) => {
       if (status !== ConnectionStatus.Connected) return;
-      //this.ageControl.setValue(this.dataService.user.age)
+      const topicId = this.quixService.workspaceId + '-' + this.quixService.offersTopic;
+      this.quixService.subscribeToEvent(topicId, this.user.userId, "offer");
     });
 
     this.ageControl.valueChanges.subscribe((age) => {
