@@ -41,7 +41,6 @@ export class AppComponent implements OnInit {
       age: this.ageControl.value || 18
     };
 
-    this.workspaceId = this.quixService.workspaceId;
     this.ungatedToken = this.quixService.ungatedToken;
     this.deploymentId = environment.DEPLOYMENT_ID || '';
 
@@ -51,6 +50,7 @@ export class AppComponent implements OnInit {
 
     this.quixService.readerConnStatusChanged$.subscribe((status) => {
       if (status !== ConnectionStatus.Connected) return;
+      this.workspaceId = this.quixService.workspaceId;
       const topicId = this.quixService.workspaceId + '-' + this.quixService.offersTopic;
       this.quixService.subscribeToEvent(topicId, this.user.userId, "offer");
     });
