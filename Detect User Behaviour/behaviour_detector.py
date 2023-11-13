@@ -118,7 +118,7 @@ class BehaviourDetector:
 
                     # Only log to info if it is a real user interaction (real user interactions do not have original_timestamp value)
                     log_text = f"[User {user_id} entered state {user_state['state']}][Event: clicked {row['productId']}][Category: {row['category']}]"
-                    if row["original_timestamp"] is None:
+                    if "original_timestamp" not in row:
                         self.logger.info(log_text)
                     else:
                         self.logger.debug(log_text)
@@ -136,7 +136,7 @@ class BehaviourDetector:
             if user_state["state"] == "offer":
                 # Only log to info if it is a real user interaction (real user interactions do not have original_timestamp value)
                 log_text = f"[User {user_id} triggered offer {user_state['offer']}]"
-                if row["original_timestamp"] is None:
+                if "original_timestamp" not in row:
                     self.logger.info(log_text)
                 else:
                     self.logger.debug(log_text)

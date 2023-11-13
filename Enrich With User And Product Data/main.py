@@ -19,7 +19,7 @@ redis_client = redis.Redis(
     host=os.environ['redis_host'],
     port=int(os.environ['redis_port']),
     password=os.environ['redis_password'],
-    username=os.environ['redis_username'] if 'redis_username' in os.environ else None,
+    username=os.environ.get('redis_username'),
     decode_responses=True)
 
 
@@ -105,11 +105,17 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     # Enrich data
     df['category'] = df['productId'].apply(get_product_category)
     df['title'] = df['productId'].apply(get_product_title)
-    df['gender'] = df['userId'].apply(get_visitor_gender)
     df['birthdate'] = df['userId'].apply(get_visitor_birthdate)
-    df['age'] = df['birthdate'].apply(calculate_age)
     df['country'] = df['ip'].apply(get_country_from_ip)
     df['deviceType'] = df['userAgent'].apply(get_device_type)
+
+    # For synthetic data (from csv) we don't have age. For data generated form our live web, we have age and gender
+    if 'age' not in df.columns:
+        df['age'] = df['birthdate'].apply(calculate_age)
+
+    if 'gender' not in df.columns:
+        df['gender'] = df['userId'].apply(get_visitor_gender)
+
 
     # Create a new stream (or reuse it if it was already created).
     # We will be using one stream per visitor id, so we can parallelise the processing
