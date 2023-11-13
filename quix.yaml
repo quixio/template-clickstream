@@ -29,12 +29,12 @@ deployments:
   - name: Enrich With User And Product Data
     application: Enrich With User And Product Data
     deploymentType: Service
-    version: 47afa6eca67cdef1e012dfd9762214ce35c2af01
+    version: 59479c6997c0c65123b222c79a7f950192abb233
     resources:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
