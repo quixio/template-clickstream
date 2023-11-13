@@ -4,6 +4,7 @@ import pandas as pd
 import logging
 from rlh import RedisStreamLogHandler
 import time
+import redis
 
 if 'window_minutes' not in os.environ:
     window_minutes = 30
@@ -64,11 +65,16 @@ class BehaviourDetector:
         self._special_offers_recipients = []
 
         self.logger = logging.getLogger("States")
-        redis_log_handler = RedisStreamLogHandler(stream_name="state_logs",
+        self.log_stream_name = "state_logs"
+        redis_log_handler = RedisStreamLogHandler(stream_name=self.log_stream_name,
                                                   host=os.environ['redis_host'],
                                                   port=int(os.environ['redis_port']),
                                                   password=os.environ['redis_password'],
                                                   username=os.environ.get('redis_username'))
+        self.redis_client = redis.Redis(host=os.environ['redis_host'],
+                                        port=int(os.environ['redis_port']),
+                                        password=os.environ['redis_password'],
+                                        username=os.environ.get('redis_username'))
         redis_log_handler.setLevel(logging.INFO)
         self.logger.addHandler(redis_log_handler)
 
@@ -144,6 +150,9 @@ class BehaviourDetector:
                 user_state["state"] = "init"
                 user_state["rows"] = []
                 self._special_offers_recipients.append((user_id, user_state["offer"]))
+
+        # Finally, keep only the last 10 log entries
+        self.redis_client.xtrim(self.log_stream_name, maxlen=10, approximate=True)
 
     def get_special_offers_recipients(self) -> list:
         """Return the recipients of the special offers."""
