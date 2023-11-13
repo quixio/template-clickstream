@@ -100,6 +100,14 @@ def get_device_type(user_agent: str):
     return "Unknown"
 
 
+def get_first_letter_of_gender(gender):
+    return gender[0]
+
+
+def convert_age_to_int(age):
+    return int(age)
+
+
 # Callback triggered for each new timeseries data. This method will enrich the data
 def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     # Enrich data
@@ -112,10 +120,13 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     # For synthetic data (from csv) we don't have age. For data generated form our live web, we have age and gender
     if 'age' not in df.columns:
         df['age'] = df['birthdate'].apply(calculate_age)
+    else:
+        df['age'] = df['age'].apply(convert_age_to_int)
 
     if 'gender' not in df.columns:
         df['gender'] = df['userId'].apply(get_visitor_gender)
-
+    else:
+        df['gender'] = df['gender'].apply(get_first_letter_of_gender)
 
     # Create a new stream (or reuse it if it was already created).
     # We will be using one stream per visitor id, so we can parallelise the processing
