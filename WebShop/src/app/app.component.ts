@@ -6,7 +6,8 @@ import { ConnectionStatus, QuixService } from './services/quix.service';
 import { MediaObserver } from '@angular/flex-layout';
 import { FormControl } from '@angular/forms';
 import { EventData } from './models/eventData';
-import { sixLetterWordList, threeLetterWordList} from './constants/words'
+import { actionWords, adjectives, nouns } from './constants/words';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ import { sixLetterWordList, threeLetterWordList} from './constants/words'
 })
 export class AppComponent implements OnInit {
 
-  ages = Array.from({length: 48}, (_, i) => i + 18);
+  ages = Array.from({ length: 48 }, (_, i) => i + 18);
   ageControl = new FormControl(this.ages[0]);
 
   genders = ["Female", "Male", "Unknown"]
@@ -24,22 +25,22 @@ export class AppComponent implements OnInit {
   workspaceId: string;
   deploymentId: string;
   ungatedToken: string;
-  userId: string;
   user: User;
-  constructor(private quixService: QuixService, private dataService: DataService, public media: MediaObserver) {}
+  constructor(private quixService: QuixService,
+    private dataService: DataService,
+    public media: MediaObserver,
+    private cookieService: CookieService) { }
 
   ngOnInit(): void {
+    const userId = this.cookieService.get('userId') || this.generateUniqueWords();
+    this.cookieService.set('userId', userId);
+    this.generateUniqueWords();
     this.user = {
-      userId: this.generateUniqueWords(),
+      userId: userId,
       gender: this.genderControl.value || "Female",
       age: this.ageControl.value || 18
     };
 
-    this.dataService.user = this.user;
-    const topicId = this.quixService.workspaceId + '-' + this.quixService.offersTopic;
-    this.quixService.subscribeToEvent(topicId, this.userId, "offer");
-
-    this.workspaceId = this.quixService.workspaceId;
     this.ungatedToken = this.quixService.ungatedToken;
     this.deploymentId = environment.DEPLOYMENT_ID || '';
 
@@ -49,16 +50,22 @@ export class AppComponent implements OnInit {
 
     this.quixService.readerConnStatusChanged$.subscribe((status) => {
       if (status !== ConnectionStatus.Connected) return;
-      this.ageControl.setValue(this.dataService.user.age)
+      this.workspaceId = this.quixService.workspaceId;
+      const topicId = this.quixService.workspaceId + '-' + this.quixService.offersTopic;
+      this.quixService.subscribeToEvent(topicId, this.user.userId, "offer");
     });
 
     this.ageControl.valueChanges.subscribe((age) => {
-      this.user.age = age || 18;
+      this.user.age = age || 0;
+      this.dataService.user.age = this.user.age;
     });
 
     this.genderControl.valueChanges.subscribe((gender) => {
-      this.user.gender = gender || "Female";
+      this.user.gender = gender || "Unknown";
+      this.dataService.user.gender = this.user.gender;
     });
+
+    this.dataService.user = this.user;
   }
 
   toggleSidenav(isOpen: boolean): void {
@@ -66,25 +73,27 @@ export class AppComponent implements OnInit {
   }
 
   generateUniqueWords(): string {
-    const threeLetterWords: string[] = [];
-    const sixLetterWords: string[] = [];
+    const uniqueWords: string[] = [];
 
-    while (threeLetterWords.length < 2) {
-      const randomIndex = Math.floor(Math.random() * threeLetterWordList.length);
-      const randomWord = threeLetterWordList[randomIndex];
-      if (!threeLetterWords.includes(randomWord)) {
-        threeLetterWords.push(randomWord);
+    while (uniqueWords.length < 3) {
+      let randomWord: string;
+
+      if (uniqueWords.length === 0) {
+        const randomIndex = Math.floor(Math.random() * adjectives.length);
+        randomWord = adjectives[randomIndex];
+      } else if (uniqueWords.length === 1) {
+        const randomIndex = Math.floor(Math.random() * nouns.length);
+        randomWord = nouns[randomIndex];
+      } else {
+        const randomIndex = Math.floor(Math.random() * actionWords.length);
+        randomWord = actionWords[randomIndex];
+      }
+
+      if (!uniqueWords.includes(randomWord)) {
+        uniqueWords.push(randomWord);
       }
     }
 
-    while (sixLetterWords.length < 1) {
-      const randomIndex = Math.floor(Math.random() * sixLetterWordList.length);
-      const randomWord = sixLetterWordList[randomIndex];
-      if (!sixLetterWords.includes(randomWord)) {
-        sixLetterWords.push(randomWord);
-      }
-    }
-
-    return `${threeLetterWords[0]}-${sixLetterWords[0]}-${threeLetterWords[1]}`;
+    return uniqueWords.join('-');
   }
 }
