@@ -14,7 +14,7 @@ deployments:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: output
         inputType: OutputTopic
@@ -69,7 +69,7 @@ deployments:
   - name: Load Products and Users
     application: Load Products and Users
     deploymentType: Job
-    version: 15da382a21423a52b6e989173859fcb387f5243a
+    version: c388f6ae83e5d0af763288ae1504cf8f79853c3e
     resources:
       cpu: 200
       memory: 500
@@ -184,7 +184,7 @@ deployments:
   - name: Template UI
     application: WebShop
     deploymentType: Service
-    version: 045ff967637e24f3c101493b300e4460db9b8616
+    version: d0d3f466e899ea9fcc36ec3af3a1acb08e436501
     resources:
       cpu: 200
       memory: 500
