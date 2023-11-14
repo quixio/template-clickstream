@@ -106,6 +106,8 @@ class BehaviourDetector:
             # Get state
             self.logger.debug(f"Getting state for {user_id}")
             start = time.time()
+            if user_id not in self._db.keys():
+                self._db[user_id] = {}
             user_state = self._db[user_id]
             self.logger.debug(f"Loaded state for {user_id}. Took {time.time() - start} seconds")
 
