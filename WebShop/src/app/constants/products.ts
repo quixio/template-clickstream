@@ -75,7 +75,7 @@ export const PRODUCTS: Product[] = [
     },
     {
         "id": "VD55147564",
-        "category": "outdoors",
+        "category": "shoes",
         "title": "Vintage Leather Hiking Boots",
         "description": "Hit the trails with our Vintage Leather Hiking Boots. Made from durable leather, these boots are designed to withstand the toughest conditions. Get yours today and explore the great outdoors in style.",
         "image": "VD55147564.png",
