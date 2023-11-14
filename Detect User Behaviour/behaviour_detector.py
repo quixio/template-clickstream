@@ -53,24 +53,14 @@ class BehaviourDetector:
             {
                 "condition": lambda row, current_state: row["category"] == "clothing"
                                                         and row["productId"] != current_state["rows"][0]["productId"],
-                "next_state": "clothes_visited_2"
-            }
-        ],
-        "clothes_visited_2": [
-            {
-                "condition": lambda row, current_state: row["category"] == "shoes"
-                                                        and row["productId"] != current_state["rows"][1]["productId"],
-                "next_state": "shoes_visited_2"
-            }
-        ],
-        "shoes_visited_2": [
-            {
-                "condition": lambda row, current_state: row["category"] == "shoes"
-                                                        and row["productId"] != current_state["rows"][0]["productId"]
-                                                        and row["productId"] != current_state["rows"][2]["productId"],
                 "next_state": "offer"
+            },
+            {
+                "condition": lambda row, current_state: row["category"] == "clothing"
+                                                        and row["productId"] == current_state["rows"][0]["productId"],
+                "next_state": "clothes_visited"
             }
-        ],
+        ]
     }
 
     def __init__(self):
