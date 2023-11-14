@@ -160,7 +160,6 @@ class BehaviourDetector:
 
                 user_state["state"] = "init"
                 user_state["rows"] = []
-                self._db[user_id] = user_state
                 self._special_offers_recipients.append((user_id, user_state["offer"]))
 
             # Save state
