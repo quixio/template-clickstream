@@ -4,7 +4,7 @@ variables:
   - name: bearer_token
     inputType: FreeText
     description: ''
-    defaultValue: abc111
+    defaultValue: pat-087fb05b72df4e91b8eff7712e409965
     required: false
   - name: Deployment__Id
     inputType: FreeText
