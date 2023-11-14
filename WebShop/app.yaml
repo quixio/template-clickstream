@@ -9,7 +9,7 @@ variables:
   - name: Deployment__Id
     inputType: FreeText
     description: ''
-    defaultValue: f3d41425-a0ff-4d45-bded-2fcfa861b5c7
+    defaultValue: 03c965bd-8f6a-40ec-97ae-e70fd974738e
     required: false
   - name: offers_topic
     inputType: InputTopic
