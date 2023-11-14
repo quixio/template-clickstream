@@ -262,7 +262,7 @@ export class QuixService {
    * @param payload The payload of data we are sending.
    */
   public sendParameterData(topic: string, streamId: string, payload: Data): void {
-    // console.log("QuixService Sending parameter data!", topic, streamId, payload);
+    console.log("QuixService Sending parameter data!", topic, streamId, payload);
     this.writerHubConnection.invoke("SendParameterData", topic, streamId, payload);
   }
 
