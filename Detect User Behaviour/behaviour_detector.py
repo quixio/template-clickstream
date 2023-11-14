@@ -5,6 +5,8 @@ import logging
 from rlh import RedisStreamLogHandler
 import time
 import redis
+from rocksdict import Rdict
+
 
 if 'window_minutes' not in os.environ:
     window_minutes = 30
@@ -78,6 +80,14 @@ class BehaviourDetector:
         redis_log_handler.setLevel(logging.INFO)
         self.logger.addHandler(redis_log_handler)
 
+        # make sure the state dir exists
+        if not os.path.exists("state"):
+            os.makedirs("state")
+
+        # rocksDb is used to hold state, state.dict is in the `state` folder which is maintained for us by Quix
+        # so we just init the rocks db using `state.dict` which will be loaded from the file system if it exists
+        self._db = Rdict("state/state.dict")
+
     # Method to process the incoming dataframe
     def process_dataframe(self, stream_consumer: qx.StreamConsumer, received_df: pd.DataFrame):
         for label, row in received_df.iterrows():
@@ -96,7 +106,7 @@ class BehaviourDetector:
             # Get state
             self.logger.debug(f"Getting state for {user_id}")
             start = time.time()
-            user_state = stream_consumer.get_dict_state(user_id)
+            user_state = self._db[user_id]
             self.logger.debug(f"Loaded state for {user_id}. Took {time.time() - start} seconds")
 
             # Initialize state if not present
@@ -136,10 +146,9 @@ class BehaviourDetector:
                 self.logger.debug(f"Resetting state to init for {user_id}")
                 user_state["state"] = "init"
                 user_state["rows"] = []
-                continue
 
             # Trigger offer
-            if user_state["state"] == "offer":
+            elif user_state["state"] == "offer":
                 # Only log to info if it is a real user interaction (real user interactions do not have original_timestamp value)
                 log_text = f"[User {user_id} triggered offer {user_state['offer']}]"
                 if "original_timestamp" not in row:
@@ -149,7 +158,11 @@ class BehaviourDetector:
 
                 user_state["state"] = "init"
                 user_state["rows"] = []
+                self._db[user_id] = user_state
                 self._special_offers_recipients.append((user_id, user_state["offer"]))
+
+            # Save state
+            self._db[user_id] = user_state
 
         # Finally, keep only the last 10 log entries
         self.redis_client.xtrim(self.log_stream_name, maxlen=10, approximate=True)
