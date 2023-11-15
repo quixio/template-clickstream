@@ -184,7 +184,7 @@ deployments:
   - name: Demo webshop frontend
     application: Demo webshop frontend
     deploymentType: Service
-    version: todo
+    version: dc9ca96c2ab52a3748bb3a47288dddeb185dffeb
     resources:
       cpu: 200
       memory: 500
