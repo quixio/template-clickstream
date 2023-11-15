@@ -184,7 +184,7 @@ deployments:
   - name: Demo webshop frontend
     application: Demo webshop frontend
     deploymentType: Service
-    version: 9ab1056df0fb2328f318aa0052e3af8e6aacab78
+    version: 55250b9e130e8037808756f128117c067d967154
     resources:
       cpu: 200
       memory: 500
