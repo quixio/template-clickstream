@@ -29,7 +29,7 @@ deployments:
   - name: Data enrichment
     application: Data enrichment
     deploymentType: Service
-    version: updateme
+    version: 6bca61e2db3f64df55ef710a34e360351c491ae4
     resources:
       cpu: 200
       memory: 1000
