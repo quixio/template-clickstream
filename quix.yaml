@@ -214,10 +214,10 @@ deployments:
         description: ''
         required: false
         value: click-data
-  - name: Streamlit
-    application: Streamlit
+  - name: Demo real-time dashboard
+    application: Demo real-time dashboard
     deploymentType: Service
-    version: b5236fef65c92f726c06f0e8d5a59e83f84d361a
+    version: todo
     resources:
       cpu: 200
       memory: 500

@@ -1,4 +1,4 @@
-name: Streamlit
+name: Demo real-time dashboard
 language: python
 variables:
   - name: redis_host
