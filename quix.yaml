@@ -3,7 +3,7 @@
 
 metadata:
   version: 1.0
-
+ 
 # This section describes the Deployments of the data pipeline
 deployments:
   - name: Clickstream producer
