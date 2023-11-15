@@ -8,7 +8,7 @@ export const environment = {
   WORKSPACE_ID: process.env["WORKSPACE_ID"],
   CLICK_TOPIC: process.env["CLICK_TOPIC"],
   OFFERS_TOPIC: process.env["OFFERS_TOPIC"],
-  DEPLOYMENT_ID: process.env["DEPLOYMENT_ID"]
+  EVT_DETECT_DEPLOYMENT_ID: "fill in prod deployment id here"
 };
 
 /*

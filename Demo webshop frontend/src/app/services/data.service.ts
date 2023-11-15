@@ -16,9 +16,7 @@ export class DataService {
   categorySelection: string[];
   isSidenavOpen$ = new Subject<boolean>();
 
-  constructor(private http: HttpClient, private dialog: MatDialog) {
-    //this.getIpAddress();
-  }
+  constructor(private http: HttpClient, private dialog: MatDialog) {}
 
   getIpAddress(): Observable<string> {
     return this.http.get("https://api.ipify.org/?format=json").pipe(map((m: any) => m.ip));

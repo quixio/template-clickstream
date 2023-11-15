@@ -199,11 +199,6 @@ deployments:
         description: Quix bearer token 
         required: true
         secretKey: bearerToken
-      - name: Deployment__Id
-        inputType: FreeText
-        description: ''
-        required: false
-        value: f3d41425-a0ff-4d45-bded-2fcfa861b5c7
       - name: offers_topic
         inputType: InputTopic
         description: ''

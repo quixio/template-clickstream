@@ -6,11 +6,6 @@ variables:
     description: ''
     defaultValue: ''
     required: false
-  - name: Deployment__Id
-    inputType: FreeText
-    description: ''
-    defaultValue: a892a183-4ac8-4991-a1f7-92799bf5b776
-    required: false
   - name: offers_topic
     inputType: InputTopic
     description: ''

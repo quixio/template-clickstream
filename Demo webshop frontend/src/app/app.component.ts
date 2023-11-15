@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   genderControl = new FormControl(this.genders[0]);
 
   workspaceId: string;
-  deploymentId: string;
+  eventDetectionDeploymentId: string;
   ungatedToken: string;
   user: User;
   constructor(private quixService: QuixService,
@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
     };
 
     this.ungatedToken = this.quixService.ungatedToken;
-    this.deploymentId = environment.DEPLOYMENT_ID || '';
+    this.eventDetectionDeploymentId = environment.EVT_DETECT_DEPLOYMENT_ID || '';
 
     this.quixService.eventDataReceived.subscribe((event: EventData) => {
       this.dataService.openDialog(event)
