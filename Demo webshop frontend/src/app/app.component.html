@@ -60,7 +60,7 @@
       <div class="mb-3">
         <h4 class="mb-2 mat-subtitle-2">Select an identity</h4>
         <p class="text-body mb-3">
-          Choose an Age and Gender to match the mock demographic profile. This will be included in the clickstream analysis.
+          Choose an age and gender that matches one of the target demographic profiles. This data will be used to detect relevant clickstream events.
         </p>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Age</mat-label>
@@ -79,40 +79,39 @@
           </mat-select>
         </mat-form-field>
         <p class="text-body mb-3">
-          Your unique Visitor Id for this session is <b>{{user.userId}}</b>
+          Your unique Visitor ID for this session is <b>{{user.userId}}</b>
         </p>
       </div>
 
       <div class="mb-5">
         <h4 class="mb-2 mat-subtitle-2">See if you can trigger a special offer</h4>
         <p class="text-body mb-3">
-          Depending on your selected demographic profile and your click behavior, you can trigger a special offer popup.
+          Depending on your chosen demographic data and your click behavior, you can trigger a special offer popup.
         </p>
       </div>
       <div>
-        <h4 class="mb-2 mat-subtitle-2">How the special offer triggers work</h4>
+        <p><strong>How the special offer triggers work</strong></p>
         <div class="text-body">
           <p>In the back end, the
             <a target="_blank"
               [href]="'https://portal.platform.quix.ai/pipeline/deployments/' + eventDetectionDeploymentId + '?workspace=' + workspaceId + '&token=' + ungatedToken">
-              clickstream analysis service
+              clickstream event detection service
             </a>
             looks for the following criteria:</p>
           <p>If, in the last 5 minutes, a <i>female between 25-35 or a male between 36 and 45</i>:</p>
           <ol>
             <li>views any item in the <b>clothing</b> category then…</li>
             <li>views any item in the <b>shoes</b> category then…</li>
-            <li>views a different item in the <b>clothing</b> category then:</li>
+            <li>views a different item in the <b>clothing</b> category then...</li>
+            <li><b>show a special offer</b> for that demographic.</li>
           </ol>
-          <ul>
-            <li>Show a special offer for that demographic</li>
-          </ul>
           <p>Try following this click pattern and see if you can trigger the special offer.</p>
-          <p>
-            To experiment with your own behavior detection patterns,
-            <b>fork this project template</b> and update Python code for the clickstream analysis.
-          </p>
-          <p>The same code can work on a massive scale with millions of users.</p>
+          <ul>
+            <li>To debug the state tracking for your Visitor ID, check out the "State machine log" in the accompanying <b><a target="_blank" [href]="'https://streamlit-dashboard-' + workspaceId + '.deployments.quix.ai/'">real-time dashboard</a></b>. <p>This dashboard demonstrates real-time processing on a larger retail data set but also includes logging for your individual Vistor Id.</p>
+              </li>
+            <li>To experiment with your own behavior detection patterns,
+              <b><a href="https://github.com/quixio/template-clickstream/fork" target="_blank">fork this project template</a></b> and update the <a href="https://github.com/quixio/template-clickstream/blob/develop/Clickstream%20event%20detection/behaviour_detector.py"  target="_blank">Python code</a> for the clickstream event detection service.</li>
+          </ul>
         </div>
       </div>
     </div>
