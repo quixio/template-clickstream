@@ -217,7 +217,7 @@ deployments:
   - name: Demo real-time dashboard
     application: Demo real-time dashboard
     deploymentType: Service
-    version: todo
+    version: 7108186b1396092c06da5d63589731393161bf67
     resources:
       cpu: 200
       memory: 500
