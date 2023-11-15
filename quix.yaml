@@ -143,10 +143,10 @@ deployments:
         description: External Redis username
         required: false
         secretKey: redis_username
-  - name: Aggregation Service
-    application: Aggregation Service
+  - name: Data aggregation
+    application: Data aggregation
     deploymentType: Service
-    version: 49a275661e7e16c06c9aea559843489073174aca
+    version: updateme
     resources:
       cpu: 200
       memory: 500

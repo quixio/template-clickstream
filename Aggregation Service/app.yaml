@@ -1,4 +1,4 @@
-name: Aggregation Service
+name: Data aggregation
 language: python
 variables:
   - name: input

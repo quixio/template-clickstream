@@ -1,4 +1,4 @@
-# Aggregation service
+# Data aggregation
 
 This service reads data from the 'enrich data' topic, performs aggregations, and writes the results to Redis. These aggregations are then consumed by a Streamlit dashboard for visualization and analysis.
 
