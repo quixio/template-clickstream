@@ -69,7 +69,7 @@ deployments:
   - name: Lookup data ingestion job
     application: Lookup data ingestion
     deploymentType: Job
-    version: 9669d2fcef55fa0c2359f4af44892b11a55ed83b
+    version: 9e2b998d42bb5228e62b5f75958c119270127120
     resources:
       cpu: 200
       memory: 500
