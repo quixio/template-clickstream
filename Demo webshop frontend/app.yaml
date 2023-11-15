@@ -1,0 +1,20 @@
+name: Demo webshop frontend
+language: nodejs
+variables:
+  - name: bearer_token
+    inputType: FreeText
+    description: ''
+    defaultValue: ''
+    required: false
+  - name: offers_topic
+    inputType: InputTopic
+    description: ''
+    defaultValue: special-offers
+    required: false
+  - name: click_topic
+    inputType: OutputTopic
+    description: ''
+    defaultValue: click-data
+    required: false
+dockerfile: src/build/dockerfile
+defaultFile: src/app/services/quix.service.ts

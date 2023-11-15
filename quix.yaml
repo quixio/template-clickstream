@@ -6,10 +6,10 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Stream data from CSV
-    application: Stream data from CSV
+  - name: Clickstream producer
+    application: Clickstream producer
     deploymentType: Service
-    version: 20189b29c0177b97eb8a97073a15712834d515d1
+    version: d499bbcadc9dbe0c9fad79251ef531642224b208
     resources:
       cpu: 200
       memory: 1000
@@ -26,10 +26,10 @@ deployments:
         description: Set to 1 to keep original timings, if set to false, send each click event every 0.2 seconds
         required: false
         value: 1
-  - name: Enrich With User And Product Data
-    application: Enrich With User And Product Data
+  - name: Data enrichment
+    application: Data enrichment
     deploymentType: Service
-    version: 430917d94e671e40577f1f75e010222cebce88fc
+    version: 6bca61e2db3f64df55ef710a34e360351c491ae4
     resources:
       cpu: 200
       memory: 1000
@@ -66,10 +66,10 @@ deployments:
         description: External Redis username
         required: false
         secretKey: redis_username
-  - name: Load Products and Users
-    application: Load Products and Users
+  - name: Lookup data ingestion job
+    application: Lookup data ingestion
     deploymentType: Job
-    version: 9669d2fcef55fa0c2359f4af44892b11a55ed83b
+    version: 9e2b998d42bb5228e62b5f75958c119270127120
     resources:
       cpu: 200
       memory: 500
@@ -95,10 +95,10 @@ deployments:
         description: External Redis username
         required: false
         secretKey: redis_username
-  - name: Detect User Behaviour
-    application: Detect User Behaviour
+  - name: Clickstream event detection
+    application: Clickstream event detection
     deploymentType: Service
-    version: 47294a76924f917159b8adefaff00974521ea81c
+    version: f75b3975073a1077e63cd85fdda039b8d3290de8
     resources:
       cpu: 200
       memory: 500
@@ -143,10 +143,10 @@ deployments:
         description: External Redis username
         required: false
         secretKey: redis_username
-  - name: Aggregation Service
-    application: Aggregation Service
+  - name: Data aggregation
+    application: Data aggregation
     deploymentType: Service
-    version: 49a275661e7e16c06c9aea559843489073174aca
+    version: 133312c35a02cfb61d5ea0ba2428ddbcad1efad1
     resources:
       cpu: 200
       memory: 500
@@ -181,29 +181,24 @@ deployments:
         description: External Redis username
         required: false
         secretKey: redis_username
-  - name: Template UI
-    application: WebShop
+  - name: Demo webshop frontend
+    application: Demo webshop frontend
     deploymentType: Service
-    version: ac14aaa3f97e2a3c637112293e223cd778d0005a
+    version: fbca3c1c9148b03f35f8a29a453392864d588d3d
     resources:
       cpu: 200
       memory: 500
       replicas: 1
     publicAccess:
       enabled: true
-      urlPrefix: webshop-88c72cf
+      urlPrefix: demo-webshop-frontend
     desiredStatus: Running
     variables:
       - name: bearer_token
-        inputType: FreeText
-        description: ''
-        required: false
-        value: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1qVTBRVE01TmtJNVJqSTNOVEpFUlVSRFF6WXdRVFF4TjBSRk56SkNNekpFUWpBNFFqazBSUSJ9.eyJodHRwczovL3F1aXguYWkvb3JnX2lkIjoiZGVtbyIsImh0dHBzOi8vcXVpeC5haS9yb2xlcyI6IiIsImlzcyI6Imh0dHBzOi8vYXV0aC5xdWl4LmFpLyIsInN1YiI6ImF1dGgwfDczOWMwODljLThjNzgtNDBmZi05OTQwLWFjNDVmZDlkMDUwYiIsImF1ZCI6WyJxdWl4IiwiaHR0cHM6Ly9sb2dpY2FsLXBsYXRmb3JtLmV1LmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2OTg2ODU1MjMsImV4cCI6MTcwMTI3NzUyMywiYXpwIjoiMHptV2ZKZGtpdUdQaUpXeXBTQ0E4ckthVnZmUERLTEkiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOltdfQ.2QpJpwGyD005vzSrXLGrwkycRKY-fRu7Q8M86zs6TQfK3WrC_76hvywPKhwS3xeyxmL7voW35xRhovtOs2wcJH0iZd9wLwY0iMyQRwzkZ6eQ_3HHYmN2Y1SoivCKMliJJiO4PVvcUAyUCstxXxVvObDhZhroac_6vy98AL4_JU7xQexto4ZuhaS6lDgUTMwlvW-aKf5vrdp4wehrLeH_k3lfxs3myGo7fTDhiL3sxaYhCTBqP8oaroeK9l53dJB46GmnN1-Ky8r0SlM9JW6G7ODU-v-VeEOPGo35IGp4QoXVMDc5AnnoQkBeUbPhJZLOnBZVB6ljzQQycXSnxxQqhw
-      - name: Deployment__Id
-        inputType: FreeText
-        description: ''
-        required: false
-        value: f3d41425-a0ff-4d45-bded-2fcfa861b5c7
+        inputType: Secret
+        description: Quix bearer token 
+        required: true
+        secretKey: bearerToken
       - name: offers_topic
         inputType: InputTopic
         description: ''
@@ -214,10 +209,10 @@ deployments:
         description: ''
         required: false
         value: click-data
-  - name: Streamlit
-    application: Streamlit
+  - name: Demo real-time dashboard
+    application: Demo real-time dashboard
     deploymentType: Service
-    version: b5236fef65c92f726c06f0e8d5a59e83f84d361a
+    version: 7108186b1396092c06da5d63589731393161bf67
     resources:
       cpu: 200
       memory: 500
