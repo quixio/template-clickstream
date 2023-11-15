@@ -198,7 +198,7 @@ deployments:
         inputType: Secret
         description: Quix bearer token 
         required: true
-        secretKey: redis_username
+        secretKey: bearerToken
       - name: Deployment__Id
         inputType: FreeText
         description: ''
