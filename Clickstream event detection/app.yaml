@@ -1,4 +1,4 @@
-name: Detect User Behaviour
+name: Clickstream event detection
 language: python
 variables:
   - name: input

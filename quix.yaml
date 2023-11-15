@@ -95,10 +95,10 @@ deployments:
         description: External Redis username
         required: false
         secretKey: redis_username
-  - name: Detect User Behaviour
-    application: Detect User Behaviour
+  - name: Clickstream event detection
+    application: Clickstream event detection
     deploymentType: Service
-    version: 47294a76924f917159b8adefaff00974521ea81c
+    version: updateme
     resources:
       cpu: 200
       memory: 500
