@@ -146,7 +146,7 @@ deployments:
   - name: Data aggregation
     application: Data aggregation
     deploymentType: Service
-    version: a3833dbea16ac29fb9e1052a217997e267d0e417
+    version: updateme
     resources:
       cpu: 200
       memory: 500
