@@ -26,10 +26,10 @@ deployments:
         description: Set to 1 to keep original timings, if set to false, send each click event every 0.2 seconds
         required: false
         value: 1
-  - name: Enrich With User And Product Data
-    application: Enrich With User And Product Data
+  - name: Data enrichment
+    application: Data enrichment
     deploymentType: Service
-    version: 430917d94e671e40577f1f75e010222cebce88fc
+    version: updateme
     resources:
       cpu: 200
       memory: 1000

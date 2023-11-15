@@ -1,4 +1,4 @@
-name: Enrich With User And Product Data
+name: Data enrichment
 language: python
 variables:
   - name: input
