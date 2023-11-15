@@ -66,8 +66,8 @@ deployments:
         description: External Redis username
         required: false
         secretKey: redis_username
-  - name: Load Products and Users
-    application: Load Products and Users
+  - name: Lookup data ingestion job
+    application: Lookup data ingestion
     deploymentType: Job
     version: 9669d2fcef55fa0c2359f4af44892b11a55ed83b
     resources:

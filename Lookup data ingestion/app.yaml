@@ -1,4 +1,4 @@
-name: Load Products and Users
+name: Lookup data ingestion
 language: python
 variables:
   - name: redis_host
