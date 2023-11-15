@@ -1,0 +1,26 @@
+name: Demo real-time dashboard
+language: python
+variables:
+  - name: redis_host
+    inputType: Secret
+    description: ''
+    defaultValue: redis_host
+    required: false
+  - name: redis_port
+    inputType: Secret
+    description: ''
+    defaultValue: redis_port
+    required: false
+  - name: redis_password
+    inputType: Secret
+    description: ''
+    defaultValue: redis_password
+    required: false
+  - name: redis_username
+    inputType: Secret
+    description: External Redis username
+    defaultValue: redis_username
+    required: false
+dockerfile: build/dockerfile
+runEntryPoint: main.py
+defaultFile: main.py

@@ -1,0 +1,268 @@
+# Quix Project Descriptor
+# This file describes the data pipeline and configuration of resources of a Quix Project.
+
+metadata:
+  version: 1.0
+
+# This section describes the Deployments of the data pipeline
+deployments:
+  - name: Clickstream producer
+    application: Clickstream producer
+    deploymentType: Service
+    version: d499bbcadc9dbe0c9fad79251ef531642224b208
+    resources:
+      cpu: 200
+      memory: 1000
+      replicas: 1
+    desiredStatus: Stopped
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: This is the output topic for realtime CSV data
+        required: true
+        value: click-data
+      - name: keep_timing
+        inputType: FreeText
+        description: Set to 1 to keep original timings, if set to false, send each click event every 0.2 seconds
+        required: false
+        value: 1
+  - name: Data enrichment
+    application: Data enrichment
+    deploymentType: Service
+    version: 6bca61e2db3f64df55ef710a34e360351c491ae4
+    resources:
+      cpu: 200
+      memory: 1000
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic where we will get user interactions
+        required: true
+        value: click-data
+      - name: output
+        inputType: OutputTopic
+        description: This is the output topic, where we will send the enriched data
+        required: true
+        value: enriched-click-data
+      - name: redis_host
+        inputType: Secret
+        description: External Redis host
+        required: true
+        secretKey: redis_host
+      - name: redis_port
+        inputType: Secret
+        description: External Redis port
+        required: true
+        secretKey: redis_port
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: false
+        secretKey: redis_username
+  - name: Lookup data ingestion job
+    application: Lookup data ingestion
+    deploymentType: Job
+    version: 9e2b998d42bb5228e62b5f75958c119270127120
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    variables:
+      - name: redis_host
+        inputType: Secret
+        description: External Redis host
+        required: true
+        secretKey: redis_host
+      - name: redis_port
+        inputType: Secret
+        description: External Redis port
+        required: true
+        secretKey: redis_port
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: false
+        secretKey: redis_username
+  - name: Clickstream event detection
+    application: Clickstream event detection
+    deploymentType: Service
+    version: f75b3975073a1077e63cd85fdda039b8d3290de8
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    state:
+      enabled: true
+      size: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic for enriched click data
+        required: true
+        value: enriched-click-data
+      - name: window_minutes
+        inputType: FreeText
+        description: Minutes for the rolling window to detect user behaviour
+        required: false
+        value: 30
+      - name: output
+        inputType: OutputTopic
+        description: Topic to write offers
+        required: true
+        value: special-offers
+      - name: redis_host
+        inputType: Secret
+        description: External Redis host
+        required: true
+        secretKey: redis_host
+      - name: redis_port
+        inputType: Secret
+        description: External Redis port
+        required: true
+        secretKey: redis_port
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: false
+        secretKey: redis_username
+  - name: Data aggregation
+    application: Data aggregation
+    deploymentType: Service
+    version: 133312c35a02cfb61d5ea0ba2428ddbcad1efad1
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    state:
+      enabled: true
+      size: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic to read data from
+        required: true
+        value: enriched-click-data
+      - name: redis_host
+        inputType: Secret
+        description: External Redis host
+        required: true
+        secretKey: redis_host
+      - name: redis_port
+        inputType: Secret
+        description: External Redis port
+        required: true
+        secretKey: redis_port
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: false
+        secretKey: redis_username
+  - name: Demo webshop frontend
+    application: Demo webshop frontend
+    deploymentType: Service
+    version: fbca3c1c9148b03f35f8a29a453392864d588d3d
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: demo-webshop-frontend
+    desiredStatus: Running
+    variables:
+      - name: bearer_token
+        inputType: Secret
+        description: Quix bearer token 
+        required: true
+        secretKey: bearerToken
+      - name: offers_topic
+        inputType: InputTopic
+        description: ''
+        required: false
+        value: special-offers
+      - name: click_topic
+        inputType: InputTopic
+        description: ''
+        required: false
+        value: click-data
+  - name: Demo real-time dashboard
+    application: Demo real-time dashboard
+    deploymentType: Service
+    version: 7108186b1396092c06da5d63589731393161bf67
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: streamlit-dashboard
+    desiredStatus: Running
+    variables:
+      - name: redis_host
+        inputType: Secret
+        description: External Redis host
+        required: true
+        secretKey: redis_host
+      - name: redis_port
+        inputType: Secret
+        description: External Redis port
+        required: true
+        secretKey: redis_port
+      - name: redis_password
+        inputType: Secret
+        description: External Redis password
+        required: true
+        secretKey: redis_password
+      - name: redis_username
+        inputType: Secret
+        description: External Redis username
+        required: false
+        secretKey: redis_username
+
+# This section describes the Topics of the data pipeline
+topics:
+  - name: click-data
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
+  - name: enriched-click-data
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
+  - name: special-offers
+    persisted: false
+    configuration:
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
