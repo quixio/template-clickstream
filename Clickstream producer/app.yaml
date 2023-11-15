@@ -1,4 +1,4 @@
-name: Stream data from CSV
+name: Clickstream producer
 language: python
 variables:
   - name: output
