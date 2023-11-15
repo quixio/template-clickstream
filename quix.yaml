@@ -98,7 +98,7 @@ deployments:
   - name: Clickstream event detection
     application: Clickstream event detection
     deploymentType: Service
-    version: updateme
+    version: f75b3975073a1077e63cd85fdda039b8d3290de8
     resources:
       cpu: 200
       memory: 500
