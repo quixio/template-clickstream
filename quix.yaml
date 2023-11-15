@@ -181,17 +181,17 @@ deployments:
         description: External Redis username
         required: false
         secretKey: redis_username
-  - name: Template UI
-    application: WebShop
+  - name: Demo webshop frontend
+    application: Demo webshop frontend
     deploymentType: Service
-    version: ac14aaa3f97e2a3c637112293e223cd778d0005a
+    version: todo
     resources:
       cpu: 200
       memory: 500
       replicas: 1
     publicAccess:
       enabled: true
-      urlPrefix: webshop-88c72cf
+      urlPrefix: demo-webshop-frontend
     desiredStatus: Running
     variables:
       - name: bearer_token

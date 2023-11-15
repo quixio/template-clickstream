@@ -1,4 +1,4 @@
-name: Template UI
+name: Demo webshop frontend
 language: nodejs
 variables:
   - name: bearer_token
