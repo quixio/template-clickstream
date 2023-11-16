@@ -252,13 +252,6 @@ topics:
       replicationFactor: 3
       retentionInMinutes: 60
       retentionInBytes: 52428800
-  - name: click-data
-    persisted: false
-    configuration:
-      partitions: 1
-      replicationFactor: 3
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
   - name: special-offers
     persisted: false
     configuration:
