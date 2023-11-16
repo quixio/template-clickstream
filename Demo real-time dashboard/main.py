@@ -169,17 +169,13 @@ while True:
         popularity = StringIO(r.get("device_type_popularity"))
         chart_df = pd.read_json(popularity)
 
-        if chart_df.empty:
-            st.markdown("N/A")
-            continue
-
         # Create 2 columns
         c1, c2 = st.columns([1, 2])
 
         # Calculate the sum of all devices
         total_devices = chart_df['Total'].sum()
         c1.markdown("Total devices")
-        c1.markdown(f"# {total_devices}")
+        c1.markdown(f"# {int(total_devices)}")
 
         # Calculate the percentage of each device type
         chart_df['Percentage'] = (chart_df['Total'] / total_devices) * 100
@@ -208,15 +204,11 @@ while True:
         data = StringIO(r.get("category_popularity"))
         df = pd.read_json(data)
 
-        if df.empty:
-            st.markdown("N/A")
-            continue
-
         # Draw a bar chart with distinct colors for each bar. Hide X axis title so we have more space for the chart
         fig = px.bar(df, x="category", y="count", height=default_height, color="category")
-        #fig.update_xaxes(title_text='Category')
         fig.update_layout(xaxis_title=None, margin=dict(r=5, l=5, t=5, b=5))
-        fig.update_yaxes(title_text='Visits', range=[0, max(1, max(df['count']))])
+        max_count = 1 if df.empty else max(df['count'])
+        fig.update_yaxes(title_text='Visits', range=[0, max_count])
         st.plotly_chart(fig, use_container_width=True)
 
     with placeholder_col31.container():
@@ -231,8 +223,6 @@ while True:
     # Display the raw dataframe data
     with placeholder_col32.container():
         data = StringIO(r.get("raw_data"))
-        if data is None:
-            continue
         real_time_df_copy = pd.read_json(data)
         real_time_df_copy = real_time_df_copy.drop(columns=['original_timestamp'])
         st.dataframe(real_time_df_copy, hide_index=True, height=default_height, use_container_width=True)
