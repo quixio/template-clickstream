@@ -245,7 +245,7 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: enriched-click-data
+  - name: click-data
     persisted: false
     configuration:
       partitions: {{click_data_topic_partitions}}
