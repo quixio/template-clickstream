@@ -13,17 +13,17 @@ st.set_page_config(
     page_icon="✅",
     layout="wide",
     menu_items={
-        'About': "This dashboard shows real-time user stats the Clickstream template. More info at https://quix.io"
+        'About': "This dashboard shows real-time user stats the Clickstream Analysis template. More info at https://quix.io/templates"
     }
 )
 
-st.header("Real-Time User Stats Dashboard", divider="blue")
+st.header("Real-Time User Analytics Dashboard", divider="blue")
 st.markdown(
 """This dashboard vizualizes real-time agreggations and statistics from a demo clickstream. The clickstream data is being streamed from a sample log file for an online retailer and processed in a Pipeline hosted in Quix—a cloud-native solution for building event streaming applications.
 
-* To explore the back-end services that power this Dashboard, check out this Quix pipeline. (link: https://portal.platform.quix.ai/pipeline?workspace=demo-clickstream-aggregationservice )
+* To explore the back-end services that power this Dashboard, check out the [Pipeline view](https://portal.platform.quix.ai/pipeline?workspace=demo-clickstream-prod) in Quix.
 
-* To see how real-time clickstream analysis can be used to trigger events in a front end, see our complimentary Clickstream Event Detection demo.(link: https://template-clickstream-front-end.vercel.app/)
+* To see how real-time clickstream analysis can be used to trigger events in a front end, see our accompanying [Clickstream Event Detection demo](https://template-clickstream-front-end.vercel.app/)
 """)
 
 redis_host = ""
@@ -84,7 +84,7 @@ with st.container():
 
     with col13:
         # Header of the second column
-        st.header("Right now")
+        st.header("Visiting Right now")
         # A placeholder for the second chart to update it later with data
         placeholder_col13 = st.empty()
 
@@ -98,13 +98,13 @@ with st.container():
 
     with col22:
         # Header of the second column
-        st.header("Latest Visitor Details")
+        st.header("Latest visitor details")
         # A placeholder for the second chart to update it later with data
         placeholder_col22 = st.empty()
 
     with col23:
         # Header of the second column
-        st.header("Category popularity in the Last Hour")
+        st.header("Category popularity in the last hour")
         # A placeholder for the second chart to update it later with data
         placeholder_col23 = st.empty()
 
@@ -118,7 +118,7 @@ with st.container():
 
     with col32:
         # Header of the second column
-        st.header("Raw Data View")
+        st.header("Raw data view")
         # A placeholder for the second chart to update it later with data
         placeholder_col32 = st.empty()
 

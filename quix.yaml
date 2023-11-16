@@ -184,7 +184,7 @@ deployments:
   - name: Demo webshop frontend
     application: Demo webshop frontend
     deploymentType: Service
-    version: fbca3c1c9148b03f35f8a29a453392864d588d3d
+    version: 95eb349d211344213923ac1835ff873d5ecab402
     resources:
       cpu: 200
       memory: 500
@@ -248,21 +248,21 @@ topics:
   - name: enriched-click-data
     persisted: false
     configuration:
-      partitions: 2
-      replicationFactor: 3
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
+      partitions: {{click_data_topic_partitions}}
+      replicationFactor: {{click_data_topic_replication_factor}}
+      retentionInMinutes: {{click_data_topic_retention_minutes}}
+      retentionInBytes: {{click_data_topic_retention_bytes}}
+  - name: enriched-click-data
+    persisted: false
+    configuration:
+      partitions: {{enriched_click_data_topic_partitions}}
+      replicationFactor: {{enriched_click_data_topic_replication_factor}}
+      retentionInMinutes: {{enriched_click_data_topic_retention_minutes}}
+      retentionInBytes: {{enriched_click_data_topic_retention_bytes}}
   - name: special-offers
     persisted: false
     configuration:
-      partitions: 2
-      replicationFactor: 3
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
-  - name: click-data
-    persisted: false
-    configuration:
-      partitions: 1
-      replicationFactor: 3
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
+      partitions: {{special_offers_topic_partitions}}
+      replicationFactor: {{special_offers_topic_replication_factor}}
+      retentionInMinutes: {{special_offers_topic_retention_minutes}}
+      retentionInBytes: {{special_offers_topic_retention_bytes}}
