@@ -34,7 +34,7 @@ deployments:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -196,7 +196,7 @@ deployments:
     variables:
       - name: bearer_token
         inputType: Secret
-        description: Quix bearer token 
+        description: Quix bearer token
         required: true
         secretKey: bearerToken
       - name: offers_topic
