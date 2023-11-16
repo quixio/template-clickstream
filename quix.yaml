@@ -249,20 +249,20 @@ topics:
     persisted: false
     configuration:
       partitions: 2
-      replicationFactor: 3
+      replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
   - name: enriched-click-data
     persisted: false
     configuration:
       partitions: 2
-      replicationFactor: 3
+      replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
   - name: special-offers
     persisted: false
     configuration:
       partitions: 2
-      replicationFactor: 3
+      replicationFactor: 2
       retentionInMinutes: 60
       retentionInBytes: 52428800
