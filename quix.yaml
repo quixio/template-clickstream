@@ -34,7 +34,7 @@ deployments:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -106,7 +106,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -154,7 +154,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
@@ -245,7 +245,7 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: click-data
+  - name: enriched-click-data
     persisted: false
     configuration:
       partitions: {{click_data_topic_partitions}}
