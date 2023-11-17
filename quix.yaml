@@ -184,7 +184,7 @@ deployments:
   - name: Demo webshop frontend
     application: Demo webshop frontend
     deploymentType: Service
-    version: 95eb349d211344213923ac1835ff873d5ecab402
+    version: b8d53eeafdf44907d9f43b30fdb12eae72bd6e63
     resources:
       cpu: 200
       memory: 500
@@ -212,7 +212,7 @@ deployments:
   - name: Demo real-time dashboard
     application: Demo real-time dashboard
     deploymentType: Service
-    version: a779792253ca04fe9470ba6d515e069524312387
+    version: b8d53eeafdf44907d9f43b30fdb12eae72bd6e63
     resources:
       cpu: 200
       memory: 500
