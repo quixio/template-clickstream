@@ -219,7 +219,7 @@ deployments:
       replicas: 1
     publicAccess:
       enabled: true
-      urlPrefix: streamlit-dashboard
+      urlPrefix: d
     desiredStatus: Running
     variables:
       - name: redis_host
