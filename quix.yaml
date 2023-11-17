@@ -14,7 +14,7 @@ deployments:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: output
         inputType: OutputTopic
@@ -34,7 +34,7 @@ deployments:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -106,7 +106,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -154,7 +154,7 @@ deployments:
     state:
       enabled: true
       size: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -184,7 +184,7 @@ deployments:
   - name: Demo webshop frontend
     application: Demo webshop frontend
     deploymentType: Service
-    version: 95eb349d211344213923ac1835ff873d5ecab402
+    version: 97d0acf7521181778c4300b953b3842d5ab5b83b
     resources:
       cpu: 200
       memory: 500
@@ -212,7 +212,7 @@ deployments:
   - name: Demo real-time dashboard
     application: Demo real-time dashboard
     deploymentType: Service
-    version: 7108186b1396092c06da5d63589731393161bf67
+    version: 97d0acf7521181778c4300b953b3842d5ab5b83b
     resources:
       cpu: 200
       memory: 500
