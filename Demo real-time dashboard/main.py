@@ -21,7 +21,7 @@ st.header("Real-Time User Analytics Dashboard", divider="blue")
 st.markdown(
 """This dashboard vizualizes real-time agreggations and statistics from a demo clickstream. The clickstream data is being streamed from a sample log file for an online retailer and processed in a Pipeline hosted in Quix—a cloud-native solution for building event streaming applications.
 
-* To explore the back-end services that power this Dashboard, check out the [Pipeline view](https://portal.platform.quix.io/pipeline?workspace=demo-clickstream-prod) in Quix.
+* To explore the back-end services that power this Dashboard, check out the [Pipeline view](https://portal.platform.quix.io/pipeline?workspace=demo-clickstream-prod&token=pat-b88b3caf912641a1b0fa8b47b262868b) in Quix.
 
 * To see how real-time clickstream analysis can be used to trigger events in a front end, see our accompanying [Clickstream Event Detection demo](https://template-clickstream-front-end.vercel.app/)
 """)
