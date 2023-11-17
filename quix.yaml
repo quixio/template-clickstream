@@ -191,7 +191,7 @@ deployments:
       replicas: 1
     publicAccess:
       enabled: true
-      urlPrefix: demo-webshop-frontend
+      urlPrefix: demo-webshop
     desiredStatus: Running
     variables:
       - name: bearer_token
