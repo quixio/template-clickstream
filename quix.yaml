@@ -248,21 +248,21 @@ topics:
   - name: click-data
     persisted: false
     configuration:
-      partitions: {{click_data_topic_partitions}}
-      replicationFactor: {{click_data_topic_replication_factor}}
-      retentionInMinutes: {{click_data_topic_retention_minutes}}
-      retentionInBytes: {{click_data_topic_retention_bytes}}
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
   - name: enriched-click-data
     persisted: false
     configuration:
-      partitions: {{enriched_click_data_topic_partitions}}
-      replicationFactor: {{enriched_click_data_topic_replication_factor}}
-      retentionInMinutes: {{enriched_click_data_topic_retention_minutes}}
-      retentionInBytes: {{enriched_click_data_topic_retention_bytes}}
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
   - name: special-offers
     persisted: false
     configuration:
-      partitions: {{special_offers_topic_partitions}}
-      replicationFactor: {{special_offers_topic_replication_factor}}
-      retentionInMinutes: {{special_offers_topic_retention_minutes}}
-      retentionInBytes: {{special_offers_topic_retention_bytes}}
+      partitions: 2
+      replicationFactor: 2
+      retentionInMinutes: 60
+      retentionInBytes: 52428800
