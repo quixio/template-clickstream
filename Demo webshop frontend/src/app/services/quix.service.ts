@@ -56,7 +56,7 @@ export class QuixService {
   eventDataReceived$ = this.eventDataReceived.asObservable();
 
   private domainRegex = new RegExp(
-    "^https:\\/\\/portal-api\\.([a-zA-Z]+)\\.quix\\.ai"
+    "^https:\\/\\/portal-api\\.([a-zA-Z]+)\\.quix\\.io"
   );
 
   constructor(private httpClient: HttpClient) {
@@ -101,10 +101,10 @@ export class QuixService {
       accessTokenFactory: () => this.token,
     };
 
-    this.readerHubConnection = this.createHubConnection(`https://reader-${workspaceId}.${this.subdomain}.quix.ai/hub`, options, true);
+    this.readerHubConnection = this.createHubConnection(`https://reader-${workspaceId}.${this.subdomain}.quix.io/hub`, options, true);
     this.startConnection(true, this.readerReconnectAttempts);
 
-    this.writerHubConnection = this.createHubConnection(`https://writer-${workspaceId}.${this.subdomain}.quix.ai/hub`, options, false);
+    this.writerHubConnection = this.createHubConnection(`https://writer-${workspaceId}.${this.subdomain}.quix.io/hub`, options, false);
     this.startConnection(false, this.writerReconnectAttempts);
   }
 
@@ -275,7 +275,7 @@ export class QuixService {
    */
   public retrievePersistedParameterData(payload: any): Observable<ParameterData> {
     return this.httpClient.post<ParameterData>(
-      `https://telemetry-query-${this.workspaceId}.${this.subdomain}.quix.ai/parameters/data`,
+      `https://telemetry-query-${this.workspaceId}.${this.subdomain}.quix.io/parameters/data`,
       payload,
       {
         headers: { 'Authorization': 'bearer ' + this.token }
