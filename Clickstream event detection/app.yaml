@@ -14,7 +14,7 @@ variables:
   - name: output
     inputType: OutputTopic
     description: Topic to write offers
-    defaultValue: ''
+    defaultValue: special-offers
     required: true
   - name: redis_host
     inputType: Secret
