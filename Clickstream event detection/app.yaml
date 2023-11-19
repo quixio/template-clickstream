@@ -4,7 +4,7 @@ variables:
   - name: input
     inputType: InputTopic
     description: This is the input topic for enriched click data
-    defaultValue: ''
+    defaultValue: enriched-click-data
     required: true
   - name: window_minutes
     inputType: FreeText
