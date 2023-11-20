@@ -245,7 +245,7 @@ deployments:
   - name: Slack Alerts
     application: Slack Alerts
     deploymentType: Service
-    version: 75f091d29927d77f2e51fd8391143c7f3dc232b7
+    version: 6f1f1f6725ffa8ed7664da8dbb5b8c3262e8842d
     resources:
       cpu: 200
       memory: 200
