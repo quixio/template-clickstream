@@ -18,7 +18,7 @@ class QuixFunction:
         print(str(df))
 
         # send your slack message
-        slack_message = {"text": str(df)}
+        slack_message = {"message": str(df)}
         requests.post(self.webhook_url, json = slack_message)
 
     # Callback triggered for each new event
