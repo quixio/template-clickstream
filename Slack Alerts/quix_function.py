@@ -15,16 +15,18 @@ class QuixFunction:
     # Callback triggered for each new parameter data
     def on_dataframe_handler(self, stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
 
-        print(str(df))
+        #print(str(df))
 
         # send your slack message
         slack_message = {"message": str(df)}
-        requests.post(self.webhook_url, json = slack_message)
+        res = requests.post(self.webhook_url, json = slack_message)
+        print(res.ok)
 
     # Callback triggered for each new event
     def on_event_data_handler(self, stream_consumer: qx.StreamConsumer, data: qx.EventData):
         print(data)
 
         # send your slack message
-        slack_message = {"text": str(data)}
-        requests.post(self.webhook_url, json = slack_message)
+        slack_message = {"message": str(data)}
+        res = requests.post(self.webhook_url, json = slack_message)
+        print(res.ok)
