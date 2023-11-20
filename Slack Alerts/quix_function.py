@@ -20,7 +20,8 @@ class QuixFunction:
         # send your slack message
         slack_message = {"message": str(df)}
         res = requests.post(self.webhook_url, json = slack_message)
-        print(res.ok)
+        if not res.ok:
+            print(res.status_code, res.text)
 
     # Callback triggered for each new event
     def on_event_data_handler(self, stream_consumer: qx.StreamConsumer, data: qx.EventData):
@@ -29,4 +30,6 @@ class QuixFunction:
         # send your slack message
         slack_message = {"message": str(data)}
         res = requests.post(self.webhook_url, json = slack_message)
-        print(res.ok)
+        if not res.ok:
+            print(res.status_code, res.text)
+
