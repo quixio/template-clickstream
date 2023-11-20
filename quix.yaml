@@ -242,6 +242,26 @@ deployments:
         description: External Redis username
         required: false
         secretKey: redis_username
+  - name: Slack Alerts
+    application: Slack Alerts
+    deploymentType: Service
+    version: baa9060edc0e82c49c167fa3c64b5e0a51b5224f
+    resources:
+      cpu: 200
+      memory: 200
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: true
+        value: enriched-click-data
+      - name: webhook_url
+        inputType: FreeText
+        description: The webhook url to send notifications to
+        required: true
+        value: https://slack.com/shortcuts/Ft066WV650P3/e45e36ef5ab730f9b6f9c69e747e0712
 
 # This section describes the Topics of the data pipeline
 topics:
