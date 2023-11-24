@@ -36,6 +36,7 @@ Some of the technologies used by this template project are listed here.
 **Backend:** 
 
 * [Redpanda Cloud](https://redpanda.com/redpanda-cloud)
+* [Redis Cloud](https://redis.io/)
 * [Quix Streams](https://github.com/quixio/quix-streams)
 * [pandas](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html)
 
