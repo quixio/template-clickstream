@@ -14,7 +14,7 @@ deployments:
       cpu: 200
       memory: 1000
       replicas: 1
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: output
         inputType: OutputTopic
@@ -285,12 +285,12 @@ deployments:
   - name: Slack Alerts
     application: Slack Alerts
     deploymentType: Service
-    version: 0a21bd17fb173c20af83a3e9f75f18267346837b
+    version: 4d304c3ee4e28ceabe4295d7f3825b1d975fd700
     resources:
       cpu: 200
       memory: 200
       replicas: 1
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
