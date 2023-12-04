@@ -9,7 +9,6 @@ import requests
 
 last_timestamp = None
 last_message_sent = None
-lock = asyncio.Lock()
 
 # Send alerts to this Slack webhook URL
 webhook_url = os.environ.get("webhook_url")
@@ -25,10 +24,9 @@ run = True
 
 
 def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
-    global last_timestamp, lock
+    global last_timestamp
 
-    async with lock:
-        last_timestamp = datetime.now()
+    last_timestamp = datetime.now()
 
     # Here we can inspect the data and send alerts if needed, for example if category is None
     if df["category"].isnull().values.any():
@@ -57,15 +55,14 @@ def send_alert_message(msg: str):
 
 # Check that we have received data in the last 1 hour
 async def check_data():
-    global last_timestamp, lock
+    global last_timestamp
 
     while run:
-        async with lock:
-            if last_timestamp is not None and last_timestamp < datetime.now() - timedelta(
-                    seconds=timeout) and webhook_url is not None:
-                # Send alert message
-                print("No data received in the last hour. Sending alert message.")
-                send_alert_message(f"No data received in the last hour in topic {os.environ['input']}")
+        if last_timestamp is not None and last_timestamp < datetime.now() - timedelta(
+                seconds=timeout) and webhook_url is not None:
+            # Send alert message
+            print("No data received in the last hour. Sending alert message.")
+            send_alert_message(f"No data received in the last hour in topic {os.environ['input']}")
 
         await asyncio.sleep(60)
 
