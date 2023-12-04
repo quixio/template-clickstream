@@ -184,7 +184,7 @@ deployments:
   - name: Demo webshop frontend
     application: Demo webshop frontend
     deploymentType: Service
-    version: 97d0acf7521181778c4300b953b3842d5ab5b83b
+    version: c841490615c1fde773e6d8a4bf2724653effe5f0
     resources:
       cpu: 200
       memory: 500
@@ -242,6 +242,46 @@ deployments:
         description: External Redis username
         required: false
         secretKey: redis_username
+  - name: Snowflake
+    application: Snowflake
+    deploymentType: Service
+    version: 5b43d87692d34c20dff3322abea3ffaeb56030bd
+    resources:
+      cpu: 400
+      memory: 800
+      replicas: 1
+    desiredStatus: Stopped
+    variables:
+      - name: Broker__TopicName
+        inputType: InputTopic
+        description: Name of the input topic to read from
+        required: true
+        value: enriched-click-data
+      - name: Snowflake__Locator
+        inputType: FreeText
+        description: The locator be found under Admin/Accounts or in the URL
+        required: true
+        value: enter_your_details_here
+      - name: Snowflake__Region
+        inputType: FreeText
+        description: Check your snowflake url or readme for details to acquire the region
+        required: true
+        value: enter_your_details_here
+      - name: Snowflake__Database
+        inputType: FreeText
+        description: The name of the database to persist to
+        required: true
+        value: enter_your_details_here
+      - name: Snowflake__User
+        inputType: FreeText
+        description: The username of the user the sink should use to interact with the database
+        required: true
+        value: enter_your_details_here
+      - name: Snowflake__Password
+        inputType: HiddenText
+        description: The password of the user
+        required: true
+        value: enter_your_details_here
 
 # This section describes the Topics of the data pipeline
 topics:
