@@ -2,7 +2,6 @@ import asyncio
 from datetime import datetime, timedelta
 
 import quixstreams as qx
-from quix_function import QuixFunction
 import os
 import pandas as pd
 import requests
@@ -31,7 +30,7 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     # Here we can inspect the data and send alerts if needed, for example if category is None
     if df["category"].isnull().values.any():
         print("No category found in data. Sending alert message.")
-        send_alert_message(f"No category found. Please, check the Data Enrichment service.")
+        send_alert_message("No category found. Please, check the Data Enrichment service.")
 
 
 # Callback called for each incoming stream
