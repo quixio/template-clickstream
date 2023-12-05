@@ -57,6 +57,8 @@ async def check_data():
     global last_timestamp
 
     while run:
+        print("Checking...")
+        print("Last message:", last_timestamp)
         if last_timestamp is not None and last_timestamp < datetime.now() - timedelta(
                 seconds=timeout) and webhook_url is not None:
             # Send alert message
