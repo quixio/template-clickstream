@@ -285,7 +285,7 @@ deployments:
   - name: Slack Alerts
     application: Slack Alerts
     deploymentType: Service
-    version: a13204d38f1d4dc67351316e1e4616eb5b3544ac
+    version: 027a187eb84c8f6f30319288d4e4e71323462a42
     resources:
       cpu: 200
       memory: 200
@@ -297,7 +297,7 @@ deployments:
         description: Name of the input topic to listen to.
         required: true
         value: enriched-click-data
-      - name: webhook_url2
+      - name: webhook_url
         inputType: Secret
         description: The webhook url to send notifications to
         required: true
