@@ -7,9 +7,9 @@ variables:
     defaultValue: enriched-click-data
     required: true
   - name: webhook_url
-    inputType: FreeText
+    inputType: Secret
     description: The webhook url to send notifications to
-    defaultValue: https://slack.com/shortcuts/Ft066WV650P3/e45e36ef5ab730f9b6f9c69e747e0712
+    defaultValue: webhook_url
     required: true
   - name: timeout
     inputType: FreeText
