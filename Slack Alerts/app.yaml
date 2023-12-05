@@ -11,6 +11,11 @@ variables:
     description: The webhook url to send notifications to
     defaultValue: https://slack.com/shortcuts/Ft066WV650P3/e45e36ef5ab730f9b6f9c69e747e0712
     required: true
+  - name: timeout
+    inputType: FreeText
+    description: Get alerts if we have not receive data in this timeout (seconds)
+    defaultValue: 3600
+    required: false
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
