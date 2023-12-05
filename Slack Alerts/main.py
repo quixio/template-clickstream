@@ -90,7 +90,7 @@ async def start_loop():
 
 async def main():
     # Start the main loop
-    await asyncio.gather(start_loop(), check_data())
+    await asyncio.gather(check_data(), start_loop())
 
 
 if __name__ == "__main__":
