@@ -285,7 +285,7 @@ deployments:
   - name: Slack Alerts
     application: Slack Alerts
     deploymentType: Service
-    version: 6f34922ef713520bc749c27a81492afed00c03de
+    version: a13204d38f1d4dc67351316e1e4616eb5b3544ac
     resources:
       cpu: 200
       memory: 200
@@ -297,11 +297,11 @@ deployments:
         description: Name of the input topic to listen to.
         required: true
         value: enriched-click-data
-      - name: webhook_url
-        inputType: FreeText
+      - name: webhook_url2
+        inputType: Secret
         description: The webhook url to send notifications to
         required: true
-        value: https://hooks.slack.com/triggers/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
+        secretKey: webhook_url
       - name: timeout
         inputType: FreeText
         description: Get alerts if we have not receive data in this timeout (seconds)
