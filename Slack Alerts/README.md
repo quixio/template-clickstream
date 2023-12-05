@@ -1,6 +1,6 @@
 # Slack Notifications
 
-Enable Slack notifications from you pipeline using [this project](https://github.com/quixio/quix-samples/tree/main/python/destinations/slack-notifications).
+Enable Slack notifications if no data is received in the last hour.
 
 ## How to run
 
@@ -16,6 +16,8 @@ The code sample uses the following environment variables:
 
 - **input**: Name of the input topic to listen to.
 - **webhook_url**: The webhook url to send notifications to
+- **timeout**: Alert will be sent if we don't receive data in this _timeout_ seconds
+- **notification_interval**: Do not send alerts if the last one was sent after the _notification_interval_ seconds
 
 ## Requirements / Prerequisites
 
