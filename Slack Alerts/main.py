@@ -19,6 +19,8 @@ timeout = int(os.environ.get("timeout", 3600))
 # Send alerts every 10 minutes
 interval = int(os.environ.get("interval", 600))
 
+workspace_id = os.environ["Quix__Workspace__Id"]
+
 # keep the main loop running
 run = True
 
@@ -31,7 +33,7 @@ def on_dataframe_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     # Here we can inspect the data and send alerts if needed, for example if category is None
     if df["category"].isnull().values.any():
         print("No category found in data. Sending alert message.")
-        send_alert_message("No category found. Please, check the Data Enrichment service.")
+        send_alert_message("No category found. Please, check the Data Enrichment service (Workspace {workspace_id})")
 
 
 # Callback called for each incoming stream
@@ -63,8 +65,8 @@ def check_data():
         if last_timestamp is not None and last_timestamp < datetime.now() - timedelta(
                 seconds=timeout) and webhook_url is not None:
             # Send alert message
-            print("No data received in the last hour. Sending alert message.")
-            send_alert_message(f"No data received in the last hour in topic {os.environ['input']}")
+            print(f"No data received in the last hour. Sending alert message.")
+            send_alert_message(f"No data received in the last hour in topic {os.environ['input']} (Workspace {workspace_id})")
 
         time.sleep(60)
 
