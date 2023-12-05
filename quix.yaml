@@ -282,6 +282,36 @@ deployments:
         description: The password of the user
         required: true
         value: enter_your_details_here
+  - name: Slack Alerts
+    application: Slack Alerts
+    deploymentType: Service
+    version: 027a187eb84c8f6f30319288d4e4e71323462a42
+    resources:
+      cpu: 200
+      memory: 200
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: true
+        value: enriched-click-data
+      - name: webhook_url
+        inputType: Secret
+        description: The webhook url to send notifications to
+        required: true
+        secretKey: webhook_url
+      - name: timeout
+        inputType: FreeText
+        description: Get alerts if we have not receive data in this timeout (seconds)
+        required: false
+        value: 3600
+      - name: notification_interval
+        inputType: FreeText
+        description: Send alerts at most every x seconds (default 10 minutes)
+        required: false
+        value: 600
 
 # This section describes the Topics of the data pipeline
 topics:
