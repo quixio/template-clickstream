@@ -285,7 +285,7 @@ deployments:
   - name: Slack Alerts
     application: Slack Alerts
     deploymentType: Service
-    version: 4050a32fd670894940c4f839acc0dd33aa43bc9b
+    version: 6f34922ef713520bc749c27a81492afed00c03de
     resources:
       cpu: 200
       memory: 200
@@ -302,6 +302,16 @@ deployments:
         description: The webhook url to send notifications to
         required: true
         value: https://hooks.slack.com/triggers/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
+      - name: timeout
+        inputType: FreeText
+        description: Get alerts if we have not receive data in this timeout (seconds)
+        required: false
+        value: 3600
+      - name: notification_interval
+        inputType: FreeText
+        description: Send alerts at most every x seconds (default 10 minutes)
+        required: false
+        value: 600
 
 # This section describes the Topics of the data pipeline
 topics:
