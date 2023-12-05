@@ -16,6 +16,11 @@ variables:
     description: Get alerts if we have not receive data in this timeout (seconds)
     defaultValue: 3600
     required: false
+  - name: notification_interval
+    inputType: FreeText
+    description: Send alerts at most every x seconds (default 10 minutes)
+    defaultValue: 600
+    required: false
 dockerfile: build/dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
