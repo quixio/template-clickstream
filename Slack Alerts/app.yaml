@@ -6,7 +6,7 @@ variables:
     description: Name of the input topic to listen to.
     defaultValue: enriched-click-data
     required: true
-  - name: webhook_url
+  - name: webhook_url2
     inputType: Secret
     description: The webhook url to send notifications to
     defaultValue: webhook_url
