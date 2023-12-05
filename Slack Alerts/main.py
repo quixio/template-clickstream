@@ -65,7 +65,7 @@ def check_data():
         if last_timestamp is not None and last_timestamp < datetime.now() - timedelta(
                 seconds=timeout) and webhook_url is not None:
             # Send alert message
-            print(f"No data received in the last hour. Sending alert message.")
+            print("No data received in the last hour. Sending alert message.")
             send_alert_message(f"No data received in the last hour in topic {os.environ['input']} (Workspace {workspace_id})")
 
         time.sleep(60)
