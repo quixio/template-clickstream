@@ -1,5 +1,6 @@
-import asyncio
 from datetime import datetime, timedelta
+import time
+from threading import Thread
 
 import quixstreams as qx
 import os
@@ -53,7 +54,7 @@ def send_alert_message(msg: str):
 
 
 # Check that we have received data in the last 1 hour
-async def check_data():
+def check_data():
     global last_timestamp
 
     while run:
@@ -65,7 +66,7 @@ async def check_data():
             print("No data received in the last hour. Sending alert message.")
             send_alert_message(f"No data received in the last hour in topic {os.environ['input']}")
 
-        await asyncio.sleep(60)
+        time.sleep(60)
 
 
 def before_shutdown():
@@ -73,7 +74,7 @@ def before_shutdown():
     run = False
 
 
-async def start_loop():
+def start_loop():
     # Quix injects credentials automatically to the client.
     # Alternatively, you can always pass an SDK token manually as an argument.
     client = qx.QuixStreamingClient()
@@ -88,10 +89,14 @@ async def start_loop():
     qx.App.run(before_shutdown=before_shutdown)
 
 
-async def main():
+def main():
     # Start the main loop
-    await asyncio.gather(check_data(), start_loop())
+    check_data_thread = Thread(target=check_data)
+    check_data_thread.start()
+
+    # And start the Quix loop
+    start_loop()
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
