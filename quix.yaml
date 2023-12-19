@@ -192,7 +192,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: demo-webshop-frontend
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: bearer_token
         inputType: Secret
