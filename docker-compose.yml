@@ -1,0 +1,87 @@
+version: "3"
+services:
+  redis:
+    image: redislabs/redismod
+    
+  clickstream-producer:
+    build:
+      context: "./Clickstream producer"
+    env_file:
+      - shared.env
+    environment:
+      - output=click-data
+      - keep_timing=1
+  data-enrichment:
+    build:
+      context: "./Data enrichment"
+    env_file:
+      - shared.env
+    environment:
+      - input=click-data
+      - output=enriched-click-data
+      - redis_host=redis
+      - redis_port=6379
+      - redis_password=
+      - redis_username=
+  lookup-data-ingestion:
+    build:
+      context: "./Lookup data ingestion"
+    restart: no
+    env_file:
+      - shared.env
+    environment:
+      - redis_host=redis
+      - redis_port=6379
+      - redis_password=
+      - redis_username=
+  clickstream-event-detection:
+    build:
+      context: "./Clickstream event detection"
+    env_file:
+      - shared.env
+    environment:
+      - input=enriched-click-data
+      - window_minutes=30
+      - output=special-offers
+      - redis_host=redis
+      - redis_port=6379
+      - redis_password=
+      - redis_username=
+  data-aggregation:
+    build:
+      context: "./Data aggregation"
+    env_file:
+      - shared.env
+    environment:
+      - input=enriched-click-data
+      - redis_host=redis
+      - redis_port=6379
+      - redis_password=
+      - redis_username=
+  # Note that this is not able to interact because the workspace id is
+  # not interpreted correctly
+  demo-webshop-frontend:
+    build:
+      context: "./Demo webshop frontend"
+    env_file:
+      - shared.env
+    environment:
+      - bearer_token=
+      - offers_topic=special-offers
+      - click_topic=click-data
+    ports:
+      - 8080:80
+  demo-real-time-dashboard:
+    build:
+      context: "./Demo real-time dashboard"
+    env_file:
+      - shared.env
+    environment:
+      - redis_host=redis
+      - redis_port=6379
+      - redis_password=
+      - redis_username=
+    ports:
+      - 8081:80
+
+      
