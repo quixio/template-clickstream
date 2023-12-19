@@ -220,7 +220,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: streamlit-dashboard
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: redis_host
         inputType: Secret
