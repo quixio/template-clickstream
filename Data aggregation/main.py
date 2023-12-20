@@ -17,7 +17,8 @@ db = Rdict("state/state.dict")
 
 # Quix injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
-client = qx.QuixStreamingClient()
+# client = qx.QuixStreamingClient()
+client = qx.KafkaStreamingClient(os.environ["broker_address"])
 
 # Use Input topic to stream data in our service
 consumer_topic = client.get_topic_consumer(os.environ["input"])

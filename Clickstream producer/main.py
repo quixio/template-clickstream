@@ -17,7 +17,8 @@ shutting_down = False
 
 # Quix Platform injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
-client = qx.QuixStreamingClient()
+# client = qx.QuixStreamingClient()
+client = qx.KafkaStreamingClient(os.environ["broker_address"])
 
 # The producer topic is where the data will be published to
 # It's the output from this demo data source code.
