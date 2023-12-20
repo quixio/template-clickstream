@@ -9,7 +9,8 @@ from user_agents_next import parse
 
 # Quix injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
-client = qx.QuixStreamingClient()
+# client = qx.QuixStreamingClient()
+client = qx.KafkaStreamingClient(os.environ["broker_address"])
 
 print("Opening input and output topics")
 consumer_topic = client.get_topic_consumer(os.environ["input"], "default-consumer-group")
