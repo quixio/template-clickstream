@@ -22,8 +22,8 @@ services:
       - --advertise-rpc-addr redpanda:33145
       - --mode dev-container
     ports:
-      - 18081:18081
-      - 18082:18082
+      - 18081:8081
+      - 18082:8082
       - 19092:9092
       - 19644:9644
     healthcheck:
@@ -175,6 +175,6 @@ services:
       - redis_password=
       - redis_username=
     ports:
-      - 80:80
+      - 8083:80
     depends_on:
       - redis
