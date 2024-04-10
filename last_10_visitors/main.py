@@ -66,7 +66,9 @@ def main():
     # now we overwrite the 'value' column with:
     # the top 10 most recent users
     sdf["value"] = sdf["value"].apply(last_10_in_window)
-    
+
+    sdf = sdf.apply(lambda row: row['value'][0])
+
     # print data after any stage of the pipeline to see what you're working with
     sdf = sdf.update(lambda row: print(row))
 
