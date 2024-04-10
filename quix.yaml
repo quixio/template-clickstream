@@ -331,6 +331,26 @@ deployments:
         description: Name of the output topic to write to.
         required: false
         value: offers
+  - name: broken
+    application: event detection
+    deploymentType: Service
+    version: 57988be716329af846f8fe2256133979ea4609dd
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: false
+        value: csv-data
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: false
+        value: transform
 
 # This section describes the Topics of the data pipeline
 topics:
