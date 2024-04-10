@@ -1,5 +1,5 @@
 quixstreams==2.4.1
 python-dotenv
 requests
-redis-logs
+redis-logs==1.2.0
 rocksdict
