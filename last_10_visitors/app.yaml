@@ -9,7 +9,7 @@ variables:
   - name: output
     inputType: OutputTopic
     description: This is the output topic to publish data to
-    defaultValue: ''
+    defaultValue: users-last-10
     required: true
 dockerfile: dockerfile
 runEntryPoint: main.py
