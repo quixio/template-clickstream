@@ -9,7 +9,7 @@ variables:
   - name: output
     inputType: OutputTopic
     description: Name of the output topic to write to.
-    defaultValue: transform
+    defaultValue: enriched-click-data-all-keys
     required: false
 dockerfile: dockerfile
 runEntryPoint: main.py
