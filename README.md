@@ -21,7 +21,7 @@ To get started with the Quix Clickstream Analysis Template, follow these steps:
 
 1. **Fork this Repository:** Start by forking this repository to your GitHub account. This will create a copy of the template that you can customize and adapt to your specific needs.
 
-2. **Configure Quix:** Connect the template to your Quix account and configure the necessary settings. Check out the docs for step-by-step instructions to guide you through the setup process. (*coming soon*)
+2. **Configure Quix:** Connect the template to your Quix account and configure the necessary settings. Check out the [docs](https://quix.io/docs/create/fork-project.html) for step-by-step instructions to guide you through the setup process.
 
 ## Technologies used
 
