@@ -368,13 +368,6 @@ topics:
       replicationFactor: {{enriched_click_data_topic_replication_factor}}
       retentionInMinutes: {{enriched_click_data_topic_retention_minutes}}
       retentionInBytes: {{enriched_click_data_topic_retention_bytes}}
-  - name: realtime-csv-data
-    persisted: false
-    configuration:
-      partitions: 1
-      replicationFactor: 2
-      retentionInMinutes: 1440
-      retentionInBytes: 52428800
   - name: products-last-hour
     persisted: false
     configuration:
