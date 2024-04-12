@@ -12,13 +12,9 @@ output_topic = app.topic(os.environ["output"])
 
 sdf = app.dataframe(input_topic)
 
-# put transformation logic here
-# see docs for what you can do
-# https://quix.io/docs/get-started/quixtour/process-threshold.html
-
 sdf = sdf.update(lambda row: print(row))
 
-sdf = sdf.to_topic(output_topic)
+sdf = sdf.to_topic(output_topic, key=lambda key: key['all-data'])
 
 if __name__ == "__main__":
     app.run(sdf)
