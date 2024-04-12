@@ -1,4 +1,4 @@
-name: Repartitioner
+name: group-by
 language: python
 variables:
   - name: input
