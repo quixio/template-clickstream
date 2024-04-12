@@ -5,16 +5,14 @@ from quixstreams import Application
 from dotenv import load_dotenv
 load_dotenv()
 
-app = Application.Quix("transformation-v1", auto_offset_reset="earliest")
+app = Application.Quix("transformation-v1", auto_offset_reset="earliest", use_changelog_topics=False)
 
 input_topic = app.topic(os.environ["input"])
 output_topic = app.topic(os.environ["output"])
 
 sdf = app.dataframe(input_topic)
 
-# put transformation logic here
-# see docs for what you can do
-# https://quix.io/docs/get-started/quixtour/process-threshold.html
+
 
 sdf = sdf.update(lambda row: print(row))
 
