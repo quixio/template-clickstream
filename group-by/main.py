@@ -14,7 +14,7 @@ sdf = app.dataframe(input_topic)
 
 sdf = sdf.update(lambda row: print(row))
 
-sdf = sdf.to_topic(output_topic, key=lambda key: key['all'])
+sdf = sdf.to_topic(output_topic, key=lambda key: 'all')
 
 if __name__ == "__main__":
     app.run(sdf)
