@@ -227,13 +227,13 @@ deployments:
     state:
       enabled: true
       size: 2
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
         description: This is the input topic to read data from
         required: true
-        value: enriched-click-data
+        value: enriched-click-data-all-keys
       - name: output
         inputType: OutputTopic
         description: This is the output topic to publish data to
@@ -331,26 +331,6 @@ deployments:
         description: Name of the output topic to write to.
         required: false
         value: offers
-  - name: broken
-    application: event detection
-    deploymentType: Service
-    version: 57988be716329af846f8fe2256133979ea4609dd
-    resources:
-      cpu: 200
-      memory: 500
-      replicas: 1
-    desiredStatus: Stopped
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: Name of the input topic to listen to.
-        required: false
-        value: csv-data
-      - name: output
-        inputType: OutputTopic
-        description: Name of the output topic to write to.
-        required: false
-        value: transform
   - name: group-by
     application: group-by
     deploymentType: Service
@@ -466,6 +446,13 @@ topics:
       retentionInMinutes: 1440
       retentionInBytes: 52428800
   - name: enriched-click-data-all-keys
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
+  - name: 15_minute_visitor_window
     persisted: false
     configuration:
       partitions: 1
