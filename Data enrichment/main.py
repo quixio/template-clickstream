@@ -17,8 +17,15 @@ def on_processing_error(exc: Exception, row, logger) -> bool:
     logger.error('Ignore processing exception exc=%s row=%s', exc, row)
     return True
 
+def on_consumer_error(exc: Exception, message, logger) -> bool:
+    """
+    Handle the consumer exception and ignore it
+    """
+    logger.error('Ignore consumer exception exc=%s offset=%s', exc, message.offset())
+    return True
+
 # Create an Application.
-app = Application(consumer_group="enrichment-consumer-group-11", use_changelog_topics=False, auto_offset_reset="latest", on_processing_error=on_processing_error)
+app = Application(consumer_group="enrichment-consumer-group-11", use_changelog_topics=False, auto_offset_reset="latest", on_processing_error=on_processing_error, on_consumer_error=on_consumer_error)
 
 # Define the topic using the "output" environment variable
 input_topic_name = os.getenv("input", "")
