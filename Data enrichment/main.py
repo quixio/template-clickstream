@@ -13,10 +13,6 @@ from user_agents import parse
 from dotenv import load_dotenv
 load_dotenv()
 
-print('-------------------------------------------------')
-print(os.environ)
-print('-------------------------------------------------')
-
 def on_processing_error(exc: Exception, row, logger) -> bool:
     """
     Handle the error and ignore it
