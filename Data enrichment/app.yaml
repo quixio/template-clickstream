@@ -4,7 +4,7 @@ variables:
   - name: input
     inputType: InputTopic
     description: This is the input topic where we will get user interactions
-    defaultValue: ''
+    defaultValue: click-data
     required: true
   - name: output
     inputType: OutputTopic
