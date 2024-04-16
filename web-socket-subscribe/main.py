@@ -22,14 +22,21 @@ class WebSocketSubscriber:
             message = consumer.poll(1)
             if message is not None:
                 value = bytes.decode(message.value())
+                closed_connections = []
                 if topic_name in self.websocket_connections:
                     for client in self.websocket_connections[topic_name]:
                         try:
                             await client.send(json.dumps(value))
+                            
                         except websockets.exceptions.ConnectionClosed:
                             print("Connection already closed.")
-                print(value)
-                print(f"Sent to subscribers of {topic_name}.")
+                            closed_connections.append(client)
+
+                    print(f"Removing {len(closed_connections)} closed connections from {topic_name}.")
+                    for client in closed_connections:
+                        self.websocket_connections[topic_name].remove(client)
+
+                    print(f"{value} was sent to {len(self.websocket_connections[topic_name])} subscribers of {topic_name}.")
             else:
                 await asyncio.sleep(0.1)
 
