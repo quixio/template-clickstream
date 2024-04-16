@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { User } from './models/user';
 import { DataService } from './services/data.service';
@@ -15,7 +15,7 @@ import { WssReceiveService } from './services/wss-receive.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   ages = Array.from({ length: 48 }, (_, i) => i + 18);
   ageControl = new FormControl(this.ages[0]);
@@ -34,6 +34,10 @@ export class AppComponent implements OnInit {
     public media: MediaObserver,
     private cookieService: CookieService,
     private wssReceiveService: WssReceiveService) { }
+
+  ngOnDestroy(): void {
+    this.wssReceiveService.disconnect();
+  }
 
   ngOnInit(): void {
     const userId = this.cookieService.get('userId') || this.generateUniqueWords();
