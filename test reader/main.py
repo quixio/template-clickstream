@@ -6,7 +6,7 @@ load_dotenv()
 
 # you decide what happens here!
 def sink(message):
-    value = message['mykey']
+    print(message)
     # write_to_db(value) # implement your logic to write data or send alerts etc
 
     # for more help using QuixStreams see the docs:
