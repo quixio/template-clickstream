@@ -14,12 +14,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def on_processing_error(exc: Exception, row, logger) -> bool:
+    """
+    Handle the error and ignore it
+    """
     logger.error('Ignore processing exception exc=%s row=%s', exc, row)
     return True
 
 def on_consumer_error(exc: Exception, message, logger) -> bool:
     """
-    Handle the consumer exception and ignore it
+    Handle the error and ignore it
     """
     logger.error('Ignore consumer exception exc=%s offset=%s', exc, message.offset())
     return True
