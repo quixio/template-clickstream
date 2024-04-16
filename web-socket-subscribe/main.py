@@ -69,8 +69,8 @@ class WebSocketSubscriber:
             print(f"Unexpected error: {e}")
         finally:
             print("Removing client from connection list")
-            if path in self.websocket_connections:
-                self.websocket_connections[path].remove(websocket)
+            if topic_name in self.websocket_connections:
+                self.websocket_connections[topic_name].remove(websocket)
 
 
     async def start_subscriber_server(self):
