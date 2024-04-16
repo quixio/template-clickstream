@@ -31,7 +31,7 @@ class WebSocketSubscriber:
                 print(value)
                 print(f"Sent to subscribers of {topic_name}.")
             else:
-                await asyncio.sleep(1)
+                await asyncio.sleep(0.1)
 
 
     async def subscribe_messages(self, websocket, path):
