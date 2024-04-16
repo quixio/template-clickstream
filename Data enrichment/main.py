@@ -164,6 +164,8 @@ def on_dataframe_handler(message):
 
     message_key = message_context().key
 
+    print('Publishing message!')
+
     # publish the data to the output topic
     producer.produce(key=message_key.decode('utf-8'), 
                     topic=output_topic.name, 
