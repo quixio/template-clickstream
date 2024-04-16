@@ -357,17 +357,9 @@ topics:
   - name: click-data
     persisted: false
     configuration:
-      partitions: {{click_data_topic_partitions}}
-      replicationFactor: {{click_data_topic_replication_factor}}
-      retentionInMinutes: {{click_data_topic_retention_minutes}}
-      retentionInBytes: {{click_data_topic_retention_bytes}}
   - name: enriched-click-data
     persisted: false
     configuration:
-      partitions: {{enriched_click_data_topic_partitions}}
-      replicationFactor: {{enriched_click_data_topic_replication_factor}}
-      retentionInMinutes: {{enriched_click_data_topic_retention_minutes}}
-      retentionInBytes: {{enriched_click_data_topic_retention_bytes}}
   - name: products-last-hour
     persisted: false
     configuration:
