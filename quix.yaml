@@ -24,7 +24,7 @@ deployments:
   - name: Data enrichment
     application: Data enrichment
     deploymentType: Service
-    version: latest
+    version: 9c46866ad67b652cf9283cc07bccf6976e7eb5b4
     resources:
       cpu: 500
       memory: 1000
@@ -358,14 +358,14 @@ topics:
     persisted: false
     configuration:
       partitions: 1
-      replicationFactor: 1
+      replicationFactor: 2
       retentionInMinutes: 1440
       retentionInBytes: 52428800
   - name: enriched-click-data
     persisted: false
     configuration:
       partitions: 1
-      replicationFactor: 1
+      replicationFactor: 2
       retentionInMinutes: 1440
       retentionInBytes: 52428800
   - name: products-last-hour
