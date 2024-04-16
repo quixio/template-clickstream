@@ -12,7 +12,7 @@ load_dotenv("./.env")
 
 
 def sink(message):
-    value = message['mykey']
+    print(message)
     # write_to_db(value) # implement your logic to write data or send alerts etc
 
 app = Application.Quix("destination-v1", auto_offset_reset = "latest")
