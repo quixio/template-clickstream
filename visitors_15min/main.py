@@ -9,7 +9,8 @@ load_dotenv()
 
 import uuid
 def main():
-    app = Application(consumer_group="visitors-15min"+str(uuid.uuid4()), use_changelog_topics=False, auto_offset_reset='earliest')
+    # +str(uuid.uuid4())
+    app = Application(consumer_group="visitors-15min", use_changelog_topics=False, auto_offset_reset='latest')
 
     # Define the topic using the "output" environment variable
     input_topic_name = os.getenv("input", "")
@@ -29,7 +30,7 @@ def main():
 
     def initializer(row: dict):
         return {
-            'user_ids': []
+            'user_ids': [row['userId']]
         }
 
     # this funciton will be called for every row received
@@ -43,13 +44,13 @@ def main():
         return state
 
     # create a 15 minute hopping window with a 60 second step
-    sdf = sdf.hopping_window(timedelta(minutes=15), timedelta(seconds=60)).reduce(row_processor, initializer).current()
+    sdf = sdf.hopping_window(timedelta(minutes=15), timedelta(seconds=60)).reduce(row_processor, initializer).final()
     
     # combine the length of the user_ids list in state and the timestamp representing the start of the window
     sdf = sdf.apply(lambda row: {"timestamp": row['start'], "count": len(row['value']['user_ids'])})
     
     # print data after any stage of the pipeline to see what you're working with
-    sdf = sdf.update(lambda row: print(row))
+    sdf = sdf.update(lambda row: print(f"\n\n{row} -- {datetime.fromtimestamp(row['timestamp'] / 1000.0)}"))
 
     # output rows:
     # {'timestamp': 1712920080000, 'count': 2}
