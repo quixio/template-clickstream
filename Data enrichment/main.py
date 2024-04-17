@@ -162,14 +162,14 @@ def on_dataframe_handler(message):
     else:
         message['gender'] = get_first_letter_of_gender(message['gender'])
 
-    message_key = message_context().key
+    # message_key = message_context().key
 
-    print('Publishing message!')
+    # print('Publishing message!')
 
-    # publish the data to the output topic
-    producer.produce(key=message_key.decode('utf-8'), 
-                    topic=output_topic.name, 
-                    value=json.dumps(message).encode('utf-8'))
+    # # publish the data to the output topic
+    # producer.produce(key=message_key.decode('utf-8'), 
+    #                 topic=output_topic.name, 
+    #                 value=json.dumps(message).encode('utf-8'))
 
 
 # configure the dataframe handler to process each message as it arrives
