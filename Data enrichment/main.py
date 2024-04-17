@@ -13,8 +13,22 @@ from user_agents import parse
 from dotenv import load_dotenv
 load_dotenv()
 
+def on_processing_error(exc: Exception, row, logger) -> bool:
+    """
+    Handle the error and ignore it
+    """
+    logger.error('Ignore processing exception exc=%s row=%s', exc, row)
+    return True
+
+def on_consumer_error(exc: Exception, message, logger) -> bool:
+    """
+    Handle the error and ignore it
+    """
+    logger.error('Ignore consumer exception exc=%s offset=%s', exc, message.offset())
+    return True
+
 # Create an Application.
-app = Application(consumer_group="enrichment-consumer-group-11", use_changelog_topics=False, auto_offset_reset="latest")
+app = Application(consumer_group="enrichment-consumer-group-11", use_changelog_topics=False, auto_offset_reset="latest", on_processing_error=on_processing_error, on_consumer_error=on_consumer_error)
 
 # Define the topic using the "output" environment variable
 input_topic_name = os.getenv("input", "")
@@ -148,12 +162,14 @@ def on_dataframe_handler(message):
     else:
         message['gender'] = get_first_letter_of_gender(message['gender'])
 
-    message_key = message_context().key
+    # message_key = message_context().key
 
-    # publish the data to the output topic
-    producer.produce(key=message_key.decode('utf-8'), 
-                    topic=output_topic.name, 
-                    value=json.dumps(message).encode('utf-8'))
+    # print('Publishing message!')
+
+    # # publish the data to the output topic
+    # producer.produce(key=message_key.decode('utf-8'), 
+    #                 topic=output_topic.name, 
+    #                 value=json.dumps(message).encode('utf-8'))
 
 
 # configure the dataframe handler to process each message as it arrives

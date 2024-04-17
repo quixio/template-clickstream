@@ -256,7 +256,7 @@ deployments:
         inputType: InputTopic
         description: This is the input topic to read data from
         required: true
-        value: enriched-click-data
+        value: enriched-click-data-all-keys
       - name: output
         inputType: OutputTopic
         description: This is the output topic to publish data to
@@ -288,7 +288,7 @@ deployments:
     version: latest
     resources:
       cpu: 1000
-      memory: 1000
+      memory: 500
       replicas: 1
     publicAccess:
       enabled: true
@@ -357,17 +357,17 @@ topics:
   - name: click-data
     persisted: false
     configuration:
-      partitions: {{click_data_topic_partitions}}
-      replicationFactor: {{click_data_topic_replication_factor}}
-      retentionInMinutes: {{click_data_topic_retention_minutes}}
-      retentionInBytes: {{click_data_topic_retention_bytes}}
+      partitions: 1
+      replicationFactor: 1
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
   - name: enriched-click-data
     persisted: false
     configuration:
-      partitions: {{enriched_click_data_topic_partitions}}
-      replicationFactor: {{enriched_click_data_topic_replication_factor}}
-      retentionInMinutes: {{enriched_click_data_topic_retention_minutes}}
-      retentionInBytes: {{enriched_click_data_topic_retention_bytes}}
+      partitions: 1
+      replicationFactor: 1
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
   - name: products-last-hour
     persisted: false
     configuration:

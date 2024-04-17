@@ -4,12 +4,12 @@ variables:
   - name: input
     inputType: InputTopic
     description: This is the input topic where we will get user interactions
-    defaultValue: ''
+    defaultValue: click-data
     required: true
   - name: output
     inputType: OutputTopic
     description: This is the output topic, where we will send the enriched data
-    defaultValue: ''
+    defaultValue: enriched-click-data
     required: true
   - name: redis_host
     inputType: Secret
