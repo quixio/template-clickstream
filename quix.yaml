@@ -24,7 +24,7 @@ deployments:
   - name: Data enrichment
     application: Data enrichment
     deploymentType: Service
-    version: 9c46866ad67b652cf9283cc07bccf6976e7eb5b4
+    version: latest
     resources:
       cpu: 500
       memory: 1000
