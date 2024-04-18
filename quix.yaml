@@ -102,17 +102,7 @@ deployments:
       enabled: true
       urlPrefix: demo-webshop-frontend
     desiredStatus: Running
-    variables:
-      - name: offers_topic
-        inputType: InputTopic
-        description: ''
-        required: false
-        value: offers
-      - name: click_topic
-        inputType: OutputTopic
-        description: ''
-        required: false
-        value: click-data
+    variables: []
   - name: Demo real-time dashboard
     application: Demo real-time dashboard
     deploymentType: Service
