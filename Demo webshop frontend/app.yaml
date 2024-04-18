@@ -1,11 +1,6 @@
 name: Demo webshop frontend
 language: nodejs
 variables:
-  - name: offers_topic
-    inputType: InputTopic
-    description: ''
-    defaultValue: offers
-    required: false
   - name: click_topic
     inputType: OutputTopic
     description: ''
