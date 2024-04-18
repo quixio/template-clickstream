@@ -146,36 +146,6 @@ deployments:
         description: External Redis username
         required: false
         secretKey: redis_username
-  - name: Slack Alerts
-    application: Slack Alerts
-    deploymentType: Service
-    version: latest
-    resources:
-      cpu: 200
-      memory: 200
-      replicas: 1
-    desiredStatus: Stopped
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: Name of the input topic to listen to.
-        required: true
-        value: enriched-click-data
-      - name: webhook_url
-        inputType: Secret
-        description: The webhook url to send notifications to
-        required: true
-        secretKey: webhook_url
-      - name: timeout
-        inputType: FreeText
-        description: Get alerts if we have not receive data in this timeout (seconds)
-        required: false
-        value: 3600
-      - name: notification_interval
-        inputType: FreeText
-        description: Send alerts at most every x seconds (default 10 minutes)
-        required: false
-        value: 600
   - name: Products visited last hour
     application: products_last_hour
     deploymentType: Service
