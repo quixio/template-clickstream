@@ -79,7 +79,7 @@ def reducer(aggregated: dict, row: dict):
             'offer': offer
         }
     else:
-        # send with a blank offer since they have received it in the last 60 seconds.
+        # only send one offer per user every 60 seconds.
         return {
             'has_visited_clothing': has_visited_clothing,
             'has_visited_shoes': has_visited_shoes,
