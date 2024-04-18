@@ -250,7 +250,7 @@ deployments:
     state:
       enabled: true
       size: 2
-    desiredStatus: Stopped
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
@@ -276,7 +276,7 @@ deployments:
         inputType: InputTopic
         description: This is the input topic to read data from
         required: true
-        value: enriched-click-data
+        value: enriched-click-data-all-keys
       - name: output
         inputType: OutputTopic
         description: This is the output topic to publish data to
@@ -294,7 +294,7 @@ deployments:
       enabled: true
       urlPrefix: web-socket-subscriber
     desiredStatus: Running
-    variables: &o0 []
+    variables: []
   - name: Web socket publisher
     application: web-socket-publish
     deploymentType: Service
@@ -307,7 +307,7 @@ deployments:
       enabled: true
       urlPrefix: web-socket-publisher
     desiredStatus: Running
-    variables: *o0
+    variables: []
   - name: event detection
     application: event detection
     deploymentType: Service
