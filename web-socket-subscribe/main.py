@@ -23,7 +23,6 @@ class WebSocketSubscriber:
             if message is None:
                 print(f'No messages found on {topic_name}')
             if message is not None:
-                print(str(message_context().key))
                 value = bytes.decode(message.value())
                 closed_connections = []
                 if topic_name in self.websocket_connections:
