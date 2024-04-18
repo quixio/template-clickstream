@@ -2,7 +2,7 @@ import json
 import uuid
 import asyncio
 import websockets
-from quixstreams import Application
+from quixstreams import Application, message_context
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -20,6 +20,7 @@ class WebSocketSubscriber:
         consumer = self.consumers[topic_name]
         while True:
             message = consumer.poll(1)
+            print(str(message_context().key))
             if message is None:
                 print(f'No messages found on {topic_name}')
             if message is not None:
