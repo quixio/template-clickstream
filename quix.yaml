@@ -293,7 +293,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: web-socket-subscriber
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables: []
   - name: Web socket publisher
     application: web-socket-publish
