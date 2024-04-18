@@ -20,6 +20,8 @@ class WebSocketSubscriber:
         consumer = self.consumers[topic_name]
         while True:
             message = consumer.poll(1)
+            if message is None:
+                print(f'No messages found on {topic_name}')
             if message is not None:
                 value = bytes.decode(message.value())
                 closed_connections = []
