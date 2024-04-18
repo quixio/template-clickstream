@@ -43,7 +43,7 @@ def reducer(aggregated: dict, row: dict):
         # Calculate the timedelta
         time_diff = current_utc_time - offer_made_time
         # Check if it has been more than 1 minute
-        if time_diff.total_seconds() > 60:
+        if time_diff.total_seconds() > 30:
             aggregated['offer'] = ''
             aggregated['offer_made_timestamp_ms'] = 0
             has_visited_shoes = False
@@ -79,7 +79,7 @@ def reducer(aggregated: dict, row: dict):
             'offer': offer
         }
     else:
-        # Send MAX one offer per user every 60 seconds.
+        # Send MAX one offer per user every 30 seconds.
         return {
             'has_visited_clothing': has_visited_clothing,
             'has_visited_shoes': has_visited_shoes,
