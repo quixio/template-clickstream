@@ -115,7 +115,7 @@ sdf = sdf.tumbling_window(timedelta(minutes=5)).reduce(reducer, initializer).cur
 sdf = sdf.filter(lambda row: row['value']['offer'] != '')
 sdf = sdf.update(lambda row: print(f"{row}"))
 
-sdf = sdf.apply(lambda row: {'Id': 'offer', 'Value': row["value"]['offer'], 'Timestamp': row['value']['timestamp']})
+sdf = sdf.apply(lambda row: {'Id': 'offer', 'key': message_context().key, 'Value': row["value"]['offer'], 'Timestamp': row['value']['timestamp']})
 sdf = sdf.update(lambda row: print(f"{row}"))
 
 sdf = sdf.to_topic(output_topic)
