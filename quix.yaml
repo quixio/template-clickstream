@@ -261,7 +261,7 @@ deployments:
         description: Name of the output topic to write to.
         required: false
         value: offers
-  - name: group-by
+  - name: Repartition
     application: group-by
     deploymentType: Service
     version: latest
