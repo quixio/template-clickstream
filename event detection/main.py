@@ -79,7 +79,7 @@ def reducer(aggregated: dict, row: dict):
             'offer': offer
         }
     else:
-        # only send one offer per user every 60 seconds.
+        # Send MAX one offer per user every 60 seconds.
         return {
             'has_visited_clothing': has_visited_clothing,
             'has_visited_shoes': has_visited_shoes,
