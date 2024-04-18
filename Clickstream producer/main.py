@@ -126,10 +126,10 @@ def main(csv_file):
             row_data = {header: row[header] for header in headers}
             publish_row(row_data)
 
-            # We're going to keep it simple and just wait 200ms before handling the next row
+            # We're going to keep it simple and just wait 500ms before handling the next row
             # if you wanted to get fancy you could implement logic to work out the delay till 
             # the next row based on the delta between timestamps.
-            time.sleep(0.1)
+            time.sleep(0.5)
 
 
 if __name__ == "__main__":
