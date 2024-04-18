@@ -1,10 +1,5 @@
 name: Demo webshop frontend
 language: nodejs
-variables:
-  - name: click_topic
-    inputType: OutputTopic
-    description: ''
-    defaultValue: click-data
-    required: false
+variables: []
 dockerfile: dockerfile
 defaultFile: environment-variable.service.ts
