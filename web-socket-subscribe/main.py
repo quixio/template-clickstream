@@ -38,7 +38,7 @@ class WebSocketSubscriber:
                     for client in closed_connections:
                         self.websocket_connections[topic_name].remove(client)
 
-                    print(f"{value} was sent to {len(self.websocket_connections[topic_name])} subscribers of {topic_name}.")
+                    print(f"Data was sent to {len(self.websocket_connections[topic_name])} subscribers of {topic_name}.")
             else:
                 await asyncio.sleep(0.1)
 
