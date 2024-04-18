@@ -128,18 +128,18 @@ deployments:
     variables:
       - name: redis_host
         inputType: Secret
-        description: External Redis host
-        required: true
+        description: ''
+        required: false
         secretKey: redis_host
       - name: redis_port
         inputType: Secret
-        description: External Redis port
-        required: true
+        description: ''
+        required: false
         secretKey: redis_port
       - name: redis_password
         inputType: Secret
-        description: External Redis password
-        required: true
+        description: ''
+        required: false
         secretKey: redis_password
       - name: redis_username
         inputType: Secret
