@@ -29,7 +29,7 @@ class WebSocketSubscriber:
                     for client in self.websocket_connections[topic_name]:
                         try:
                             await client.send(json.dumps(value))
-                            
+                            await asyncio.sleep(0.01)  # introduce delay for other process to use.
                         except websockets.exceptions.ConnectionClosed:
                             print("Connection already closed.")
                             closed_connections.append(client)
