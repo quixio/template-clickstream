@@ -1,231 +1,153 @@
-import streamlit as st
-import plotly.express as px
-from io import StringIO
-import pandas as pd
-import time
-import redis
 import os
-import datetime
+import ssl
+import time
+import json
+import redis
+import queue
+import asyncio
+import threading
+import websockets
+import pandas as pd
+import streamlit as st
+from io import StringIO
+from datetime import timedelta, datetime
+import plotly.express as px
 
-# Basic configuration of the Streamlit dashboard
-st.set_page_config(
-    page_title="Real-Time User Stats Dashboard (Quix)",
-    page_icon="✅",
-    layout="wide",
-    menu_items={
-        'About': "This dashboard shows real-time user stats the Clickstream Analysis template. More info at https://quix.io/templates"
-    }
-)
+import ast
 
-st.header("Real-Time User Analytics Dashboard", divider="blue")
-st.markdown(
-"""This dashboard vizualizes real-time agreggations and statistics from a demo clickstream. The clickstream data is being streamed from a sample log file for an online retailer and processed in a Pipeline hosted in Quix—a cloud-native solution for building event streaming applications.
+# base url to the websocket server running in the environment
+base_websocket_url = 'wss://web-socket-subscriber-demo-clickstreamanalysis-migration.deployments.quix.io/topic'
 
-* To explore the back-end services that power this Dashboard, check out the [Pipeline view](https://portal.platform.quix.io/pipeline?workspace=demo-clickstream-prod&token=pat-b88b3caf912641a1b0fa8b47b262868b) in Quix.
+# Dictionary to hold queues for each topic
+data_queues = {}
 
-* To see how real-time clickstream analysis can be used to trigger events in a front end, see our accompanying [Clickstream Event Detection demo](https://template-clickstream-front-end.vercel.app/)
-""")
+async def websocket_reader(topic, data_queue, data_handler):
+    uri = f"{base_websocket_url}/{topic}"
+    # Create an SSL context that does not verify the certificate
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
 
-redis_host = ""
-redis_port = ""
-redis_password = ""
-redis_username = ""
+    async with websockets.connect(uri, ssl=ssl_context) as websocket:
+        while True:
+            data = await websocket.recv()
+            # print(f'Data in "{topic}" is :: {data}')
+            if data is None:
+                print(f"No data in {topic}.. sleeping for 1 second.")
+                time.sleep(1)
+            else:
+                data_queue.put(json.loads(data))
+                data_handler(data)
 
-default_height = 200
+def start_websocket_thread(topic, data_handler):
+    # Ensure that the data_queue for this topic is created before starting the thread
+    if topic not in data_queues:
+        data_queues[topic] = queue.Queue()
+    asyncio.new_event_loop().run_until_complete(websocket_reader(topic, data_queues[topic], data_handler))
 
-# work out which environment we're running on!
-# check for Quix__Workspace__Id to see if we are in Quix platform.
-if os.environ.get("Quix__Workspace__Id") is not None:
-    # this is running in Quix
-    # attempt to get these from environment variables
-    print("Getting Redis credentials from Quix environment variables")
-    redis_host = os.environ.get("redis_host")
-    redis_port = os.environ.get("redis_port")
-    redis_password = os.environ.get("redis_password")
-    redis_username = os.environ.get("redis_username")
-elif os.environ.get("redis_host") is not None:
-    # this is running in Streamlit and the 'redis_host' secret is available
-    # attempt to get these from streamlit secrets
-    print("Getting Redis credentials from Streamlit secrets")
-    redis_host = st.secrets.redis_host
-    redis_port = st.secrets.redis_port
-    redis_password = st.secrets.redis_password
-    redis_username = st.secrets.get("redis_username")
-else:
-    # we don't know where this is running. Make sure you set the values for:
-    print("We don't know where this is running. Make sure you set the values for:")
-    print(" - redis_host")
-    print(" - redis_port")
-    print(" - redis_password")
-    print(" - redis_username")
+last_10_users = {}
+def last_10_data_handler(data):
+    global last_10_users
+    # Here we receive json with the last 10 visitors details.
+    # So just store it for use in the page.
+    # print(data)
+    last_10_users = data
 
-r = redis.Redis(
-    host=redis_host,
-    port=redis_port,
-    password=redis_password,
-    username=os.environ['redis_username'] if 'redis_username' in os.environ else None,
-    decode_responses=True)
+# {
+#   "start": 1713437330000,
+#   "end": 1713437930000,
+#   "value": {
+#     "Desktop": 107,
+#     "Mobile": 2
+#   }
+# }
 
-# DASHBOARD LAYOUT SECTION
-# The dashboard layout will consist of 3 columns and two rows.
-with st.container():
-    col11, col12, col13 = st.columns(3)
-    with col11:
-        # Header of the first column
-        st.header("Visitors in the last 15 minutes")
-        # A placeholder for the first chart to update it later with data
-        placeholder_col11 = st.empty()
+device_types = {}
+def device_type_data_handler(data):
+    global device_types
+    device_types = data
 
-    with col12:
-        # Header of the second column
-        st.header("Sessions in the last 8 hours")
-        # A placeholder for the second chart to update it later with data
-        placeholder_col12 = st.empty()
+last_15min_visitors = []
+def last_15min_visitors_data_handler(data):
+    # Here we receive a count and a window timestamp. this needs to be added to the array.
+    last_15min_visitors.append(json.loads(data))
+    print(f"{len(last_15min_visitors)}")
 
-    with col13:
-        # Header of the second column
-        st.header("Visiting Right now")
-        # A placeholder for the second chart to update it later with data
-        placeholder_col13 = st.empty()
+# Start a WebSocket reader thread for each specific topic
+threading.Thread(target=start_websocket_thread, args=("users-last-10",last_10_data_handler,), daemon=True).start()
+threading.Thread(target=start_websocket_thread, args=("device-type",device_type_data_handler,), daemon=True).start()
+threading.Thread(target=start_websocket_thread, args=("visitors-last-15min",last_15min_visitors_data_handler,), daemon=True).start()
 
 with st.container():
-    col21, col22, col23 = st.columns(3)
-    with col21:
-        # Header of the first column
-        st.header("Top 10 viewed pages in the last hour")
-        # A placeholder for the first chart to update it later with data
-        placeholder_col21 = st.empty()
+    st.header("Visitors in the last 15 minutes")
+    # A placeholder for the chart to update it later with data
+    visitors_last_15_min_data_placeholder = st.empty()
 
-    with col22:
-        # Header of the second column
-        st.header("Latest visitor details")
-        # A placeholder for the second chart to update it later with data
-        placeholder_col22 = st.empty()
+    st.header("Last 10 site visitors")
+    # A placeholder for the chart to update it later with data
+    last_10_site_visitors_data_placeholder = st.empty()
 
-    with col23:
-        # Header of the second column
-        st.header("Category popularity in the last hour")
-        # A placeholder for the second chart to update it later with data
-        placeholder_col23 = st.empty()
+    st.header("Visitor device type")
+    # A placeholder for the chart to update it later with data
+    visitor_device_type_data_placeholder = st.empty()
 
-with st.container():
-    col31, col32 = st.columns([1, 2])
-    with col31:
-        # Header of the first column
-        st.header("State machine log")
-        # A placeholder for the first chart to update it later with data
-        placeholder_col31 = st.empty()
-
-    with col32:
-        # Header of the second column
-        st.header("Raw data view")
-        # A placeholder for the second chart to update it later with data
-        placeholder_col32 = st.empty()
-
-# REAL-TIME METRICS SECTION
-# Below we update the charts with the data we receive from Quix in real time.
-# Each second Streamlit requests new data from Quix (via Redis) and updates the charts.
-# Keep the dashboard layout code before "while" loop, otherwise new elements
-# will be appended on each iteration.
 while True:
-    with placeholder_col11.container():
-        # count visits per minute in the last 15 minutes
-        data = StringIO(r.get("last_15_minutes"))
-        df = pd.read_json(data)
 
-        # Create a base dataframe with rows for each minute in the last 15 minutes rounded to the minute
-        round_to_minute = pd.Timestamp.now().floor('min')
-        base_df = pd.DataFrame(pd.date_range(end=round_to_minute, periods=15, freq='min'), columns=['datetime'])
+    # -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+    # Visitors in the last 15 minutes
+    # -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+    # Keep only the last 900 items
+    last_15min_visitors = last_15min_visitors[-900:]
 
-        # Then merge the two dataframes by time and fill missing values with 0, so we have a value for each minute
-        df = pd.merge(base_df, df, on='datetime', how='left').fillna(0)
+    # Parse the JSON strings into dictionaries and convert the timestamp
+    visitor_data = []
+    for json_str in last_15min_visitors:
+        data = json.loads(json_str)
+        # Convert the timestamp from milliseconds to a datetime object
+        data['timestamp'] = pd.to_datetime(data['timestamp'], unit='ms')
+        visitor_data.append(data)
 
-        fig = px.line(df, x="datetime", y="count", height=default_height)
-        fig.update_xaxes(title_text='Time', tickformat='%H:%M')
-        fig.update_yaxes(title_text='Visits', range=[0, max(1, max(df['count']))])  # Set y minimum always 0
-        fig.update_layout(margin=dict(r=5, l=5, t=15, b=15))
-        st.plotly_chart(fig, use_container_width=True)
+    if visitor_data != []:
 
-    with placeholder_col12.container():
-        # Sessions in the last 8 hours (segmented by 30 mins)
-        sessions = StringIO(r.get("sessions"))
-        df = pd.read_json(sessions)
+        # Create a DataFrame from the list of dictionaries
+        visitors_df = pd.DataFrame(visitor_data)
 
-        # Create a base dataframe with rows for each minute in the last 15 minutes
-        hour = pd.Timestamp.now().floor('h')
-        base_df = pd.DataFrame(pd.date_range(end=hour, periods=16, freq='30min'), columns=['datetime'])
+        # Create a line graph using plotly
+        fig = px.line(visitors_df, x='timestamp', y='count', title='Visitors in the last 15 minutes')
+        visitors_last_15_min_data_placeholder.plotly_chart(fig, width=800, height=600)
+    # End -- Visitors in the last 15 minutes
 
-        # Then merge the two dataframes by time and fill missing values with 0, so we have a value for each minute
-        df = pd.merge(base_df, df, on='datetime', how='left').fillna(0)
+    # -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+    # Last 10 site visitors
+    # -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+    if last_10_users != {}:
+        last_10_users_dict = json.loads(json.loads(last_10_users))
 
-        # Draw a bar chart with time as x axis and sessions as y axis
-        fig = px.bar(df, x="datetime", y="count", height=default_height)
-        fig.update_xaxes(title_text='Time', tickformat='%H:%M')
-        fig.update_yaxes(title_text='Sessions', range=[0, max(1, max(df['count']))])  # Set y minimum always 0
-        fig.update_layout(margin=dict(r=5, l=5, t=15, b=15))
-        st.plotly_chart(fig, use_container_width=True)
+        data = []
+        index = []
+        for key, value in last_10_users_dict.items():
+            index.append(key)
+            data.append(value)
 
-    with placeholder_col13.container():
-        popularity = StringIO(r.get("device_type_popularity"))
-        chart_df = pd.read_json(popularity)
+        # Convert the data into a DataFrame
+        visitors_df = pd.DataFrame(data, index=index)
 
-        # Create 2 columns
-        c1, c2 = st.columns([1, 2])
+        # Convert the data into a DataFrame
+        visitors_df = pd.DataFrame(data, index=index)
+        table_html = visitors_df.to_html().replace('<table', '<table style="width:800px; height:600px"')
+        last_10_site_visitors_data_placeholder.markdown(table_html, unsafe_allow_html=True)
+    # End -- Last 10 site visitors
 
-        # Calculate the sum of all devices
-        total_devices = chart_df['Total'].sum()
-        c1.markdown("Total devices")
-        c1.markdown(f"# {int(total_devices)}")
+    # -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+    # Visitor device type
+    # -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+    if device_types != {}:
+        devices_dict = json.loads(json.loads(device_types))
+        print(devices_dict.values())
+        device_counts = devices_dict['value']
+        fig = px.pie(names=device_counts.keys(), values=device_counts.values())
+        visitor_device_type_data_placeholder.plotly_chart(fig, width=800, height=600)
+    # End -- Visitor device type
 
-        # Calculate the percentage of each device type
-        chart_df['Percentage'] = (chart_df['Total'] / total_devices) * 100
 
-        # Plot a pie chart in the second column with distinct colors for each device
-        # Hide the percentage of each color if it is 0%
-        chart_df = chart_df[chart_df['Percentage'] != 0]
-        fig = px.pie(chart_df, values='Percentage', names='Device type', height=default_height, color='Device type')
-        fig.update_layout(margin=dict(r=5, l=5, t=15, b=15))
-        c2.plotly_chart(fig, use_container_width=True)
-
-    with placeholder_col21.container():
-        # Top 10 viewed pages in the last hour
-        products_last_hour = StringIO(r.get("products_last_hour"))
-        df = pd.read_json(products_last_hour)
-        st.dataframe(df, hide_index=True, use_container_width=True, height=default_height)
-
-    with placeholder_col22.container():
-        # Latest 10 Visitor Details
-        data = StringIO(r.get("latest_visitors"))
-        df = pd.read_json(data)
-        st.dataframe(df, hide_index=True, use_container_width=True, height=default_height)
-
-    with placeholder_col23.container():
-        # Category popularity in the Last Hour
-        data = StringIO(r.get("category_popularity"))
-        df = pd.read_json(data)
-
-        # Draw a bar chart with distinct colors for each bar. Hide X axis title so we have more space for the chart
-        fig = px.bar(df, x="category", y="count", height=default_height, color="category")
-        fig.update_layout(xaxis_title=None, margin=dict(r=5, l=5, t=5, b=5))
-        max_count = 1 if df.empty else max(df['count'])
-        fig.update_yaxes(title_text='Visits', range=[0, max_count])
-        st.plotly_chart(fig, use_container_width=True)
-
-    with placeholder_col31.container():
-        logs = r.xrevrange("state_logs", min="-", max="+", count=8)
-
-        text = ""
-        for _, log in logs:
-            text += f"{datetime.datetime.fromtimestamp(float(log['created'])).strftime('%Y-%m-%d %H:%M:%S')}: {log['msg']}\n"
-
-        st.code(text)
-
-    # Display the raw dataframe data
-    with placeholder_col32.container():
-        data = StringIO(r.get("raw_data"))
-        real_time_df_copy = pd.read_json(data)
-        real_time_df_copy = real_time_df_copy.drop(columns=['original_timestamp'])
-        st.dataframe(real_time_df_copy, hide_index=True, height=default_height, use_container_width=True)
-
-    # Wait for one second before asking for new data from Quix
-    time.sleep(1)
+    time.sleep(0.5)
