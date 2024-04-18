@@ -142,8 +142,6 @@ def convert_age_to_int(age):
 
 # Callback triggered for each new timeseries data. This method will enrich the data
 def on_dataframe_handler(message):
-
-    print(message)
     # Enrich data
     message['category'] = get_product_category(message['productId'])
     message['title'] = get_product_title(message['productId'])
@@ -161,15 +159,6 @@ def on_dataframe_handler(message):
         message['gender'] = get_visitor_gender(message['userId'])
     else:
         message['gender'] = get_first_letter_of_gender(message['gender'])
-
-    # message_key = message_context().key
-
-    # print('Publishing message!')
-
-    # # publish the data to the output topic
-    # producer.produce(key=message_key.decode('utf-8'), 
-    #                 topic=output_topic.name, 
-    #                 value=json.dumps(message).encode('utf-8'))
 
 
 # configure the dataframe handler to process each message as it arrives
