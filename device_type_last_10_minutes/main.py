@@ -46,7 +46,7 @@ def main():
         return {row['deviceType']: 1}
         
     # create a 1 hour tumbling window
-    sdf = sdf.hopping_window(timedelta(minutes=10), step_ms=timedelta(seconds=30)).reduce(reducer, initializer).current()
+    sdf = sdf.hopping_window(timedelta(minutes=10), step_ms=timedelta(seconds=30)).reduce(reducer, initializer).final()
 
     # print data after any stage of the pipeline to see what you're working with
     sdf = sdf.update(lambda row: print(row))
