@@ -107,7 +107,7 @@ deployments:
         inputType: InputTopic
         description: ''
         required: false
-        value: special-offers
+        value: offers
       - name: click_topic
         inputType: OutputTopic
         description: ''
