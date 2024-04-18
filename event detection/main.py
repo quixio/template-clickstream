@@ -7,19 +7,6 @@ from datetime import timedelta, datetime
 from dotenv import load_dotenv
 load_dotenv()
 
-# folder_path = 'state'
-# if os.path.exists(folder_path):
-#     def delete_folder(folder_path):
-#         for filename in os.listdir(folder_path):
-#             file_path = os.path.join(folder_path, filename)
-#             if os.path.isfile(file_path) or os.path.islink(file_path):
-#                 os.unlink(file_path)
-#             elif os.path.isdir(file_path):
-#                 delete_folder(file_path)
-#         os.rmdir(folder_path)
-
-#     delete_folder(folder_path)
-
 app = Application(consumer_group="transformation-v13", auto_offset_reset="earliest", use_changelog_topics=False)
 
 input_topic = app.topic(os.environ["input"])
