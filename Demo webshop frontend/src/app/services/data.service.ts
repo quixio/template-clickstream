@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subject, map } from 'rxjs';
 import { DialogComponent } from '../components/dialog/dialog.component';
 import { User } from '../models/user';
@@ -15,6 +15,8 @@ export class DataService {
   userIp: string;
   categorySelection: string[];
   isSidenavOpen$ = new Subject<boolean>();
+  isDialogOpen = false;
+  dialogRef: MatDialogRef<DialogComponent>;
 
   constructor(private http: HttpClient, private dialog: MatDialog) {}
 
@@ -27,6 +29,12 @@ export class DataService {
       width: '70vh',
       data,
       backdropClass: 'bg-transparent'
+    });
+
+    this.isDialogOpen = true;
+    
+    this.dialogRef.afterClosed().subscribe(() => {
+      this.isDialogOpen = false;
     });
   }
 }

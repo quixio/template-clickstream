@@ -66,13 +66,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.environmentVariables.offersTopic$.subscribe(topic => {
       if (topic) {
-        // The topic is non-empty, proceed with your logic
         this.wssReceiveService.connectAndReceiveMessages(topic).subscribe(
           message => {
             console.log(message)
             if (message == null) return;
             const offer = new Offer(JSON.parse(message));
-            if (offer.IsValid && offer.Offer !== undefined){
+            if (offer.IsValid && offer.Offer !== undefined && !this.dataService.isDialogOpen){
               this.dataService.openDialog(offer)
             }   
           }
